@@ -1,336 +1,403 @@
 # ASHGROVE — Game Design Dokument
 
 > Arbeitstitel. 2D-Horror-Survival, Godot 4, Raum-für-Raum-Standbilder.
-> Status: Konzeptentwurf v0.1 — noch nichts davon ist in Stein gemeißelt.
+> **Version 0.2** — kompletter Umbau nach Feedback: keine festen Nächte,
+> keine direkte Monster-Bedrohung, weniger Systeme.
+> Spieltexte auf Englisch, Setting Anfang der 1960er.
 
 ---
 
-## 1. Der Pitch in drei Sätzen
+## 1. Der Pitch
 
-Du bist über Nacht im Anwesen Ashgrove eingeschlossen und hast sieben Nächte,
-um herauszufinden, was hier passiert ist — bevor es dich findet.
-Die Villa hat keinen Strom: dein Licht ist begrenzt, deine Zeit ist begrenzt,
-und alles, was du tust, macht Geräusche.
-Jede Nacht ist anders, weil das Haus selbst würfelt.
+Du bist nachts vor *etwas* weggelaufen und in das erstbeste Haus geflüchtet.
+Die Tür ist hinter dir zugefallen. Sie geht nicht mehr auf.
 
-**Kernfantasie:** Nicht "kämpfe gegen das Monster", sondern
-*"ich habe zu wenig Öl, zu wenig Zeit und noch drei Räume zu durchsuchen — was lasse ich weg?"*
+Du weißt nicht, wie lange du hier drin sein wirst. Es gibt keine Frist, keinen
+Countdown, kein "überlebe sieben Nächte". Es gibt nur die Vorräte, die noch da sind,
+und die Frage, wie du an mehr kommst.
+
+**Kernfantasie:** Nicht Flucht vor einem Monster, sondern das langsame Rechnen:
+*"Zwei Dosen übrig. Ich bin seit 19 Stunden wach. Der Keller ist unerforscht,
+aber da unten ist es dunkel — und letztes Mal, als ich im Dunkeln gesucht habe,
+ist etwas passiert."*
+
+Der nächste Verwandte im Regal ist **This War of Mine** — nur dass der Krieg
+draußen durch ein Haus ersetzt ist, das nicht will, dass du gehst.
 
 ---
 
-## 2. Die zentrale Mechanik: drei Währungen
+## 2. Die vier Achsen
 
-Das ist das Herz des Spiels. **Jede Aktion kostet mindestens eine von drei Währungen:**
+Alles im Spiel hängt an genau vier Dingen. Mehr gibt es nicht.
 
-| Währung | Anzeige | Woher der Druck kommt |
+**Zwei davon gehören dir** und werden als Leiste angezeigt:
+
+| Achse | Anzeige | Was passiert, wenn sie fällt |
 |---|---|---|
-| **Zeit** | Uhr, 22:00 → 06:00 (480 Minuten) | Läuft nur, wenn du handelst. Nacht endet hart. |
-| **Lärm** | Präsenz-Anzeige 0–5 | Lärm zieht *es* an. Bei 5 kommt es in deinen Raum. |
-| **Ressourcen** | Öl, Streichhölzer, Kerzen, Werkzeug | Endlich. Nachschub ist knapp und zufällig. |
+| **FOOD** (Essen) | 0–100 | Unter 30: alles dauert länger. Unter 10: Zustand *Starving*. |
+| **REST** (Schlaf) | 0–100 | Unter 40: du übersiehst Dinge. Unter 20: du siehst Dinge, die nicht da sind. |
 
-Der Spieler zahlt immer in einer Währung, um in einer anderen zu sparen.
-**Beispiel — eine verschlossene Schublade:**
+**Zwei davon gehören dem Raum**, in dem du gerade stehst:
 
-| Weg | Zeit | Lärm | Ressource |
+| Achse | Stufen | Wirkung |
+|---|---|---|
+| **LIGHT** (Licht) | 0–3 | Bestimmt, wie schnell du suchst und wie schlimm Ereignisse ausfallen |
+| **SAFETY** (Sicherheit) | 0–3 | Bestimmt, ob ein Ereignis dich erreicht oder an der Tür hängen bleibt |
+
+Das ist der ganze Kern. Keine Angst-Leiste, keine Bedrohungsstufe, kein Monster-Zähler.
+Wenn du dich fragst "warum ist das gerade schwierig?", ist die Antwort immer eine
+dieser vier Achsen.
+
+### 2.1 FOOD — Essen
+
+- Sinkt um **4 pro Stunde** Spielzeit → ein Tag kostet etwa 50 Punkte, du brauchst
+  ungefähr **eine ordentliche Mahlzeit pro Tag**.
+- Nahrung gibt es in zwei Sorten:
+  - **Konserven** — halten ewig, geben 30–40. Die Währung des Spiels.
+  - **Verderbliches** — Brot, Obst, Eingemachtes. Gibt mehr (bis 50), aber wird nach
+    2–3 Tagen schlecht. Schlechtes Essen essen → Zustand *Sick*.
+- Fundorte: Küche, Speisekammer, Weinkeller — und Zufallsereignisse.
+- **Wasser lasse ich bewusst weg.** Eine zweite Verbrauchsleiste würde nur die
+  gleiche Entscheidung doppelt stellen.
+
+### 2.2 REST — Schlaf
+
+Das ist die interessanteste Achse, weil Schlafen dich hilflos macht.
+
+- Sinkt um **5 pro wacher Stunde**. Nach etwa 20 Stunden bist du am Ende.
+- Schlafen gibt **+15 pro Stunde**. Im Bett **+20**. Auf dem Boden nur **+8**.
+- **Während du schläfst, zieht das Haus Ereignisse** — und du kannst nicht reagieren.
+  Wie schlimm sie ausfallen, hängt vollständig an LIGHT und SAFETY des Raums,
+  in dem du dich hingelegt hast.
+- Unter REST 20 erscheinen **Halluzinations-Ereignisse**: Hotspots, die nicht existieren,
+  Hinweise, die falsch sind, Geräusche ohne Ursache. Der Spieler kann nicht mehr
+  unterscheiden, was echt ist. Das ist der Horror — nicht ein Gesicht im Fenster.
+- Bei REST 0 **brichst du zusammen, wo du gerade stehst.** Vier Stunden Schlaf an
+  einem ungesicherten, dunklen Ort. Das ist fast immer die schlechteste Nacht deines Lebens.
+
+→ Die Kernfrage jeder Nacht: *Schlafe ich jetzt, wo es noch sicher ist —
+oder suche ich noch zwei Räume ab und riskiere den Zusammenbruch?*
+
+### 2.3 LIGHT — Licht im Raum
+
+| Stufe | Quelle | Kosten | Wirkung |
 |---|---|---|---|
-| Mit Brecheisen aufbrechen | 5 min | +3 | Brecheisen nutzt sich ab |
-| Mit Dietrich knacken | 20 min | +0 | Dietrich kann brechen (30 %) |
-| Den Schlüssel suchen gehen | 40 min+ | +0 | keine |
-| Im Dunkeln aufbrechen (spart Öl) | 10 min | +3 | Angst +15 |
+| **0** Dark | — | — | Suchen dauert **doppelt** so lange, Ereignisse eine Stufe schlimmer |
+| **1** Handheld | Taschenlampe | 1 Batterie / Stunde | Du siehst nur den Kegel, aber es reicht |
+| **2** Placed | Kerze, Petroleumlampe | brennt 4 Std. ab | Der ganze Raum ist hell, bleibt auch ohne dich an |
+| **3** Electric | Deckenlicht | 1 Sicherung, dauerhaft | Beste Sicht, kostet laufend nichts — aber siehe unten |
 
-→ Es gibt nie *die* richtige Lösung, nur die, die heute Nacht am wenigsten wehtut.
-Das ist der Grund, warum das Spiel ohne Monster-KI und ohne Kampf funktioniert.
+**Der Sicherungskasten** (Keller): Das Haus hat Strom, aber nur **drei intakte Sicherungen**.
+Du entscheidest, welche drei Räume Licht bekommen, und kannst sie jederzeit umstecken
+(kostet 20 Minuten und den Weg in den Keller).
+
+Der Haken: **Elektrisches Licht verändert, was für Ereignisse gezogen werden.**
+Nicht "das Monster kommt" — sondern das Haus wird *wach*. Sicherungen brennen durch,
+Lampen platzen, in beleuchteten Räumen passieren andere, seltsamere Dinge als in dunklen.
+Licht ist nicht einfach besser. Es ist anders.
+
+### 2.4 SAFETY — Sicherheit im Raum
+
+| Stufe | Zustand | Kosten |
+|---|---|---|
+| **0** Open | Tür offen | — |
+| **1** Closed | Tür zu | 1 min |
+| **2** Blocked | Möbel davor geschoben | 15 min |
+| **3** Barricaded | Bretter vernagelt | 30 min + 2 Bretter + Nägel + Hammer |
+
+- SAFETY entscheidet, ob ein Bedrohungs-Ereignis **dich** trifft oder nur **die Tür**.
+  Bei Stufe 3 wird aus "etwas steht in deinem Zimmer" ein "etwas kratzt draußen".
+- **Barrikaden halten nicht.** Ereignisse beschädigen sie (Stufe 3 → 2 → 1).
+  Reparieren kostet wieder Material. Das ist der Grund, warum du raus musst.
+- Material (Bretter, Nägel) findest du in Werkstatt, Dachboden, Keller —
+  oder du **zerlegst Möbel**, was laut ist und den Raum dauerhaft verändert.
+
+### 2.5 Dein Lager
+
+Du bekommst keinen sicheren Raum zugewiesen — **du wählst ihn selbst.**
+Wo du deine Vorräte hinlegst und schläfst, ist deine wichtigste Entscheidung
+im ganzen Spiel, und du kannst sie später bereuen.
+
+| Kandidat | Dafür | Dagegen |
+|---|---|---|
+| Schlafzimmer | Bett (+20 Schlaf), Schrank zum Verstecken | Weit weg von Küche und Keller |
+| Küche | Direkt am Essen, zwei Fluchtwege | Kellertür lässt sich schlecht sichern |
+| Bibliothek | Viele Regale = viel Barrikadenmaterial | Kein Bett, kein Wasser |
+| Eingangshalle | Zentral, kurze Wege überall hin | Die Haustür ist hier. Und sie ist nicht still. |
+
+Vorräte, die du im Lager stapelst, sind **nicht automatisch sicher** — manche
+Ereignisse nehmen dir etwas weg. Alles auf einen Haufen legen ist bequem und riskant.
 
 ---
 
-## 3. Die Systeme im Detail
+## 3. Die Bedrohung: nur Ereignisse
 
-### 3.1 Zeit
+**Es gibt keine Kreatur mit Wegfindung, keinen Verfolger, keine Bedrohungsanzeige.**
+Alles, was dir zustößt, kommt aus dem Ereignis-System. Das Haus ist der Gegner,
+und es handelt in Momenten, nicht in Bewegungen.
 
-- Eine Nacht = **480 Minuten Spielzeit** (22:00–06:00).
-- Die Uhr ist **aktionsbasiert**, nicht in Echtzeit. Sie tickt nur, wenn du etwas tust.
-  Du kannst also in Ruhe nachdenken — der Horror kommt aus Entscheidungen, nicht aus Hektik.
-- Richtwerte:
-  | Aktion | Zeit |
-  |---|---|
-  | Raumwechsel (Nachbarraum) | 5 min |
-  | Etagenwechsel (Treppe) | 10 min |
-  | Möbelstück durchsuchen | 10 min |
-  | Notiz/Buch lesen | 5 min |
-  | Kerze platzieren & anzünden | 5 min |
-  | Verstecken (pro Runde) | 10 min |
-  | Ausruhen (Angst −20) | 30 min |
-- Um **06:00 musst du in einem sicheren Raum sein** (Eingangshalle mit Kamin, oder ein Raum mit brennender Kerze).
-  Wenn nicht: kein sofortiger Tod, sondern **Blackout** → du verlierst getragene Gegenstände
-  und einen zufälligen noch nicht notierten Hinweis. Das ist schmerzhaft, aber nicht frustrierend.
+### 3.1 Wann gezogen wird
 
-### 3.2 Licht & Ressourcen
+- Bei jedem Raumwechsel (30 % Chance)
+- Nach jeder Aktion, die über 15 Minuten dauert (20 %)
+- **Jede Stunde, in der du schläfst** (60 %)
+- Zu festen Uhrzeiten (Mitternacht, 03:00)
 
-Die Villa hat keinen Strom. Licht ist Ausrüstung.
+### 3.2 Die Kategorien
 
-- **Öllampe** — Hauptlichtquelle. Verbraucht **1 Öl pro 10 Minuten** während sie brennt.
-  Du kannst sie ausmachen (spart Öl, aber Dunkelheit → Angst +2/Min, Suchen dauert doppelt so lange).
-- **Kerzen** — werden in einem *Raum platziert*, brennen 60 Minuten.
-  Ein Raum mit Kerze ist **sicher**: die Präsenz betritt ihn nicht und Angst sinkt langsam.
-  Kerzen sind die wichtigste taktische Ressource — sie bauen dir sichere Inseln im Haus.
-- **Streichhölzer** — zum Anzünden von allem. 1 Streichholz pro Anzündvorgang. Sehr knapp.
-- **Werkzeug** — Brecheisen (laut, schnell), Dietrich (leise, langsam, kann brechen), Schlüssel (perfekt, aber selten).
-- **Laudanum** — senkt Angst sofort um 40, kostet 10 min. Nebenwirkung: die nächsten 60 min siehst du Dinge, die nicht da sind (falsche Hotspots im Raum).
-
-**Traglimit:** 6 Slots. Du kannst nicht alles mitnehmen — was du dabei hast, ist eine Aussage darüber,
-was du heute Nacht vorhast.
-
-### 3.3 Angst (0–100)
-
-| Steigt durch | Sinkt durch |
-|---|---|
-| Dunkelheit (+2/min) | Sicherer Raum mit Kerze (−1/min) |
-| Zufallsereignisse (+5 bis +25) | Ausruhen am Kamin (−20, 30 min) |
-| Heimsuchung (+30) | Laudanum (−40, mit Nebenwirkung) |
-| Leichen/Funde/Visionen (+10) | Einen Hinweis ins Notizbuch eintragen (−5) |
-
-Schwellen:
-- **ab 50** — Bildschirmrand pulsiert, Herzschlag hörbar, Hotspots flackern
-- **ab 75** — falsche Hotspots erscheinen, Türen führen manchmal woanders hin
-- **bei 100** — **Zusammenbruch**: 60 Minuten Zeitsprung, du wachst an einem zufälligen Ort auf,
-  Inventar verstreut, Präsenz auf 4.
-- **Drei Zusammenbrüche in einem Durchlauf = Game Over.**
-
-### 3.4 Die Präsenz (Bedrohungsstufe 0–5)
-
-Kein patrouillierendes Monster mit Pathfinding — das passt nicht zu festen Raumbildern.
-Stattdessen ein **Druck-Zähler**, der zu dir kommt.
-
-- Steigt durch: Lärm-Aktionen, Zeitverlauf (+1 alle 90 min), bestimmte Ereignisse, hohe Angst.
-- Sinkt durch: Stillsitzen (10 min = −1), sicherer Raum, Anbruch der Morgendämmerung.
-- Zeigt sich gestaffelt: **1** = Geräusche eine Etage entfernt · **2** = im selben Stockwerk ·
-  **3** = Schritte im Nachbarraum · **4** = die Türklinke bewegt sich · **5** = **Heimsuchung**.
-
-**Heimsuchung** (das einzige "Echtzeit"-Element im Spiel): 20 Sekunden, in denen du reagieren musst.
-- Lampe sofort löschen und stillhalten → funktioniert, kostet aber Angst +30
-- In einen Schrank/unters Bett (falls im Raum vorhanden) → sicher, kostet 10 min
-- In einen Raum mit brennender Kerze fliehen → sicher, wenn erreichbar
-- Nichts tun → du verlierst 90 Minuten und einen Gegenstand, Angst +50
-
-### 3.5 Zufallsereignisse — der "Drama-Manager"
-
-Das Haus würfelt, aber es würfelt **nicht fair, sondern dramaturgisch**.
-Statt reinem Zufall ein gewichtetes Deck, das den Spielzustand liest
-(Nacht-Nummer, Angst, Präsenz, Licht an/aus, Raum, wie lange nichts passiert ist).
-
-Fünf Kategorien:
-
-| Kategorie | Anteil | Beispiele |
+| Kategorie | Anteil | Was es tut |
 |---|---|---|
-| **Atmosphäre** (folgenlos) | 40 % | Ein Bild fällt von der Wand · Schritte über dir · dein Atem wird sichtbar |
-| **Bedrohung** | 20 % | Präsenz +2 · eine Tür verriegelt sich hinter dir · das Licht geht aus |
-| **Ressource** | 15 % | Streichhölzer im Sofa · eine halbvolle Ölkanne · ein Schlüssel im Kaminrost |
-| **Weltveränderung** | 15 % | Der Flur führt heute Nacht woanders hin · ein Raum ist "verdorben" (Angst doppelt) · ein neuer Raum öffnet sich |
-| **Story/Vision** | 10 % | Eine Erinnerung, die dir ein Hinweis-Fragment gibt |
+| **Ambient** | 35 % | Nur Ton und Bild. Folgenlos. Damit das Haus nie still wirkt. |
+| **Choice** | 25 % | Eine Entscheidung mit Konsequenzen — der Kern des Spiels, siehe unten |
+| **Supply** | 15 % | Du findest etwas. Wird häufiger, wenn du kurz vor dem Verhungern bist. |
+| **Damage** | 15 % | Barrikade beschädigt · Sicherung durchgebrannt · Vorräte verdorben · Gegenstand weg |
+| **Clue** | 10 % | Ein Stück des Geheimnisses |
 
-**Anti-Frust-Regeln (wichtig):**
-- Kein Bedrohungs-Event zweimal hintereinander.
-- Wenn 40 Minuten nichts passiert ist → garantiert ein Atmosphäre-Event (das Haus darf nie still wirken).
-- Wenn der Spieler unter 20 % Ressourcen hat → Ressourcen-Events werden doppelt gewichtet (verstecktes Mitleid).
-- Jedes Event kann nur einmal pro Nacht ziehen.
+### 3.3 Choice-Ereignisse — hier lebt das Spiel
 
-### 3.6 Das Geheimnis — die eigentliche Siegbedingung
+Statt eines Monsters bekommt der Spieler **Situationen ohne gute Antwort.** Beispiel:
 
-Überleben ist nicht das Ziel, sondern die Bedingung. Das Ziel ist **Verstehen**.
+> *Something is at the cellar door. Not knocking. Testing.*
+>
+> **[Go and look]** — 40 % ein Hinweis, 40 % nichts, 20 % Zustand *Injured*
+> **[Push the dresser against it]** — 20 min, SAFETY +1, aber der Weg in den Keller ist zu
+> **[Ignore it and keep working]** — die Barrikade nimmt Schaden, du verlierst nichts sonst
+
+Weiteres Beispiel:
+
+> *The radio picks something up. A voice reading names. One of them might be yours.*
+>
+> **[Listen to the end]** — 30 min, garantierter Hinweis, REST −10
+> **[Turn it off]** — nichts passiert. Du wirst nie erfahren, was da kam.
+
+Jedes Choice-Ereignis muss diese Regel erfüllen: **keine Option ist eindeutig richtig,
+und mindestens eine kostet eine der vier Achsen.**
+
+### 3.4 Schlaf-Ereignisse
+
+Eigene Kategorie, weil du nicht reagieren kannst. Sie werden am Morgen aufgelöst —
+du wachst auf und siehst, was passiert ist.
+
+- Die Tür, die du verriegelt hattest, steht offen
+- Eine Konserve fehlt
+- Jemand hat neben deinem Bett gesessen — der Boden ist dort staubfrei
+- Du hast im Schlaf etwas geschrieben. Es ist ein Hinweis. Es ist deine Handschrift.
+- Es sind neun Stunden vergangen, nicht sechs
+
+Wie viele und wie schlimm: direkt abhängig von LIGHT und SAFETY deines Schlafplatzes.
+In einem dunklen, offenen Raum zu schlafen ist die gefährlichste Handlung im Spiel.
+
+### 3.5 Fairness-Regeln
+
+- Nie zwei Damage-Ereignisse hintereinander
+- Sind 90 Minuten ohne Ereignis vergangen → garantiert ein Ambient-Ereignis
+- FOOD unter 25 → Supply-Ereignisse werden verdreifacht (das Spiel hilft leise)
+- Jedes Ereignis nur einmal pro Tag
+- **Die ersten 12 Stunden ziehen nur Ambient und Supply.** Der Spieler soll das Haus
+  kennenlernen, bevor es ihn kennenlernt.
+
+---
+
+## 4. Zustände und Tod
+
+Ein schlecht ausgegangenes Ereignis tötet dich **nie direkt**. Es gibt dir einen Zustand.
+
+| Zustand | Wirkung | Behandlung | Wenn unbehandelt |
+|---|---|---|---|
+| **Injured** | Alle Aktionen +50 % Zeit | Verbandskasten | Nach 12 Std. → *Bleeding* |
+| **Sick** | FOOD sinkt doppelt so schnell | Medikamente + 8 Std. Schlaf | Nach 24 Std. → *Fevered* |
+| **Shaken** | Du kannst 4 Stunden nicht schlafen | Zeit, warme Mahlzeit | vergeht von selbst |
+| **Starving** | REST sinkt doppelt, Aktionen misslingen | Essen | zieht Lebenspunkte |
+
+**Tod tritt nur ein durch:**
+1. Einen Zustand der zweiten Stufe (*Bleeding*, *Fevered*), der weitere 12 Stunden unbehandelt bleibt
+2. FOOD auf 0 über mehr als 24 Stunden
+3. Ganz seltene Ereignisse, bei denen du eine klare Warnung ignoriert hast
+
+Es gibt also immer eine Vorwarnung und immer einen Weg zurück — aber der kostet.
+
+**Tod ist endgültig.** Kein Laden, kein Zurücksetzen des Tages. Der Durchlauf ist vorbei,
+du siehst eine Zusammenfassung (wie viele Tage, was du herausgefunden hast, was du
+nie erfahren hast) und fängst neu an. Was du behältst, ist dein Wissen über das Haus.
+
+---
+
+## 5. Zeit
+
+- Uhr läuft **aktionsbasiert**, nicht in Echtzeit. Sie tickt nur, wenn du etwas tust.
+  Nachdenken ist kostenlos.
+- **Tag (08:00–20:00):** Milde Ereignisse, weniger Ziehungen. Zeit zum Erkunden.
+- **Nacht (20:00–08:00):** Ereignisse häufiger und eine Stufe schlimmer. Zeit zum Schlafen —
+  wenn du dich traust.
+- Tage werden gezählt (**Day 1, Day 2, …**), aber es gibt **kein Ziel-Datum.**
+  Der Spieler weiß nie, ob noch drei Tage kommen oder dreißig.
+
+**Eskalation ohne Countdown** — alle 3 Tage wird ein neues Ereignis-Deck freigeschaltet:
+
+| Ab | Was sich ändert |
+|---|---|
+| Tag 1 | Grunddeck. Das Haus ist nur ein leeres Haus. |
+| Tag 4 | Damage-Ereignisse aktiv. Vorratsfunde werden seltener. |
+| Tag 7 | Das Haus verändert sich: Räume tauschen Verbindungen, ein Raum wird unbetretbar. |
+| Tag 10 | Schlaf-Ereignisse werden persönlich — sie beziehen sich auf das, was du getan hast. |
+| Tag 13+ | Kein neues Deck. Nur noch weniger Vorräte. Ab hier ist es ein Rennen. |
+
+---
+
+## 6. Das Geheimnis — und der Weg hinaus
+
+Das Ziel ist nicht "durchhalten". Das Ziel ist **rauskommen** — und das geht erst,
+wenn du verstanden hast, warum die Tür zu ist.
 
 Ein **Notizbuch** mit vier offenen Fragen:
 
-1. **Wer** ist in dieser Villa gestorben?
-2. **Wo** genau ist es passiert?
-3. **Was** will es?
-4. **Wie** bringt man es zur Ruhe?
+1. **Who** is still in this house?
+2. **What** happened in the room they died in?
+3. **What** does it want returned?
+4. **Where** does it have to go?
 
-Jede Frage braucht **3 Fragmente** (12 insgesamt, im Spiel verteilt sind ~20 — du findest nie alle).
-Fragmente kommen aus Notizen, Gegenständen, Visionen und Ereignissen.
-Der Spieler muss sie **selbst kombinieren** — das Spiel löst es nicht für ihn:
-Du wählst pro Frage eine Antwort aus mehreren Möglichkeiten.
+Jede Frage braucht 3 gefundene Fragmente, dann kannst du eine Antwort aus mehreren
+Möglichkeiten wählen. Fragmente kommen aus Notizen, Fotos, Radiodurchsagen,
+Telefonanrufen, Schlaf-Ereignissen und Gegenständen.
 
-**Das Finale:** In der 7. Nacht führst du in der Verborgenen Kammer das Ritual durch,
-mit den Gegenständen, die deine vier Antworten vorgeben.
-- Alle vier richtig → **Bannung** (bestes Ende)
-- Zwei bis drei richtig → **Flucht** (du überlebst, aber es bleibt)
-- Weniger → **Übernahme** (schlechtes Ende)
-- Ritual nie versucht, aber 7 Nächte überlebt → **Morgen** (neutrales Ende)
+**Der Ausgangsversuch** kann jederzeit unternommen werden, sobald du alle vier Fragen
+beantwortet hast — es gibt keine vorgeschriebene Nacht dafür. Du gehst zur Haustür,
+mit dem, was deine Antworten vorgeben.
 
-→ **Wiederspielwert:** Der Täter/Ort/Motiv wird pro Durchlauf aus mehreren Varianten gewürfelt.
-Du kannst die Lösung nicht auswendig lernen, nur die *Methode*.
-
----
-
-## 4. Ablauf einer Nacht
-
-```
-  ┌─ VORBEREITUNG (Eingangshalle, keine Zeit läuft) ───────────┐
-  │  Inventar sichten · 6 Slots packen · Notizbuch lesen       │
-  │  Ziel für die Nacht wählen (optional, gibt Bonus)          │
-  └──────────────────────────────┬─────────────────────────────┘
-                                 ▼
-  ┌─ DIE NACHT (22:00 – 06:00) ────────────────────────────────┐
-  │  Raum betreten → Hotspots anklicken → Zeit/Lärm zahlen     │
-  │  Ereignisse ziehen · Präsenz steigt · Öl brennt runter     │
-  │  Fragmente finden → ins Notizbuch eintragen                │
-  └──────────────────────────────┬─────────────────────────────┘
-                                 ▼
-  ┌─ MORGENGRAUEN (06:00) ─────────────────────────────────────┐
-  │  Im sicheren Raum? → Nacht bestanden                       │
-  │  Sonst → Blackout (Verlust von Gegenständen + 1 Hinweis)   │
-  └──────────────────────────────┬─────────────────────────────┘
-                                 ▼
-  ┌─ TAG-INTERLUDE (Text + Standbild) ─────────────────────────┐
-  │  Kurze Erzählung · minimaler Nachschub · Nacht N+1         │
-  └────────────────────────────────────────────────────────────┘
-```
-
-**Sieben Nächte, mit Steigerung:**
-
-| Nacht | Was neu ist |
+| Ergebnis | Ende |
 |---|---|
-| 1 | Tutorial ohne Präsenz. Nur Haus, Uhr, Öl. Ein Fragment garantiert. |
-| 2 | Präsenz aktiv (max. 3). Keller wird zugänglich. |
-| 3 | Erste Heimsuchung möglich. Weltveränderungs-Events schalten frei. |
-| 4 | Wendepunkt: Ein Raum wird dauerhaft unbetretbar. Öl-Nachschub halbiert. |
-| 5 | Dachboden öffnet sich. Präsenz startet bei 2. |
-| 6 | Die Villa "atmet": Raumverbindungen ändern sich pro Nacht. |
-| 7 | Verborgene Kammer erreichbar. Kein Morgengrauen — es endet so oder so. |
+| 4 von 4 richtig | **The Door** — du gehst hinaus. Bestes Ende. |
+| 2–3 richtig | **Morning** — die Tür öffnet sich, aber etwas geht mit dir. |
+| 0–1 richtig | Der Versuch schlägt fehl. Du verlierst die verwendeten Gegenstände und einen Tag. |
+
+Der Täter, der Ort und der Gegenstand werden **pro Durchlauf neu gewürfelt** —
+du kannst die Lösung nicht auswendig lernen, nur die Methode, sie zu finden.
 
 ---
 
-## 5. Die Villa — Raumplan
+## 7. Die Villa
 
-14 Räume, vier Ebenen. Der sichere Raum ist die Eingangshalle.
+13 Räume. Jeder ist an mindestens eine der vier Achsen gebunden — kein Raum ist Dekoration.
 
 ```
-  DACHBODEN            [12] Dachboden
+  ATTIC                    [12] Attic
+                                │
+  UPPER          [8]──[7 Upper Landing]──[9]     [10] Bathroom
+              Bedroom      │      │    Nursery      │
+                           │      └──[11] Study ────┘
+                           │
+  GROUND    [3]──[2]──[1 ENTRANCE HALL]──[4]──[5]──[6]
+          Library Parlor      ▲ AUSGANG  Dining Kitchen Conservatory
                               │
-  OBERGESCHOSS   [8]──[7 Oberer Flur]──[9]      [10] Bad
-                 Schlaf-      │   │    Kinder-    │
-                 zimmer       │   └──[11] Arbeitszimmer
-                              │
-  ERDGESCHOSS  [3]──[2]──[1 EINGANGSHALLE]──[4]──[5]──[6]
-              Biblio- Salon    ▲ SICHER    Speise- Küche Winter-
-              thek                │        zimmer        garten
-                                  │
-  KELLER                    [13] Weinkeller ── [14] Verborgene Kammer
+  CELLAR                [13] Cellar ── [Fuse box]
 ```
 
-| # | Raum | Rolle im Spiel | Ab Nacht |
+| # | Raum | Achse | Rolle |
 |---|---|---|---|
-| 1 | Eingangshalle | Sicherer Raum, Kamin, Ausrüstung, Speicherpunkt | 1 |
-| 2 | Salon | Viele Möbel zum Durchsuchen, Klavier (laut!) | 1 |
-| 3 | Bibliothek | Hauptquelle für Notiz-Fragmente, Geheimtür | 1 |
-| 4 | Speisezimmer | Kerzenleuchter, Silber (Ritualgegenstand) | 1 |
-| 5 | Küche | Öl, Streichhölzer, Kellerzugang | 1 |
-| 6 | Wintergarten | Einziger Blick nach draußen, Wetter-Events | 2 |
-| 7 | Oberer Flur | Drehscheibe, hier ändern sich ab Nacht 6 die Türen | 1 |
-| 8 | Schlafzimmer | Bett zum Verstecken, persönliche Gegenstände | 1 |
-| 9 | Kinderzimmer | Emotionaler Kern der Story, hohe Angst | 2 |
-| 10 | Bad | Spiegel-Mechanik (Visionen), Wasser | 3 |
-| 11 | Arbeitszimmer | Safe mit Zahlenschloss, Dokumente | 2 |
-| 12 | Dachboden | Truhen, das meiste Öl, sehr gefährlich | 5 |
-| 13 | Weinkeller | Dunkel, kein Kerzenhalter, Abkürzungen | 2 |
-| 14 | Verborgene Kammer | Ritualort, Finale | 7 |
+| 1 | Entrance Hall | — | Die Haustür. Der Ausgang. Sie geht nicht auf. |
+| 2 | Parlor | SAFETY | Schwere Möbel zum Verbarrikadieren, Radio |
+| 3 | Library | Geheimnis | Hauptquelle für Notiz-Fragmente, Bretter aus Regalen |
+| 4 | Dining Room | LIGHT | Kerzen, Kerzenleuchter, Silber |
+| 5 | Kitchen | FOOD | Speisekammer, Konserven, Herd (warme Mahlzeit) |
+| 6 | Conservatory | — | Der einzige Blick nach draußen. Man sollte nicht hinsehen. |
+| 7 | Upper Landing | — | Drehscheibe. Ab Tag 7 stimmen die Türen nicht mehr. |
+| 8 | Bedroom | REST | Bett (+20/Std.), Schrank, Kleidung |
+| 9 | Nursery | Geheimnis | Der emotionale Kern. Und ein sehr gutes Versteck. |
+| 10 | Bathroom | Zustände | Medikamente, Verbandskasten, Spiegel |
+| 11 | Study | Geheimnis | Telefon, Schreibtisch, Safe mit Zahlenschloss |
+| 12 | Attic | SAFETY | Werkzeug, Bretter, Nägel, Koffer |
+| 13 | Cellar | LIGHT | **Sicherungskasten.** Eingemachtes. Ganz dunkel. |
 
-**Für den ersten Prototyp reichen 5 Räume:** Eingangshalle, Salon, Bibliothek, Küche, Oberer Flur.
+**Für einen ersten Prototyp reichen 5:** Entrance Hall, Kitchen, Bedroom, Library, Cellar —
+damit sind alle vier Achsen abgedeckt.
+
+### Warum du nicht rausgehst
+
+Die Haustür ist zu und lässt sich nicht öffnen — das ist die harte Grenze.
+Die Fenster sind eine weichere: sie sind **nicht** vernagelt. Du könntest eines einschlagen.
+Aber der Wintergarten zeigt dir, was draußen steht und wartet, und ab dann versuchst du es nicht mehr.
+
+Ein Fenster einzuschlagen ist im Spiel möglich. Es ist keine Lösung. Es ist ein Ende.
 
 ---
 
-## 6. Steuerung & Bildschirmaufbau
-
-Maus-first (Point & Click), Tastatur als Alternative.
+## 8. Bedienung und Bildschirm
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│ 03:20  ▓▓▓▓▓░░░ Öl        Präsenz ●●●○○      Angst ▓▓▓░░ │ ← HUD oben
+│ DAY 3  ·  02:40      FOOD ▓▓▓▓░░░░    REST ▓▓░░░░░░      │
+│ KITCHEN         light ●●○   safety ●●●        [Injured]  │
 ├──────────────────────────────────────────────────────────┤
 │                                                          │
 │                  RAUMBILD (Standbild)                    │
 │         Hotspots leuchten schwach beim Hovern            │
 │                                                          │
 ├──────────────────────────────────────────────────────────┤
-│ [🕯][🔥][🔧][📄][ ][ ]        [Notizbuch] [Karte] [Lampe]│ ← Inventar unten
+│ [🔦][🥫][🔨][🪵][ ][ ]        [Notebook] [Map] [Sleep]   │
 └──────────────────────────────────────────────────────────┘
 ```
 
-- **Linksklick Hotspot** → Aktionsmenü ("Durchsuchen — 10 min · leise", "Aufbrechen — 5 min · LAUT")
-  Die Kosten stehen **immer vorher** dran. Der Spieler soll informiert entscheiden, nicht raten.
-- **Rechtsklick** → ansehen (kostenlos, gibt Atmosphäre-Text)
-- **Tab** → Notizbuch · **M** → Karte · **L** → Lampe an/aus · **Leertaste** → in Heimsuchung: verstecken
+- **Linksklick auf Hotspot** → Aktionsmenü. Die Kosten stehen **immer vorher** dran:
+  `Search the pantry — 10 min` · `Pry open the crate — 20 min, needs crowbar`
+- **Rechtsklick** → ansehen, kostenlos, gibt Atmosphäre-Text
+- **Tab** Notebook · **M** Map · **F** Taschenlampe · **S** Schlafen (öffnet Schlaf-Dialog
+  mit Anzeige, wie sicher der Raum gerade ist — der Spieler soll wissen, was er riskiert)
+- Traglimit **6 Slots**. Der Rest liegt in deinem Lager.
 
 ---
 
-## 7. Technische Struktur (Godot 4.x, GDScript)
+## 9. Technische Struktur (Godot 4, GDScript)
 
-**Grundprinzip: datengetrieben.** Räume, Gegenstände, Ereignisse und Hinweise sind
-`Resource`-Dateien (`.tres`), kein hartcodierter Inhalt. So kannst du Inhalte im Godot-Editor
-hinzufügen, ohne eine Zeile Code zu schreiben.
+Datengetrieben: Räume, Gegenstände, Ereignisse und Hinweise sind `Resource`-Dateien (`.tres`).
+Inhalte kann man im Editor anlegen, ohne Code anzufassen.
 
 ```
 res://
-├── project.godot
 ├── src/
 │   ├── autoload/
-│   │   ├── game_state.gd      # Nacht, Uhr, Angst, Präsenz, Flags
-│   │   ├── clock.gd           # Zeit vorspulen, Signale bei Schwellen
-│   │   ├── event_deck.gd      # Drama-Manager, gewichtetes Ziehen
-│   │   ├── inventory.gd       # 6 Slots, Ressourcenverbrauch
-│   │   ├── notebook.gd        # Fragmente, Fragen, Antworten
-│   │   ├── audio.gd           # Bus-Management, Ducking bei Heimsuchung
-│   │   └── save_system.gd     # JSON-Speicherstand pro Nacht
-│   ├── data/                  # Resource-Klassen (Schema)
-│   │   ├── room_data.gd · item_data.gd · event_data.gd
-│   │   ├── clue_data.gd · action_data.gd · hotspot_data.gd
-│   │   └── ...
-│   ├── scenes/
-│   │   ├── main.tscn          # Einstieg, Szenenwechsel
-│   │   ├── room_view.tscn     # Zeigt ein RoomData an
-│   │   ├── hotspot.tscn       # Klickbereich + Outline-Shader
-│   │   ├── haunting.tscn      # Die 20-Sekunden-Sequenz
-│   │   └── interlude.tscn     # Tag-Übergang
-│   └── ui/
-│       ├── hud.tscn · inventory_bar.tscn · notebook.tscn
-│       ├── map.tscn · action_menu.tscn · main_menu.tscn
-├── content/                   # DIE eigentlichen Inhalte als .tres
-│   ├── rooms/ · items/ · events/ · clues/
-├── assets/                    # Grafik (siehe ASSET_PLAN.md)
+│   │   ├── game_state.gd     # Tag, Uhr, FOOD, REST, Zustände, Flags
+│   │   ├── clock.gd          # Zeit vorspulen, Tag/Nacht-Signale
+│   │   ├── event_deck.gd     # Gewichtetes Ziehen, Fairness-Regeln
+│   │   ├── rooms.gd          # LIGHT/SAFETY je Raum, Barrikaden-Zustand
+│   │   ├── power.gd          # Sicherungskasten, 3 Sicherungen
+│   │   ├── inventory.gd      # 6 Slots + Lagerbestand
+│   │   ├── notebook.gd       # Fragmente, Fragen, Antworten, Enden
+│   │   └── save_system.gd    # Ein Speicherstand, wird bei Tod gelöscht
+│   ├── data/                 # Resource-Schemas
+│   ├── scenes/               # main · room_view · hotspot · sleep · event_popup
+│   └── ui/                   # hud · inventory · notebook · map · action_menu
+├── content/                  # rooms/ items/ events/ clues/ als .tres
+├── assets/                   # siehe ASSET_PLAN.md
 └── audio/
 ```
 
-**Wichtige Godot-Details für diesen Stil:**
-- Projekt-Auflösung **640×360**, Stretch-Mode `viewport`, Aspect `keep` → knackige Pixel bei jeder Fenstergröße
-- Textur-Import: Filter **Nearest**, Mipmaps aus
-- Licht/Dunkelheit über `CanvasModulate` + `PointLight2D` mit weichem Lichtkegel-Textur —
-  **so brauchst du pro Raum nur EIN Bild**, keine Hell/Dunkel-Varianten
-- Hotspots als `Area2D` mit `CollisionPolygon2D`, im Editor direkt aufs Raumbild gemalt
-- Speichern nur zwischen den Nächten (kein Quicksave — das ist Teil des Drucks)
+- Auflösung **640 × 360**, Stretch `viewport`, Aspect `keep` → saubere Pixel in jeder Größe
+- Textur-Import: Filter **Nearest**
+- Licht per `CanvasModulate` + `PointLight2D` → **ein Bild pro Raum reicht**,
+  die vier LIGHT-Stufen entstehen im Shader
+- **Ein einziger Speicherstand**, automatisch, wird bei Tod gelöscht (Permadeath)
 
 ---
 
-## 8. Entwicklungs-Roadmap
+## 10. Roadmap
 
-| Meilenstein | Inhalt | Ergebnis |
-|---|---|---|
-| **M0 — Gerüst** | Godot-Projekt, Ordner, Autoloads leer, ein Raum mit Platzhalter | Startet und zeigt einen Raum |
-| **M1 — Kernschleife** | Uhr, Raumwechsel, Hotspots, Aktionen mit Zeitkosten | Eine Nacht ist spielbar |
-| **M2 — Druck** | Öl/Licht, Angst, Präsenz, Heimsuchung | Es wird bedrohlich |
-| **M3 — Zufall** | Event-Deck mit Drama-Manager, 30 Ereignisse | Jede Nacht fühlt sich anders an |
-| **M4 — Geheimnis** | Notizbuch, Fragmente, Kombinieren, Enden | Das Spiel hat ein Ziel |
-| **M5 — Inhalt** | Alle 14 Räume, 7 Nächte, ~60 Ereignisse | Vollständiger Durchlauf |
-| **M6 — Politur** | Deine echten Sprites rein, Sound, Balancing, Menüs | Veröffentlichbar |
+| Meilenstein | Inhalt |
+|---|---|
+| **M0** | Godot-Projekt, Ordner, Platzhalter, ein Raum ist sichtbar |
+| **M1** | Bewegung zwischen 5 Räumen, Hotspots, Uhr, Aktionen mit Zeitkosten |
+| **M2** | FOOD und REST, Essen, Schlafen, Zustände |
+| **M3** | LIGHT und SAFETY: Taschenlampe, Kerzen, Sicherungskasten, Barrikaden |
+| **M4** | Ereignis-System mit allen fünf Kategorien, ~40 Ereignisse |
+| **M5** | Notizbuch, Fragmente, die vier Fragen, die Enden |
+| **M6** | Alle 13 Räume, ~100 Ereignisse, Eskalationsdecks |
+| **M7** | Deine Sprites rein, Ton, Balancing |
 
 ---
 
-## 9. Offene Entscheidungen
+## 11. Offene Punkte
 
-Diese Punkte habe ich vorläufig festgelegt — sag Bescheid, wenn du es anders willst:
-
-1. **Titel** — "Ashgrove" ist nur ein Platzhalter.
-2. **Zeitalter** — Ich bin von ~1920er ausgegangen (Öllampe statt Taschenlampe, kein Strom).
-   Modern (Taschenlampe + Batterien) würde auch funktionieren, ändert aber die Ressourcen-Fantasie.
-3. **Sprache** — Konzept auf Deutsch. Spieltexte: Deutsch, Englisch oder beides?
-4. **Tod** — Aktuell kein sofortiger Tod, sondern Verlust. Härter (Permadeath) wäre möglich.
-5. **Umfang** — 7 Nächte / 14 Räume ist ambitioniert. Eine 3-Nächte-Version wäre ein realistisches erstes Ziel.
+1. **Titel** — "Ashgrove" ist ein Platzhalter.
+2. **Wovor bist du weggelaufen?** Mein Vorschlag: es wird nie beantwortet.
+   Das Ding draußen und das Ding im Haus bleiben getrennt und beide ungeklärt.
+3. **Umfang von Version 1** — noch offen, du wolltest das später entscheiden.
+4. **Balancing-Zahlen** — alle Werte oben sind erste Schätzungen zum Draufhauen.

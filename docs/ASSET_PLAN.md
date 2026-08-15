@@ -1,213 +1,249 @@
 # Asset-Plan — ASHGROVE
 
-Alles, was an Grafik und Ton gebraucht wird. **Du zeichnest die echten Sprites,
-ich baue nur simple Platzhalter in denselben Maßen** — dadurch kannst du jederzeit
-eine Datei austauschen, ohne dass am Code etwas geändert werden muss.
+**Version 0.2** — angepasst an das überarbeitete Konzept (vier Achsen, keine
+Monster-Sprites, 1960er-Setting, englische Texte).
+
+**Du zeichnest die echten Sprites, ich baue nur simple Platzhalter in exakt denselben
+Maßen und mit denselben Dateinamen.** Dadurch kannst du jederzeit eine Datei
+austauschen, ohne dass am Code etwas geändert werden muss.
 
 ---
 
-## 1. Technische Vorgaben (bitte einhalten, dann passt alles sofort)
+## 1. Technische Vorgaben
 
 | Punkt | Vorgabe |
 |---|---|
-| **Basis-Auflösung** | 640 × 360 Pixel (16:9). Das Spiel skaliert auf 1280×720 / 1920×1080 hoch. |
+| **Basis-Auflösung** | 640 × 360 Pixel (16:9), skaliert sauber auf 1280×720 und 1920×1080 |
 | **Format** | PNG mit Transparenz (RGBA), kein JPG |
-| **Pixel-Art-Regel** | **Kein Anti-Aliasing**, keine weichen Kanten, keine Halbtransparenz an Rändern |
-| **Farbtiefe** | Frei, aber eine gemeinsame Palette (max. ~32 Farben) hält den Look zusammen |
-| **Benennung** | klein_mit_unterstrichen, siehe Tabellen unten. Genau so, sonst findet der Code sie nicht. |
-| **Animation** | Als horizontaler Sprite-Sheet-Streifen, alle Frames gleich groß |
-| **Kein Licht einbauen** | Räume bitte **gleichmäßig ausgeleuchtet** zeichnen. Dunkelheit, Lampenschein und Schatten macht die Engine per Shader darüber. Sonst passt das Licht nicht zur Lampe. |
+| **Pixel-Art-Regel** | **Kein Anti-Aliasing**, keine weichen Kanten, keine halbtransparenten Ränder |
+| **Palette** | Frei, aber gemeinsam für alles. Max. ~32 Farben hält den Look zusammen. |
+| **Benennung** | exakt wie unten, klein_mit_unterstrichen |
+| **Animation** | Horizontaler Sprite-Sheet-Streifen, alle Frames gleich groß |
+| **Kein Licht einbauen** | Räume **gleichmäßig ausgeleuchtet** zeichnen. Die vier LIGHT-Stufen macht die Engine per Shader darüber. Sonst passt das Licht nicht zur Taschenlampe. |
+| **Untere 40 Pixel freihalten** | Da liegt die Inventarleiste. |
 
-### Farbpalette — Vorschlag
+### Palette — Vorschlag
 
-Ein Horror-Look lebt von Zurückhaltung. Vorschlag als Ausgangspunkt:
-
-- **Schatten/Basis:** sehr dunkles Blaugrün und Braun (nicht reines Schwarz)
-- **Mitteltöne:** entsättigtes Holzbraun, Staubgrau, verblasstes Grün
-- **Akzente:** genau zwei — warmes Kerzengelb (Sicherheit) und ein kaltes Rot (Gefahr)
+- **Basis/Schatten:** sehr dunkles Blaugrün und Braun, **nie reines Schwarz**
+- **Mitteltöne:** entsättigtes Holzbraun, Staubgrau, verblasstes Tapetengrün
+- **Genau zwei Akzente:** warmes Glühbirnengelb (= Sicherheit) und ein stumpfes Rot (= Gefahr)
 - Alles andere entsättigt. Wenn Farbe auftaucht, soll sie etwas bedeuten.
 
----
-
-## 2. Prioritäten
+### Prioritäten
 
 | Stufe | Bedeutung |
 |---|---|
-| **P0** | Für den ersten spielbaren Prototyp. Ohne das läuft nichts. |
-| **P1** | Für eine vollständige spielbare Nacht. |
-| **P2** | Für die Vollversion. |
+| **P0** | Erster spielbarer Prototyp — 5 Räume, alle vier Achsen |
+| **P1** | Vollständiger Spieldurchlauf |
+| **P2** | Politur und Vollversion |
 
 ---
 
-## 3. Raum-Hintergründe · `assets/rooms/`
+## 2. Raum-Hintergründe · `assets/rooms/` — **640 × 360**
 
-**Je Raum genau eine Datei, 640 × 360.** Keine Hell/Dunkel-Varianten nötig.
+Je Raum **eine** Datei. Keine Hell/Dunkel-Varianten nötig.
 
-| Datei | Raum | Prio |
-|---|---|---|
-| `room_hall.png` | Eingangshalle (Kamin, Treppe, Haustür) | P0 |
-| `room_parlor.png` | Salon (Sofa, Klavier, Vitrine) | P0 |
-| `room_library.png` | Bibliothek (Regale, Lesepult, Kamin) | P0 |
-| `room_kitchen.png` | Küche (Herd, Speisekammer, Kellertür) | P0 |
-| `room_upper_hall.png` | Oberer Flur (vier Türen, Fenster) | P0 |
-| `room_dining.png` | Speisezimmer | P1 |
-| `room_bedroom.png` | Schlafzimmer (Bett, Schrank) | P1 |
-| `room_study.png` | Arbeitszimmer (Schreibtisch, Safe) | P1 |
-| `room_cellar.png` | Weinkeller | P1 |
-| `room_nursery.png` | Kinderzimmer | P2 |
-| `room_bath.png` | Bad (großer Spiegel) | P2 |
-| `room_conservatory.png` | Wintergarten | P2 |
-| `room_attic.png` | Dachboden | P2 |
-| `room_chamber.png` | Verborgene Kammer | P2 |
+| Datei | Raum | Was drin sein muss | Prio |
+|---|---|---|---|
+| `room_entrance.png` | Entrance Hall | Haustür (der Ausgang), Treppe, Garderobe | **P0** |
+| `room_kitchen.png` | Kitchen | Herd, Speisekammertür, Spüle, Kellertür | **P0** |
+| `room_bedroom.png` | Bedroom | Bett, Kleiderschrank, Nachttisch, Fenster | **P0** |
+| `room_library.png` | Library | Regale (Bretter!), Lesepult, Kamin | **P0** |
+| `room_cellar.png` | Cellar | **Sicherungskasten**, Einmachregale, Treppe | **P0** |
+| `room_parlor.png` | Parlor | Schweres Sofa, Radio, Vitrine | P1 |
+| `room_upper_landing.png` | Upper Landing | Vier Türen, Fenster, Geländer | P1 |
+| `room_study.png` | Study | Schreibtisch, **Telefon**, Safe | P1 |
+| `room_attic.png` | Attic | Werkbank, Bretterstapel, Koffer | P1 |
+| `room_dining.png` | Dining Room | Langer Tisch, Kerzenleuchter, Anrichte | P1 |
+| `room_bathroom.png` | Bathroom | Spiegelschrank, Wanne | P2 |
+| `room_nursery.png` | Nursery | Kinderbett, Spielzeug, Schrank | P2 |
+| `room_conservatory.png` | Conservatory | Große Glasfront, Blick nach draußen | P2 |
 
-**Optional pro Raum — Überlagerungen** (`_ovl_` = wird über das Raumbild gelegt):
+### Überlagerungen · `_ovl_` — dieselbe Größe, transparent
 
 | Datei | Zweck | Prio |
 |---|---|---|
-| `room_hall_ovl_fire.png` | Brennender Kamin, 4 Frames | P1 |
+| `room_*_ovl_barricade_2.png` | Möbel vor der Tür (SAFETY 2) | **P0** — mind. für die 5 P0-Räume |
+| `room_*_ovl_barricade_3.png` | Bretter vernagelt (SAFETY 3) | **P0** — dito |
+| `room_*_ovl_stash.png` | Dein Vorratsstapel, wenn hier dein Lager ist | P1 |
 | `room_*_ovl_open.png` | Geöffnete Schranktür / Schublade, nur wo nötig | P1 |
-| `room_*_ovl_corrupt.png` | "Verdorbene" Variante ab Nacht 4 (Blut, Risse, falsche Geometrie) | P2 |
-
-**Zeichenhinweise für Räume:**
-- Die untersten ~40 Pixel bleiben frei von wichtigen Details → dort liegt die Inventarleiste.
-- Interaktive Möbel klar lesbar und **voneinander getrennt** platzieren (Hotspots brauchen Platz).
-- Fluchtpunkt-Perspektive, leicht von oben — man soll den Raum "betreten" können.
+| `room_*_ovl_wrong.png` | Ab Tag 7: der Raum stimmt nicht mehr | P2 |
+| `room_entrance_ovl_door.png` | Die Haustür in mehreren Zuständen, 3 Frames | P1 |
 
 ---
 
-## 4. Gegenstände · `assets/items/` — **32 × 32**
+## 3. Gegenstände · `assets/items/` — **32 × 32**
 
-Werden als Inventar-Icon und im Fundbildschirm benutzt.
-
-| Datei | Gegenstand | Prio |
-|---|---|---|
-| `item_lamp.png` | Öllampe | P0 |
-| `item_oil.png` | Ölkanne | P0 |
-| `item_matches.png` | Streichholzschachtel | P0 |
-| `item_candle.png` | Kerze | P0 |
-| `item_crowbar.png` | Brecheisen | P0 |
-| `item_lockpick.png` | Dietrich | P1 |
-| `item_key_brass.png` | Messingschlüssel | P1 |
-| `item_key_iron.png` | Eisenschlüssel | P1 |
-| `item_note.png` | Zusammengefaltete Notiz | P0 |
-| `item_diary.png` | Tagebuch | P1 |
-| `item_photo.png` | Vergilbtes Foto | P1 |
-| `item_laudanum.png` | Laudanum-Fläschchen | P1 |
-| `item_silver_cross.png` | Silberkreuz (Ritual) | P2 |
-| `item_doll.png` | Puppe (Ritual) | P2 |
-| `item_ring.png` | Ehering (Ritual) | P2 |
-| `item_bone.png` | Knochen (Ritual) | P2 |
-| `item_mirror_shard.png` | Spiegelscherbe (Ritual) | P2 |
-| `item_ledger.png` | Hauptbuch | P2 |
-
----
-
-## 5. Bedienoberfläche · `assets/ui/`
-
-| Datei | Größe | Zweck | Prio |
-|---|---|---|---|
-| `ui_frame_hud.png` | 640 × 24 | Leiste oben (9-Slice-fähig) | P0 |
-| `ui_frame_inventory.png` | 640 × 40 | Leiste unten | P0 |
-| `ui_slot.png` | 36 × 36 | Leerer Inventarplatz | P0 |
-| `ui_slot_hover.png` | 36 × 36 | Platz unter dem Mauszeiger | P0 |
-| `ui_clock.png` | 48 × 24 | Uhr-Rahmen | P0 |
-| `ui_oil_bar.png` | 64 × 8 | Ölanzeige, leer + voll als 2 Frames | P0 |
-| `ui_fear_bar.png` | 64 × 8 | Angstanzeige | P0 |
-| `ui_presence_pip.png` | 10 × 10 | Präsenz-Punkt, 2 Frames (aus/an) | P0 |
-| `ui_button.png` | 64 × 20 | Knopf, 3 Frames (normal/hover/gedrückt) | P0 |
-| `ui_panel.png` | 200 × 120 | Dialog-/Menühintergrund, 9-Slice | P0 |
-| `ui_notebook_bg.png` | 640 × 360 | Aufgeschlagenes Notizbuch | P1 |
-| `ui_clue_card.png` | 96 × 64 | Hinweis-Kärtchen | P1 |
-| `ui_map.png` | 640 × 360 | Grundriss der Villa, Räume einzeln ein-/ausblendbar | P1 |
-| `ui_cursor.png` | 16 × 16 | Mauszeiger, 3 Frames (normal/hand/verboten) | P0 |
-| `ui_title_logo.png` | 400 × 120 | Titelschriftzug | P2 |
-
-**Schrift:** Ein Pixel-Font mit deutschen Umlauten (ä ö ü ß!) — nach `assets/fonts/`.
-Zwei Größen: klein (HUD, 8 px) und groß (Titel/Notizbuch, 16 px).
-Kostenlose Empfehlungen mit Umlaut-Unterstützung: *m5x7*, *m6x11*, *Pixel Operator*.
-
----
-
-## 6. Die Präsenz & Effekte · `assets/entities/` und `assets/fx/`
-
-Bewusst **wenig zeigen**. Das Meiste sind Andeutungen, keine Kreatur in voller Größe.
-
-| Datei | Größe | Zweck | Prio |
-|---|---|---|---|
-| `fx_vignette.png` | 640 × 360 | Dunkler Bildrand, wird nach Angst eingeblendet | P0 |
-| `fx_light_cone.png` | 256 × 256 | Weiche Lichtmaske für die Lampe (Graustufen) | P0 |
-| `fx_light_candle.png` | 128 × 128 | Kleinere, wärmere Maske für Kerzen | P0 |
-| `fx_dust.png` | 8 × 8 | Staubkorn für Partikel, 3 Varianten | P1 |
-| `fx_scratch.png` | 640 × 360 | Filmkorn/Kratzer-Überlagerung, 4 Frames | P1 |
-| `entity_shadow_door.png` | 64 × 96 | Silhouette im Türrahmen | P1 |
-| `entity_shadow_hall.png` | 48 × 80 | Gestalt am Ende des Flurs | P1 |
-| `entity_hands.png` | 640 × 360 | Hände am Bildrand (Heimsuchung) | P2 |
-| `entity_face.png` | 128 × 128 | Gesicht — der einzige echte Jumpscare, sehr sparsam | P2 |
-| `entity_mirror.png` | 96 × 128 | Spiegelbild, das nicht deins ist | P2 |
-
----
-
-## 7. Ton · `audio/`
-
-Ton trägt bei diesem Spiel mehr als die Grafik. Wenn Zeit knapp ist: **lieber weniger Sprites, besserer Ton.**
-
-### Umgebung (`audio/ambient/`) — je 60–120 s, nahtlos loopend
+### Licht
 
 | Datei | Prio |
 |---|---|
-| `amb_house_calm.ogg` — Grundton: Wind, knarrendes Holz | P0 |
-| `amb_house_tense.ogg` — dasselbe, aber falsch (ab Präsenz 3) | P1 |
-| `amb_cellar.ogg` — Tropfen, Enge | P1 |
-| `amb_attic.ogg` — Regen aufs Dach, Flügelschlag | P2 |
+| `item_flashlight.png` — Taschenlampe, 1960er-Form | **P0** |
+| `item_battery.png` — Batterie | **P0** |
+| `item_candle.png` — Kerze | **P0** |
+| `item_matches.png` — Streichholzschachtel | **P0** |
+| `item_fuse.png` — Schmelzsicherung | **P0** |
+| `item_lantern.png` — Petroleumlampe | P1 |
+
+### Essen
+
+| Datei | Prio |
+|---|---|
+| `item_can.png` — Konservendose | **P0** |
+| `item_can_open.png` — geöffnete Dose | **P0** |
+| `item_bread.png` — Brot (verderblich) | **P0** |
+| `item_preserves.png` — Einmachglas | P1 |
+| `item_meal_hot.png` — warme Mahlzeit vom Herd | P1 |
+| `item_food_spoiled.png` — verdorben (graue Variante) | P1 |
+
+### Bauen und Werkzeug
+
+| Datei | Prio |
+|---|---|
+| `item_board.png` — Brett | **P0** |
+| `item_nails.png` — Nagelschachtel | **P0** |
+| `item_hammer.png` — Hammer | **P0** |
+| `item_crowbar.png` — Brecheisen | P1 |
+| `item_screwdriver.png` — Schraubendreher | P1 |
+| `item_key.png` — Schlüssel | P1 |
+
+### Gesundheit
+
+| Datei | Prio |
+|---|---|
+| `item_bandage.png` — Verbandskasten | **P0** |
+| `item_pills.png` — Tablettenröhrchen | P1 |
+| `item_blanket.png` — Decke (besserer Schlaf) | P2 |
+
+### Geheimnis
+
+| Datei | Prio |
+|---|---|
+| `item_note.png` — gefaltete Notiz | **P0** |
+| `item_photo.png` — vergilbtes Foto | P1 |
+| `item_diary.png` — Tagebuch | P1 |
+| `item_letter.png` — Brief | P1 |
+| `item_ring.png` · `item_doll.png` · `item_locket.png` · `item_bone.png` | die vier möglichen "Rückgabe"-Gegenstände | P2 |
+
+---
+
+## 4. Bedienoberfläche · `assets/ui/`
+
+| Datei | Größe | Zweck | Prio |
+|---|---|---|---|
+| `ui_bar_top.png` | 640 × 28 | Kopfleiste, 9-Slice | **P0** |
+| `ui_bar_bottom.png` | 640 × 44 | Inventarleiste, 9-Slice | **P0** |
+| `ui_slot.png` | 36 × 36 | Inventarplatz, 3 Frames (leer/hover/belegt) | **P0** |
+| `ui_meter.png` | 72 × 10 | Leiste für FOOD und REST, 2 Frames (Rahmen/Füllung) | **P0** |
+| `ui_pip_light.png` | 10 × 10 | LIGHT-Punkt, 2 Frames (aus/an) | **P0** |
+| `ui_pip_safety.png` | 10 × 10 | SAFETY-Punkt, 2 Frames | **P0** |
+| `ui_button.png` | 72 × 22 | Knopf, 3 Frames (normal/hover/gedrückt) | **P0** |
+| `ui_panel.png` | 240 × 140 | Dialoghintergrund, 9-Slice | **P0** |
+| `ui_cursor.png` | 16 × 16 | Mauszeiger, 3 Frames (normal/hand/gesperrt) | **P0** |
+| `ui_event_frame.png` | 400 × 220 | **Rahmen für Ereignis-Popups.** Wichtigstes UI-Element im Spiel. | **P0** |
+| `ui_icon_status.png` | 16 × 16 | Zustandssymbole, 6 Frames: Injured · Bleeding · Sick · Fevered · Shaken · Starving | **P0** |
+| `ui_sleep_dialog.png` | 300 × 180 | Schlaf-Dialog mit Risikoanzeige | **P0** |
+| `ui_notebook_bg.png` | 640 × 360 | Aufgeschlagenes Notizbuch, vier Fragen | P1 |
+| `ui_clue_card.png` | 100 × 70 | Hinweis-Kärtchen, 2 Frames (offen/verdeckt) | P1 |
+| `ui_map.png` | 640 × 360 | Grundriss, Räume einzeln ein-/ausblendbar | P1 |
+| `ui_fusebox.png` | 320 × 220 | Sicherungskasten-Bildschirm, 3 Steckplätze | P1 |
+| `ui_title_logo.png` | 400 × 120 | Titelschriftzug | P2 |
+| `ui_death_card.png` | 640 × 360 | Zusammenfassung nach dem Tod | P2 |
+
+**Schrift** → `assets/fonts/` — Pixel-Font, zwei Größen (8 px HUD, 16 px Titel/Notizbuch).
+Da die Spieltexte englisch sind, brauchst du **keine Umlaute**. Gute kostenlose
+Empfehlungen: *m5x7*, *m6x11*, *Pixel Operator*.
+
+---
+
+## 5. Effekte · `assets/fx/`
+
+Es gibt **keine Monster-Sprites** mehr. Die Bedrohung ist Text, Ton und Licht.
+Was hier steht, ist alles, was du an "Übernatürlichem" zeichnen musst.
+
+| Datei | Größe | Zweck | Prio |
+|---|---|---|---|
+| `fx_light_flashlight.png` | 256 × 256 | Kegelförmige Lichtmaske, Graustufen weich | **P0** |
+| `fx_light_candle.png` | 128 × 128 | Runde, warme Maske | **P0** |
+| `fx_light_bulb.png` | 320 × 320 | Große Maske für Deckenlicht | **P0** |
+| `fx_vignette.png` | 640 × 360 | Dunkler Bildrand, Stärke abhängig von REST | **P0** |
+| `fx_dust.png` | 8 × 8 | Staubkorn, 3 Varianten | P1 |
+| `fx_grain.png` | 640 × 360 | Filmkorn, 4 Frames | P1 |
+| `fx_shadow_figure.png` | 40 × 88 | **Eine** Silhouette, nur als Andeutung am Bildrand. Sparsam einsetzen. | P1 |
+| `fx_handwriting.png` | 200 × 120 | Die Schrift aus dem Schlaf-Ereignis | P2 |
+| `fx_hallucination.png` | 640 × 360 | Verzerrung bei REST unter 20 | P2 |
+
+---
+
+## 6. Ton · `audio/`
+
+Bei diesem Konzept trägt der Ton **mehr als die Grafik** — die ganze Bedrohung ist
+unsichtbar. Wenn Zeit knapp wird: lieber weniger Sprites, besserer Ton.
+
+### Umgebung (`audio/ambient/`) — 60–120 s, nahtlos loopend
+
+| Datei | Prio |
+|---|---|
+| `amb_house_day.ogg` — Wind, Holz, entfernte Vögel | **P0** |
+| `amb_house_night.ogg` — dasselbe, aber leerer und tiefer | **P0** |
+| `amb_cellar.ogg` — Tropfen, Enge, Brummen des Sicherungskastens | P1 |
+| `amb_attic.ogg` — Regen aufs Dach | P2 |
 
 ### Effekte (`audio/sfx/`)
 
 | Gruppe | Dateien | Prio |
 |---|---|---|
-| Schritte | `sfx_step_wood_1..4.ogg`, `sfx_step_stone_1..4.ogg` | P0 |
-| Türen | `sfx_door_open.ogg`, `sfx_door_close.ogg`, `sfx_door_locked.ogg` | P0 |
-| Durchsuchen | `sfx_search_drawer.ogg`, `sfx_search_cloth.ogg`, `sfx_search_paper.ogg` | P0 |
-| Licht | `sfx_match_strike.ogg`, `sfx_lamp_out.ogg`, `sfx_candle_place.ogg` | P0 |
-| Bedienung | `sfx_ui_click.ogg`, `sfx_ui_hover.ogg`, `sfx_clue_found.ogg` | P0 |
-| Werkzeug | `sfx_crowbar_pry.ogg` (laut!), `sfx_lockpick.ogg` (leise) | P1 |
-| Bedrohung | `sfx_presence_1..5.ogg` — je Stufe ein Signal, das lauter/näher wird | P1 |
-| Heimsuchung | `sfx_haunt_begin.ogg`, `sfx_haunt_pass.ogg`, `sfx_haunt_fail.ogg`, `sfx_heartbeat.ogg` | P1 |
-| Uhr | `sfx_clock_tick.ogg`, `sfx_clock_chime.ogg` (zu jeder vollen Stunde) | P1 |
+| Schritte | `sfx_step_wood_1..4.ogg`, `sfx_step_stone_1..4.ogg` | **P0** |
+| Türen | `sfx_door_open.ogg`, `sfx_door_close.ogg`, `sfx_door_locked.ogg` | **P0** |
+| Suchen | `sfx_search_drawer.ogg`, `sfx_search_cloth.ogg`, `sfx_search_paper.ogg` | **P0** |
+| Licht | `sfx_flashlight_click.ogg`, `sfx_match_strike.ogg`, `sfx_bulb_on.ogg`, `sfx_bulb_burst.ogg` | **P0** |
+| Strom | `sfx_fuse_insert.ogg`, `sfx_fuse_blow.ogg`, `sfx_power_hum.ogg` (loop) | **P0** |
+| Bauen | `sfx_hammer_1..3.ogg`, `sfx_furniture_drag.ogg`, `sfx_wood_break.ogg` | **P0** |
+| Essen/Schlaf | `sfx_can_open.ogg`, `sfx_eat.ogg`, `sfx_bed_creak.ogg`, `sfx_wake.ogg` | **P0** |
+| Bedienung | `sfx_ui_click.ogg`, `sfx_ui_hover.ogg`, `sfx_event_appear.ogg`, `sfx_clue_found.ogg` | **P0** |
+| Ereignisse | `sfx_scratch_door.ogg`, `sfx_steps_above.ogg`, `sfx_whisper.ogg`, `sfx_thud_distant.ogg`, `sfx_breathing.ogg` | **P0** |
+| 60er-Technik | `sfx_radio_static.ogg`, `sfx_radio_voice.ogg`, `sfx_phone_ring.ogg`, `sfx_phone_pickup.ogg` | P1 |
+| Zustände | `sfx_heartbeat.ogg`, `sfx_cough.ogg`, `sfx_stomach.ogg` | P1 |
 
 ### Musik (`audio/music/`)
 
 | Datei | Zweck | Prio |
 |---|---|---|
 | `mus_title.ogg` | Hauptmenü | P1 |
-| `mus_interlude.ogg` | Zwischen den Nächten | P1 |
-| `mus_finale.ogg` | Nacht 7 / Ritual | P2 |
+| `mus_death.ogg` | Zusammenfassung nach dem Tod | P1 |
+| `mus_ending.ogg` | Wenn die Tür aufgeht | P2 |
 
-Während der Nacht läuft **keine Musik** — nur Umgebungston. Musik nimmt der Stille die Wirkung.
+**Während des Spiels läuft keine Musik.** Nur Umgebungston. Musik nimmt der Stille
+die Wirkung, und die Stille ist hier das Hauptinstrument.
 
 ---
 
-## 8. Mengengerüst
+## 7. Mengengerüst
 
 | Kategorie | P0 | P1 | P2 | Gesamt |
 |---|---|---|---|---|
-| Raum-Hintergründe | 5 | 4 | 5 | **14** |
-| Raum-Überlagerungen | 0 | ~8 | ~14 | **~22** |
-| Gegenstände | 7 | 6 | 6 | **19** |
-| Bedienoberfläche | 11 | 3 | 1 | **15** |
-| Effekte / Präsenz | 3 | 4 | 3 | **10** |
-| Tondateien | ~20 | ~20 | ~6 | **~46** |
+| Raum-Hintergründe | 5 | 5 | 3 | **13** |
+| Raum-Überlagerungen | 10 | ~10 | ~13 | **~33** |
+| Gegenstände | 12 | 11 | 5 | **28** |
+| Bedienoberfläche | 12 | 4 | 2 | **18** |
+| Effekte | 4 | 3 | 2 | **9** |
+| Tondateien | ~40 | ~15 | ~3 | **~58** |
 
-**Für den ersten spielbaren Prototyp brauchst du also 26 Grafiken.**
-Davon sind 5 die aufwendigen Raumbilder — der Rest sind kleine Icons.
+**Für den Prototyp: 43 Grafiken.** Davon sind 5 aufwendige Raumbilder und
+10 Barrikaden-Überlagerungen — der Rest sind kleine Icons von 16 bis 36 Pixeln.
+
+Wenn du klein anfangen willst: **Zeichne zuerst `room_kitchen.png`.** Daran sehe
+ich deine Palette, deine Perspektive und deine Detailtiefe und kann alle Platzhalter
+danach ausrichten.
 
 ---
 
-## 9. Ablauf beim Austauschen
+## 8. Ablauf beim Austauschen
 
-1. Ich lege für jede Datei oben einen **Platzhalter in exakt derselben Größe und mit demselben Namen** an.
+1. Ich lege für jede Datei oben einen **Platzhalter in exakt derselben Größe** an.
 2. Du zeichnest die echte Version.
-3. Du legst sie einfach über den Platzhalter (gleicher Pfad, gleicher Name).
-4. Godot lädt sie beim nächsten Start automatisch. **Keine Code-Änderung nötig.**
+3. Du legst sie über den Platzhalter — gleicher Pfad, gleicher Name.
+4. Godot lädt sie beim nächsten Start. **Keine Code-Änderung nötig.**
 
-Wenn du eine Grafik in einer *anderen* Größe machen willst als hier angegeben:
-sag vorher Bescheid, dann passe ich die Vorgabe an, bevor du malst.
+Willst du eine Grafik in einer anderen Größe machen als hier angegeben:
+sag vorher Bescheid, dann passe ich die Vorgabe an, **bevor** du malst.
