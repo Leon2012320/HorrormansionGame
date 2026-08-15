@@ -134,7 +134,8 @@ Je Raum **eine** Datei. Keine Hell/Dunkel-Varianten nötig.
 | `ui_bar_top.png` | 640 × 28 | Kopfleiste, 9-Slice | **P0** |
 | `ui_bar_bottom.png` | 640 × 44 | Inventarleiste, 9-Slice | **P0** |
 | `ui_slot.png` | 36 × 36 | Inventarplatz, 3 Frames (leer/hover/belegt) | **P0** |
-| `ui_meter.png` | 72 × 10 | Leiste für FOOD und REST, 2 Frames (Rahmen/Füllung) | **P0** |
+| `ui_meter.png` | 72 × 10 | FOOD-Leiste, 2 Frames (Rahmen/Füllung) | **P0** |
+| `ui_pip_energy.png` | 14 × 14 | **ENERGY-Punkt**, 3 Frames (voll/verbraucht/gesperrt). Wichtigstes Anzeigeelement — der Spieler schaut den ganzen Tag darauf. | **P0** |
 | `ui_pip_light.png` | 10 × 10 | LIGHT-Punkt, 2 Frames (aus/an) | **P0** |
 | `ui_pip_safety.png` | 10 × 10 | SAFETY-Punkt, 2 Frames | **P0** |
 | `ui_button.png` | 72 × 22 | Knopf, 3 Frames (normal/hover/gedrückt) | **P0** |
@@ -142,7 +143,8 @@ Je Raum **eine** Datei. Keine Hell/Dunkel-Varianten nötig.
 | `ui_cursor.png` | 16 × 16 | Mauszeiger, 3 Frames (normal/hand/gesperrt) | **P0** |
 | `ui_event_frame.png` | 400 × 220 | **Rahmen für Ereignis-Popups.** Wichtigstes UI-Element im Spiel. | **P0** |
 | `ui_icon_status.png` | 16 × 16 | Zustandssymbole, 6 Frames: Injured · Bleeding · Sick · Fevered · Shaken · Starving | **P0** |
-| `ui_sleep_dialog.png` | 300 × 180 | Schlaf-Dialog mit Risikoanzeige | **P0** |
+| `ui_sleep_dialog.png` | 300 × 180 | Schlaf-Dialog: Raum, Risiko in Worten, 1–3 Segmente | **P0** |
+| `ui_night_report.png` | 480 × 300 | Morgenbericht: was in der Nacht passiert ist | **P0** |
 | `ui_notebook_bg.png` | 640 × 360 | Aufgeschlagenes Notizbuch, vier Fragen | P1 |
 | `ui_clue_card.png` | 100 × 70 | Hinweis-Kärtchen, 2 Frames (offen/verdeckt) | P1 |
 | `ui_map.png` | 640 × 360 | Grundriss, Räume einzeln ein-/ausblendbar | P1 |

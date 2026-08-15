@@ -19,35 +19,41 @@ wie lange du hier drin sein wirst.**
 
 ## Stand
 
-Konzeptphase, Version 0.4. Noch kein Code.
+Konzeptphase, Version 0.5. Noch kein Code.
+
+## Sechs Handlungen am Tag
+
+Es gibt **keine Uhr und keine Minuten.** Ein Tag besteht aus einer festen Zahl
+Handlungen — meistens sechs. Laufen, ansehen und lesen sind kostenlos; suchen, bauen,
+kochen und pflanzen kosten. Wie viele du hast, hängt davon ab, wie du geschlafen hast.
+
+Ein Durchlauf geht über **20 Tage** und dauert **60–80 Minuten**.
 
 ## Die vier Achsen
 
-Das ganze Spiel hängt an vier Dingen — mehr gibt es nicht:
-
-- **FOOD** — Essen ist endlich und du musst dafür raus aus dem sicheren Raum
-- **REST** — du musst schlafen, und im Schlaf passiert alles
-- **LIGHT** — Taschenlampe, Kerze oder Deckenlicht; das Haus hat nur drei Sicherungen
-- **SAFETY** — Türen, Möbel, Bretter. Barrikaden halten nicht ewig.
+- **ENERGY** — deine Handlungen heute, berechnet aus der letzten Nacht
+- **FOOD** — endlich; und arbeiten macht hungrig
+- **LIGHT** — Taschenlampe, Kerze oder Deckenlicht; das Haus hat drei Sicherungen
+- **SAFETY** — Türen, Möbel, Bretter. Barrikaden halten nicht.
 
 ## Der Rhythmus
 
 **Tagsüber passiert fast nichts. 90 % aller Ereignisse passieren, während du schläfst** —
-und schlafen musst du. Der Tag ist Vorbereitung, die Nacht ist die Prüfung, der Morgen
-ist die Rechnung.
+und schlafen musst du, sonst hast du morgen nichts zu tun. Der Tag ist Vorbereitung,
+die Nacht ist die Prüfung, der Morgen ist die Rechnung.
 
 Es gibt **kein Monster mit Wegfindung und keine Bedrohungsanzeige.** Kein Ereignis
 tötet dich direkt — es gibt dir einen Zustand, und der bringt dich um, wenn du ihn
-ignorierst. Tod ist endgültig.
+ignorierst. **Tod ist endgültig, es wird nicht gespeichert.**
 
 ## Zwei Wege raus
 
-- **THE DOOR** — herausfinden, was das Haus verlangt, und selbst gehen. Ab Tag 20
-  möglich, ein guter Durchlauf endet um Tag 22–28. Der gedachte Normalweg.
-- **RESCUE** — durchhalten bis Tag 50. Der Tag wird dir nie genannt, das Radio ist
-  die einzige Vorwarnung. Der Ausdauerweg für die, die es wissen wollen.
+- **THE DOOR** — herausfinden, was das Haus verlangt, und selbst gehen. Ab Tag 8
+  möglich, ein guter Durchlauf endet um Tag 10–14. Der gedachte Normalweg.
+- **RESCUE** — durchhalten bis Tag 20. Der Tag wird dir nie genannt, das Radio ist
+  die einzige Vorwarnung. Der Ausdauerweg.
 
-Im Haus liegen Vorräte für **elf Tage**. Ab etwa Tag 8 musst du im Wintergarten
-anbauen und Fallen stellen, sonst verhungerst du — egal wie gut du sonst spielst.
+Im Haus liegen Vorräte für **zwölf von zwanzig Tagen**. Der Geheimnisweg geht knapp
+ohne Anbau auf, der Rettungsweg nicht.
 
 **Aufgelöst wird nichts.** Du erfährst, *was* zu tun ist, nie *warum*.
