@@ -16,10 +16,12 @@ Du weißt nicht, wie lange du hier drin sein wirst. Es gibt keine Frist, keinen
 Countdown, kein "überlebe sieben Nächte". Es gibt nur die Vorräte, die noch da sind,
 und die Frage, wie du an mehr kommst.
 
+Tagsüber passiert fast nichts. **Alles passiert, während du schläfst** — und schlafen
+musst du.
+
 **Kernfantasie:** Nicht Flucht vor einem Monster, sondern das langsame Rechnen:
-*"Zwei Dosen übrig. Ich bin seit 19 Stunden wach. Der Keller ist unerforscht,
-aber da unten ist es dunkel — und letztes Mal, als ich im Dunkeln gesucht habe,
-ist etwas passiert."*
+*"Zwei Dosen übrig. Ich bin seit 19 Stunden wach. Ich könnte den Keller noch
+absuchen — oder die Zeit nutzen, um die Schlafzimmertür zuzunageln. Beides geht nicht."*
 
 Der nächste Verwandte im Regal ist **This War of Mine** — nur dass der Krieg
 draußen durch ein Haus ersetzt ist, das nicht will, dass du gehst.
@@ -50,8 +52,8 @@ dieser vier Achsen.
 
 ### 2.1 FOOD — Essen
 
-- Sinkt um **4 pro Stunde** Spielzeit → ein Tag kostet etwa 50 Punkte, du brauchst
-  ungefähr **eine ordentliche Mahlzeit pro Tag**.
+- Sinkt um **3 pro wacher Stunde** und **1 pro Schlafstunde** → ein Tag kostet
+  etwa **56 Punkte**, also zwei Konserven oder eine warme Mahlzeit plus Kleinigkeit.
 - Nahrung gibt es in zwei Sorten:
   - **Konserven** — halten ewig, geben 30–40. Die Währung des Spiels.
   - **Verderbliches** — Brot, Obst, Eingemachtes. Gibt mehr (bis 50), aber wird nach
@@ -62,21 +64,24 @@ dieser vier Achsen.
 
 ### 2.2 REST — Schlaf
 
-Das ist die interessanteste Achse, weil Schlafen dich hilflos macht.
+**Das ist die wichtigste Achse des ganzen Spiels**, weil im Schlaf 90 % von allem passiert,
+was dir zustößt. Siehe Abschnitt 3.
 
 - Sinkt um **5 pro wacher Stunde**. Nach etwa 20 Stunden bist du am Ende.
 - Schlafen gibt **+15 pro Stunde**. Im Bett **+20**. Auf dem Boden nur **+8**.
-- **Während du schläfst, zieht das Haus Ereignisse** — und du kannst nicht reagieren.
-  Wie schlimm sie ausfallen, hängt vollständig an LIGHT und SAFETY des Raums,
-  in dem du dich hingelegt hast.
-- Unter REST 20 erscheinen **Halluzinations-Ereignisse**: Hotspots, die nicht existieren,
-  Hinweise, die falsch sind, Geräusche ohne Ursache. Der Spieler kann nicht mehr
-  unterscheiden, was echt ist. Das ist der Horror — nicht ein Gesicht im Fenster.
-- Bei REST 0 **brichst du zusammen, wo du gerade stehst.** Vier Stunden Schlaf an
-  einem ungesicherten, dunklen Ort. Das ist fast immer die schlechteste Nacht deines Lebens.
+- Unter REST 40: du übersiehst beim Durchsuchen Dinge (Fundchance −30 %).
+- Unter REST 20: **Halluzinationen** — Hotspots, die nicht existieren, Hinweise,
+  die falsch sind, Geräusche ohne Ursache. Der Spieler kann nicht mehr unterscheiden,
+  was echt ist. Das ist der Horror, nicht ein Gesicht im Fenster.
+- Bei REST 0 **brichst du zusammen, wo du gerade stehst.** Sechs Stunden Schlaf an
+  einem ungesicherten, dunklen Ort, ohne dass du die Dauer wählen durftest.
+  Das ist fast immer die schlechteste Nacht des Durchlaufs.
 
-→ Die Kernfrage jeder Nacht: *Schlafe ich jetzt, wo es noch sicher ist —
-oder suche ich noch zwei Räume ab und riskiere den Zusammenbruch?*
+Du kannst dich nicht drücken. Wachbleiben ist keine Strategie, es ist nur ein Aufschub —
+und es endet damit, dass du an einem Ort umfällst, den du dir nicht ausgesucht hast.
+
+→ Die Kernfrage jedes Tages: *Wo schlafe ich, wie lange, und wie viel Zeit
+investiere ich vorher noch in diesen Raum?*
 
 ### 2.3 LIGHT — Licht im Raum
 
@@ -130,71 +135,105 @@ Ereignisse nehmen dir etwas weg. Alles auf einen Haufen legen ist bequem und ris
 
 ---
 
-## 3. Die Bedrohung: nur Ereignisse
+## 3. Die Bedrohung: Ereignisse — und fast alle im Schlaf
 
 **Es gibt keine Kreatur mit Wegfindung, keinen Verfolger, keine Bedrohungsanzeige.**
-Alles, was dir zustößt, kommt aus dem Ereignis-System. Das Haus ist der Gegner,
-und es handelt in Momenten, nicht in Bewegungen.
+Alles, was dir zustößt, kommt aus dem Ereignis-System.
+
+Und die entscheidende Regel: **90 % aller Ereignisse passieren, während du schläfst.**
+
+Daraus folgt der ganze Rhythmus des Spiels:
+
+```
+   TAG                          NACHT                        MORGEN
+   ─────────────────────        ──────────────────────       ─────────────────
+   Erkunden, sammeln,     →     Du schläfst.            →    NIGHT REPORT
+   bauen, barrikadieren,        Pro Stunde würfelt           Was ist passiert,
+   Kerzen setzen,               das Haus.                    was fehlt, was ist
+   Vorräte einteilen            Manches weckt dich.          kaputt, was ist neu.
+   ─────────────────────        ──────────────────────       ─────────────────
+   sicher, aber die Uhr         hier passiert alles          hier zahlst du
+   läuft                                                     die Rechnung
+```
+
+Der Tag ist Vorbereitung. Die Nacht ist die Prüfung. Alles, was du tagsüber tust,
+ist im Grunde eine Wette darauf, wie die kommende Nacht ausgeht.
 
 ### 3.1 Wann gezogen wird
 
-- Bei jedem Raumwechsel (30 % Chance)
-- Nach jeder Aktion, die über 15 Minuten dauert (20 %)
-- **Jede Stunde, in der du schläfst** (60 %)
-- Zu festen Uhrzeiten (Mitternacht, 03:00)
+| Situation | Chance |
+|---|---|
+| **Pro Schlafstunde** | **35 %** — bei ~8 Stunden also etwa 3 Ereignisse pro Nacht |
+| Wach, pro Raumwechsel | 4 % — und dann fast nur Ambient oder ein Fund |
+| Wach, nach langer Aktion | 3 % |
 
-### 3.2 Die Kategorien
+Die Wachwelt ist bewusst ruhig. Nicht, weil nichts los ist — sondern damit die
+Stille tagsüber unangenehm wird und der Spieler die ganze Zeit an die Nacht denkt.
+
+### 3.2 Der Schlaf-Ablauf
+
+1. Der Spieler wählt **Raum** und **Dauer** (1–10 Stunden).
+2. Ein Dialog zeigt vorher die Einschätzung — **in Worten, nicht als Prozentzahl**:
+   - *"Dark. Open. You should not sleep here."*
+   - *"Boarded up. A candle burning. This is as good as it gets."*
+3. Bildschirm wird dunkel, die Uhr läuft stundenweise.
+4. Jede Stunde eine Ziehung. Zwei mögliche Verläufe:
+   - **Durchgeschlafen** → die Folgen siehst du erst im Night Report
+   - **Aufgewacht** → ein Choice-Ereignis mitten in der Nacht, halb wach,
+     mit Optionen. Danach: weiterschlafen (weniger Erholung) oder aufbleiben.
+5. Morgens: **Night Report** — eine Seite, die auflistet, was in der Nacht geschah.
+
+### 3.3 Was den Schlaf sicherer macht
+
+| Maßnahme | Wirkung |
+|---|---|
+| SAFETY 3 (verbarrikadiert) | Ereignischance −15 Punkte, schwere Ergebnisse gesperrt |
+| SAFETY 2 (Möbel davor) | −8 Punkte |
+| LIGHT ≥ 2 (Kerze brennt) | −7 Punkte, und die "es war neben dir"-Ereignisse fallen weg |
+| Stolperschnur mit Dosen | Wandelt schwere Ereignisse in "du wachst rechtzeitig auf" |
+| Bett statt Boden | Bessere Erholung, keine Wirkung auf Ereignisse |
+| FOOD über 60 | Keine Hunger-Albträume |
+
+Ein voll ausgebauter Schlafplatz kommt auf etwa **8 % pro Stunde** — also eine
+ruhige Nacht in vier. Vollständige Sicherheit gibt es nie, und sie kostet
+jeden Tag aufs Neue Material und Zeit.
+
+### 3.4 Die Kategorien im Schlaf-Deck
 
 | Kategorie | Anteil | Was es tut |
 |---|---|---|
-| **Ambient** | 35 % | Nur Ton und Bild. Folgenlos. Damit das Haus nie still wirkt. |
-| **Choice** | 25 % | Eine Entscheidung mit Konsequenzen — der Kern des Spiels, siehe unten |
-| **Supply** | 15 % | Du findest etwas. Wird häufiger, wenn du kurz vor dem Verhungern bist. |
-| **Damage** | 15 % | Barrikade beschädigt · Sicherung durchgebrannt · Vorräte verdorben · Gegenstand weg |
-| **Clue** | 10 % | Ein Stück des Geheimnisses |
+| **Sound** | 25 % | Nur ein Geräusch. Du schläfst weiter, REST −5. Folgenlos. |
+| **Wake** | 25 % | Du wachst auf → Choice-Ereignis mit echten Optionen |
+| **Damage** | 15 % | Barrikade beschädigt, Sicherung durch, Vorräte verdorben |
+| **Theft** | 10 % | Etwas ist weg. Nicht immer merkst du sofort, was. |
+| **Mark** | 10 % | Du wachst mit einem Zustand auf. Kratzer, Fieber, Erschütterung. |
+| **Clue** | 10 % | Ein Traum, eine Stimme, eine Zeile in deiner eigenen Handschrift |
+| **Move** | 5 % | Du wachst in einem anderen Raum auf. Deine Sachen nicht unbedingt mit dir. |
 
-### 3.3 Choice-Ereignisse — hier lebt das Spiel
+### 3.5 Choice-Ereignisse — hier lebt das Spiel
 
-Statt eines Monsters bekommt der Spieler **Situationen ohne gute Antwort.** Beispiel:
+Der Spieler bekommt **Situationen ohne gute Antwort.** Beispiel:
 
-> *Something is at the cellar door. Not knocking. Testing.*
+> *You wake up. The room is wrong. The chair from the corner is at the foot of the
+> bed now, turned to face you.*
 >
-> **[Go and look]** — 40 % ein Hinweis, 40 % nichts, 20 % Zustand *Injured*
-> **[Push the dresser against it]** — 20 min, SAFETY +1, aber der Weg in den Keller ist zu
-> **[Ignore it and keep working]** — die Barrikade nimmt Schaden, du verlierst nichts sonst
+> **[Put it back]** — 10 min, REST −5, nichts weiter
+> **[Leave it. Don't look at it again.]** — kein Schlafbonus mehr diese Nacht
+> **[Sit in it]** — 25 % ein Hinweis, 25 % Zustand *Shaken*, 50 % nichts
 
-Weiteres Beispiel:
+Regel für jedes Choice-Ereignis: **keine Option ist eindeutig richtig, und mindestens
+eine kostet eine der vier Achsen.** Wenn eine Option offensichtlich die beste ist,
+ist das Ereignis kaputt und muss überarbeitet werden.
 
-> *The radio picks something up. A voice reading names. One of them might be yours.*
->
-> **[Listen to the end]** — 30 min, garantierter Hinweis, REST −10
-> **[Turn it off]** — nichts passiert. Du wirst nie erfahren, was da kam.
+### 3.6 Fairness-Regeln
 
-Jedes Choice-Ereignis muss diese Regel erfüllen: **keine Option ist eindeutig richtig,
-und mindestens eine kostet eine der vier Achsen.**
-
-### 3.4 Schlaf-Ereignisse
-
-Eigene Kategorie, weil du nicht reagieren kannst. Sie werden am Morgen aufgelöst —
-du wachst auf und siehst, was passiert ist.
-
-- Die Tür, die du verriegelt hattest, steht offen
-- Eine Konserve fehlt
-- Jemand hat neben deinem Bett gesessen — der Boden ist dort staubfrei
-- Du hast im Schlaf etwas geschrieben. Es ist ein Hinweis. Es ist deine Handschrift.
-- Es sind neun Stunden vergangen, nicht sechs
-
-Wie viele und wie schlimm: direkt abhängig von LIGHT und SAFETY deines Schlafplatzes.
-In einem dunklen, offenen Raum zu schlafen ist die gefährlichste Handlung im Spiel.
-
-### 3.5 Fairness-Regeln
-
-- Nie zwei Damage-Ereignisse hintereinander
-- Sind 90 Minuten ohne Ereignis vergangen → garantiert ein Ambient-Ereignis
-- FOOD unter 25 → Supply-Ereignisse werden verdreifacht (das Spiel hilft leise)
+- Nie zwei Damage-Ereignisse in derselben Nacht
+- Höchstens ein Mark-Ereignis pro Nacht
+- FOOD unter 25 → Fund-Ereignisse werden verdreifacht (das Spiel hilft leise)
 - Jedes Ereignis nur einmal pro Tag
-- **Die ersten 12 Stunden ziehen nur Ambient und Supply.** Der Spieler soll das Haus
-  kennenlernen, bevor es ihn kennenlernt.
+- **Die erste Nacht ist immer ruhig.** Der Spieler soll einmal aufwachen und denken,
+  es sei alles in Ordnung, bevor es losgeht.
+- Nach einer sehr schlechten Nacht ist die nächste garantiert milder
 
 ---
 
@@ -236,42 +275,91 @@ nie erfahren hast) und fängst neu an. Was du behältst, ist dein Wissen über d
 
 | Ab | Was sich ändert |
 |---|---|
-| Tag 1 | Grunddeck. Das Haus ist nur ein leeres Haus. |
-| Tag 4 | Damage-Ereignisse aktiv. Vorratsfunde werden seltener. |
+| Tag 1 | Grunddeck. Die erste Nacht ist immer ruhig. Das Haus ist nur ein leeres Haus. |
+| Tag 4 | Damage- und Theft-Ereignisse aktiv. Vorratsfunde werden seltener. |
 | Tag 7 | Das Haus verändert sich: Räume tauschen Verbindungen, ein Raum wird unbetretbar. |
 | Tag 10 | Schlaf-Ereignisse werden persönlich — sie beziehen sich auf das, was du getan hast. |
-| Tag 13+ | Kein neues Deck. Nur noch weniger Vorräte. Ab hier ist es ein Rennen. |
+| Tag 12–18 | **Fenster für die Rettung.** Der genaue Tag steht seit Spielbeginn fest, wird aber nie genannt. Vorräte sind jetzt knapp, jede Nacht kostet. |
 
 ---
 
-## 6. Das Geheimnis — und der Weg hinaus
+## 6. Zwei Wege hinaus
 
-Das Ziel ist nicht "durchhalten". Das Ziel ist **rauskommen** — und das geht erst,
-wenn du verstanden hast, warum die Tür zu ist.
+Es gibt **zwei Arten zu gewinnen**, und sie ziehen in entgegengesetzte Richtungen.
+Das ist die strategische Hauptentscheidung des Spiels.
 
-Ein **Notizbuch** mit vier offenen Fragen:
+### Weg 1 — RESCUE: durchhalten
 
-1. **Who** is still in this house?
-2. **What** happened in the room they died in?
-3. **What** does it want returned?
-4. **Where** does it have to go?
+Irgendwann kommt Hilfe. Du weißt nur nicht wann.
 
-Jede Frage braucht 3 gefundene Fragmente, dann kannst du eine Antwort aus mehreren
-Möglichkeiten wählen. Fragmente kommen aus Notizen, Fotos, Radiodurchsagen,
-Telefonanrufen, Schlaf-Ereignissen und Gegenständen.
+- Der Rettungstag wird **pro Durchlauf zwischen Tag 12 und Tag 18 gewürfelt**
+  und dem Spieler **nie genannt**.
+- Das **Radio im Salon** ist deine einzige Vorwarnung. Die Meldungen werden über die
+  Tage konkreter: erst allgemeine Vermisstenmeldungen, dann Suchgebiete, dann
+  ein Hubschrauber, den man hört. Wer das Radio ignoriert, tappt völlig im Dunkeln.
+- Das ist der **sichere, aber teure Weg**: Du brauchst Vorräte für eine unbekannt
+  lange Zeit und musst zwei Wochen lang jede Nacht überstehen.
 
-**Der Ausgangsversuch** kann jederzeit unternommen werden, sobald du alle vier Fragen
-beantwortet hast — es gibt keine vorgeschriebene Nacht dafür. Du gehst zur Haustür,
-mit dem, was deine Antworten vorgeben.
+### Weg 2 — THE DOOR: verstehen
 
-| Ergebnis | Ende |
+Die Haustür geht auf, wenn du herausgefunden hast, was das Haus verlangt.
+
+Ein **Notizbuch** mit vier Fragen — sie fragen alle nach **Regeln**, nie nach Identität:
+
+1. **What does it take from you?**
+2. **Which room is the wrong one?**
+3. **What has to go back?**
+4. **Where does it have to go?**
+
+Jede Frage braucht 3 gefundene Fragmente, dann wählst du eine Antwort aus mehreren
+Möglichkeiten. Der Versuch an der Haustür ist **jederzeit möglich**, sobald alle vier
+beantwortet sind — es gibt keine vorgeschriebene Nacht dafür.
+
+| Ergebnis | Was passiert |
 |---|---|
-| 4 von 4 richtig | **The Door** — du gehst hinaus. Bestes Ende. |
-| 2–3 richtig | **Morning** — die Tür öffnet sich, aber etwas geht mit dir. |
-| 0–1 richtig | Der Versuch schlägt fehl. Du verlierst die verwendeten Gegenstände und einen Tag. |
+| 4 von 4 richtig | Die Tür geht auf. Du gehst hinaus. |
+| 2–3 richtig | Die Tür geht auf, aber sie schließt sich nicht hinter dir. |
+| 0–1 richtig | Fehlschlag: du verlierst die verwendeten Gegenstände und einen Tag. |
 
-Der Täter, der Ort und der Gegenstand werden **pro Durchlauf neu gewürfelt** —
-du kannst die Lösung nicht auswendig lernen, nur die Methode, sie zu finden.
+Die richtige Kombination wird **pro Durchlauf neu gewürfelt**. Du kannst die Lösung
+nicht auswendig lernen, nur die Methode, sie zu finden.
+
+Das ist der **schnelle, aber riskante Weg**: Fragmente liegen in den Räumen, in die
+man am wenigsten will, und du schläfst öfter an schlechten Orten.
+
+### Der dritte Ausgang — THE WINDOW
+
+Ein Fenster einzuschlagen ist **jederzeit möglich**, vom ersten Tag an. Es funktioniert
+sogar: du kommst raus. Der Wintergarten zeigt dir vorher, warum das keine gute Idee ist.
+
+Es ist kein Scheitern-Knopf, sondern ein echtes Ende mit eigener Schlusskarte —
+und es ist immer da, als leise Versuchung, wenn eine Nacht besonders schlecht lief.
+
+### Was du nie erfährst
+
+**Es wird nicht aufgelöst.** Nicht in einem der Enden.
+
+Du erfährst, *was* das Haus verlangt, nie *warum*. Die Fragmente passen nicht restlos
+zusammen — zwei Notizen widersprechen sich, ein Datum ergibt keinen Sinn, auf dem
+Foto ist eine Person zu viel. Das ist Absicht und wird nicht repariert.
+
+Auch das, wovor du zu Beginn weggelaufen bist, bleibt ungeklärt. Es kommt nicht wieder
+vor, außer als das, was der Wintergarten zeigt. Ob es dasselbe ist wie das im Haus,
+sagt niemand.
+
+**Wichtig für die Umsetzung:** Alle Ereignistexte müssen diese Zurückhaltung durchhalten.
+Nie ein Name für die Sache, nie eine Erklärung, nie ein Wesen, das sich zeigt.
+Nur Wirkungen: eine offene Tür, ein fehlendes Glas, ein warmer Stuhl.
+
+### Übersicht der Enden
+
+| Ende | Wie | Ton |
+|---|---|---|
+| **RESCUE** | Bis zum Rettungstag durchhalten | Erleichterung, aber du erklärst nie, was war |
+| **THE DOOR** | Alle vier Fragen richtig | Du gehst selbst. Ruhig. |
+| **THE THRESHOLD** | 2–3 Fragen richtig | Du kommst raus, aber nicht allein |
+| **THE WINDOW** | Fenster einschlagen | Jederzeit verfügbar. Schlecht. |
+| **DEATH** | Zustand oder Verhungern | Endgültig, Zusammenfassung, Neustart |
 
 ---
 
@@ -394,10 +482,16 @@ res://
 
 ---
 
-## 11. Offene Punkte
+## 11. Weiterführende Dokumente
+
+| Datei | Inhalt |
+|---|---|
+| [`ITEMS.md`](ITEMS.md) | Alle Gegenstände mit Werten, Fundorten und Häufigkeiten |
+| [`EVENTS.md`](EVENTS.md) | Ausgeschriebene Ereignisse mit englischem Text und Konsequenzen |
+| [`ASSET_PLAN.md`](ASSET_PLAN.md) | Grafik- und Tonliste mit Größen und Dateinamen |
+
+## 12. Offene Punkte
 
 1. **Titel** — "Ashgrove" ist ein Platzhalter.
-2. **Wovor bist du weggelaufen?** Mein Vorschlag: es wird nie beantwortet.
-   Das Ding draußen und das Ding im Haus bleiben getrennt und beide ungeklärt.
-3. **Umfang von Version 1** — noch offen, du wolltest das später entscheiden.
-4. **Balancing-Zahlen** — alle Werte oben sind erste Schätzungen zum Draufhauen.
+2. **Umfang von Version 1** — noch offen, du wolltest das später entscheiden.
+3. **Balancing-Zahlen** — alle Werte sind erste Schätzungen zum Draufhauen.

@@ -12,26 +12,39 @@ wie lange du hier drin sein wirst.**
 | Datei | Inhalt |
 |---|---|
 | [`docs/GAME_DESIGN.md`](docs/GAME_DESIGN.md) | Spielkonzept, Mechaniken, Raumplan, Roadmap |
+| [`docs/ITEMS.md`](docs/ITEMS.md) | Alle Gegenstände mit Werten, Fundorten und Mengen |
+| [`docs/EVENTS.md`](docs/EVENTS.md) | 45 ausgeschriebene Ereignisse mit Text und Konsequenzen |
 | [`docs/ASSET_PLAN.md`](docs/ASSET_PLAN.md) | Asset-Liste mit Größen, Dateinamen und Prioritäten |
 
 ## Stand
 
-Konzeptphase, Version 0.2. Noch kein Code.
+Konzeptphase, Version 0.3. Noch kein Code.
 
 ## Die vier Achsen
 
 Das ganze Spiel hängt an vier Dingen — mehr gibt es nicht:
 
 - **FOOD** — Essen ist endlich und du musst dafür raus aus dem sicheren Raum
-- **REST** — du musst schlafen, aber im Schlaf kannst du nicht reagieren
+- **REST** — du musst schlafen, und im Schlaf passiert alles
 - **LIGHT** — Taschenlampe, Kerze oder Deckenlicht; das Haus hat nur drei Sicherungen
 - **SAFETY** — Türen, Möbel, Bretter. Barrikaden halten nicht ewig.
 
-Es gibt **kein Monster mit Wegfindung und keine Bedrohungsanzeige.** Alles, was dir
-zustößt, kommt aus dem Ereignis-System — meistens als Entscheidung ohne gute Antwort.
+## Der Rhythmus
 
-Kein Ereignis tötet dich direkt. Es gibt dir einen Zustand, und der bringt dich um,
-wenn du ihn ignorierst. Tod ist endgültig.
+**Tagsüber passiert fast nichts. 90 % aller Ereignisse passieren, während du schläfst** —
+und schlafen musst du. Der Tag ist Vorbereitung, die Nacht ist die Prüfung, der Morgen
+ist die Rechnung.
 
-Ziel ist nicht Durchhalten, sondern **Rauskommen** — und die Tür geht erst auf,
-wenn du verstanden hast, warum sie zu ist.
+Es gibt **kein Monster mit Wegfindung und keine Bedrohungsanzeige.** Kein Ereignis
+tötet dich direkt — es gibt dir einen Zustand, und der bringt dich um, wenn du ihn
+ignorierst. Tod ist endgültig.
+
+## Zwei Wege raus
+
+- **RESCUE** — durchhalten, bis Hilfe kommt. Der Tag steht seit Spielbeginn fest
+  (irgendwo zwischen 12 und 18) und wird dir nie gesagt. Das Radio ist deine einzige
+  Vorwarnung. Sicher, aber du brauchst Vorräte für unbekannt lange.
+- **THE DOOR** — herausfinden, was das Haus verlangt, und selbst gehen. Schneller,
+  aber die Hinweise liegen in den Räumen, in die man am wenigsten will.
+
+**Aufgelöst wird nichts.** Du erfährst, *was* zu tun ist, nie *warum*.
