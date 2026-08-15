@@ -11,6 +11,7 @@ wie lange du hier drin sein wirst.**
 
 | Datei | Inhalt |
 |---|---|
+| [`docs/DECISIONS.md`](docs/DECISIONS.md) | **Alle Festlegungen in einer Tabelle zum Abnicken — hier anfangen** |
 | [`docs/GAME_DESIGN.md`](docs/GAME_DESIGN.md) | Spielkonzept, Mechaniken, Raumplan, Roadmap |
 | [`docs/ITEMS.md`](docs/ITEMS.md) | Alle Gegenstände mit Werten, Fundorten und Mengen |
 | [`docs/EVENTS.md`](docs/EVENTS.md) | 45 ausgeschriebene Ereignisse mit Text und Konsequenzen |
@@ -18,7 +19,7 @@ wie lange du hier drin sein wirst.**
 
 ## Stand
 
-Konzeptphase, Version 0.3. Noch kein Code.
+Konzeptphase, Version 0.4. Noch kein Code.
 
 ## Die vier Achsen
 
@@ -41,10 +42,12 @@ ignorierst. Tod ist endgültig.
 
 ## Zwei Wege raus
 
-- **RESCUE** — durchhalten, bis Hilfe kommt. Der Tag steht seit Spielbeginn fest
-  (irgendwo zwischen 12 und 18) und wird dir nie gesagt. Das Radio ist deine einzige
-  Vorwarnung. Sicher, aber du brauchst Vorräte für unbekannt lange.
-- **THE DOOR** — herausfinden, was das Haus verlangt, und selbst gehen. Schneller,
-  aber die Hinweise liegen in den Räumen, in die man am wenigsten will.
+- **THE DOOR** — herausfinden, was das Haus verlangt, und selbst gehen. Ab Tag 20
+  möglich, ein guter Durchlauf endet um Tag 22–28. Der gedachte Normalweg.
+- **RESCUE** — durchhalten bis Tag 50. Der Tag wird dir nie genannt, das Radio ist
+  die einzige Vorwarnung. Der Ausdauerweg für die, die es wissen wollen.
+
+Im Haus liegen Vorräte für **elf Tage**. Ab etwa Tag 8 musst du im Wintergarten
+anbauen und Fallen stellen, sonst verhungerst du — egal wie gut du sonst spielst.
 
 **Aufgelöst wird nichts.** Du erfährst, *was* zu tun ist, nie *warum*.

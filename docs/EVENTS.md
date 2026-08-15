@@ -194,7 +194,7 @@ Die wichtigste Kategorie. Hier trifft der Spieler seine echten Entscheidungen.
 | Option | Kosten | Ergebnis |
 |---|---|---|
 | **Throw it off and get up** | 15 min, REST −10 | nichts |
-| **Go back to sleep** | — | Rest der Nacht garantiert ruhig. **Und am Morgen fehlt ein Gegenstand.** |
+| **Go back to sleep** | — | Rest der Nacht garantiert ruhig. Am Morgen fehlt ein Gegenstand — er **taucht 2–4 Tage später in einem anderen Raum wieder auf**, ordentlich hingelegt. |
 
 ---
 
@@ -271,10 +271,12 @@ Sie sind der Grund, warum das Haus nie leer wirkt.
 | N-T-02 | *The hammer is not where you left it.* | Hammer weg — **taucht 1–3 Tage später in einem anderen Raum wieder auf** |
 | N-T-03 | *The batteries are flat. All of them. You have not used the flashlight since yesterday.* | Alle Batterien im Lager verloren |
 | N-T-04 | *The matches are damp. The box has been sitting in something.* | 1 Schachtel Streichhölzer weg |
-| N-T-05 | *A page is missing from your notebook. You remember writing it. You do not remember what it said.* | **Ein bereits gefundenes Fragment wird gelöscht** |
+| N-T-05 | *A page in your notebook has run. The ink is smeared edge to edge and the paper is damp. You remember writing it. You do not remember what it said.* | **Ein Fragment wird unleserlich** — es zählt nicht mehr, ist aber **am ursprünglichen Fundort wieder aufsammelbar** |
 
-N-T-05 ist das härteste Ereignis im Spiel. Gewicht bewusst niedrig (1), und es kann
-nie das letzte Fragment einer Frage treffen.
+N-T-05 abgeschwächt: das Fragment ist nicht verloren, sondern muss noch einmal geholt
+werden. Der Weg dorthin kostet Zeit und meistens eine Nacht an einem schlechteren Ort —
+das reicht als Strafe. Gewicht bewusst niedrig (1), und es trifft nie das letzte
+Fragment einer Frage.
 
 ---
 
@@ -355,16 +357,25 @@ einschätzen, wie nah die Hilfe ist.
 | ID | Ab Tag | Meldung |
 |---|---|---|
 | R-01 | 1 | *"…scattered showers through the county, clearing towards the weekend…"* — nichts. |
-| R-02 | 3 | *"…police are asking motorists to avoid the old county road following an incident…"* |
-| R-03 | 5 | *"…a vehicle was recovered abandoned near the Ashgrove turning. The owner has not been traced…"* |
-| R-04 | 7 | *"…now being treated as a missing person enquiry…"* |
-| R-05 | 9 | *"…search teams have been working the woodland at the north end since first light…"* |
-| R-06 | 11 | *"…the search has been extended to properties on the estate itself…"* |
-| R-07 | 13+ | Kein Wortlaut mehr — man hört einen Hubschrauber, weit weg, aber echt. |
-| R-08 | Rettungstag | Stimmen draußen. Mehrere. Sie rufen. |
+| R-02 | 5 | *"…police are asking motorists to avoid the old county road following an incident…"* |
+| R-03 | 10 | *"…a vehicle was recovered abandoned near the Ashgrove turning. The owner has not been traced…"* |
+| R-04 | 16 | *"…now being treated as a missing person enquiry…"* |
+| R-05 | 22 | *"…the family have made an appeal. There is no further information at this time…"* |
+| R-06 | 28 | *"…search teams have been working the woodland at the north end since first light…"* |
+| R-07 | 34 | *"…the search has been scaled back after four weeks without…"* — dann Rauschen. |
+| R-08 | 40 | *"…following new information, officers will begin searching properties on the estate itself…"* |
+| R-09 | 45 | Kein Wortlaut mehr — man hört einen Hubschrauber. Weit weg, aber echt. |
+| R-10 | 48 | Fahrzeuge auf dem Kiesweg. Motoren, die abgestellt werden. Dann nichts mehr. |
+| R-11 | 50 | Stimmen draußen. Mehrere. Sie rufen. |
 
-Ab Tag 10 kann das Radio mit 20 % Chance stattdessen **Namen vorlesen**. Einer davon
-ist deiner. Folge: *Shaken*, aber garantiert ein Fragment.
+**R-07 an Tag 34 ist der wichtigste Eintrag der Staffel:** Die Suche wird eingestellt.
+Wer nur auf die Rettung gesetzt hat, bekommt hier die Nachricht, dass es vorbei ist —
+und muss zwei Wochen weitermachen, bevor R-08 zeigt, dass es doch nicht vorbei war.
+Das ist der Tiefpunkt der Kurve und er ist mit Absicht dort.
+
+Ab Tag 26 kann das Radio mit 20 % Chance stattdessen **Namen vorlesen** — Vermisste,
+sachlich verlesen. Folge: *Shaken*, aber garantiert ein Fragment. Ob einer der Namen
+deiner ist, wird nie geklärt; die Figur hat keinen.
 
 ## C2 · Das Telefon (Study)
 

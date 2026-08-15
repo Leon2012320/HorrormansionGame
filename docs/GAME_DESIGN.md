@@ -26,6 +26,20 @@ absuchen — oder die Zeit nutzen, um die Schlafzimmertür zuzunageln. Beides ge
 Der nächste Verwandte im Regal ist **This War of Mine** — nur dass der Krieg
 draußen durch ein Haus ersetzt ist, das nicht will, dass du gehst.
 
+### Wer du bist
+
+**Niemand.** Kein Name, kein Alter, kein Geschlecht, keine Vorgeschichte, kein Beruf.
+Die Figur wird nie beschrieben und nie gezeigt — auch nicht in Spiegeln.
+
+Das ist eine harte Regel für alle Texte: **kein Ereignis darf etwas über die Figur
+behaupten.** Keine Erinnerungen an eine Kindheit, keine Familie, kein "du hattest
+schon immer Angst vor…". Wenn ein Ereignis etwas Persönliches braucht, bezieht es
+sich auf **das, was der Spieler im Spiel getan hat** — welchen Raum er zum Lager
+gemacht hat, was er aufgebrochen, wen er nicht gerufen hat.
+
+Wenn das Radio ab Tag 26 Namen vorliest, ist genau deshalb nie klar, ob einer davon
+deiner ist. Das funktioniert nur, solange die Figur leer bleibt.
+
 ---
 
 ## 2. Die vier Achsen
@@ -61,6 +75,28 @@ dieser vier Achsen.
 - Fundorte: Küche, Speisekammer, Weinkeller — und Zufallsereignisse.
 - **Wasser lasse ich bewusst weg.** Eine zweite Verbrauchsleiste würde nur die
   gleiche Entscheidung doppelt stellen.
+
+#### Der wichtigste Punkt: die Vorräte reichen nicht
+
+Im ganzen Haus liegen zu Beginn etwa **620 FOOD-Punkte — genug für elf Tage.**
+Ein Durchlauf geht bis zu fünfzig. Diese Lücke ist kein Balancing-Fehler, sondern
+die zentrale Aufgabe: **ab etwa Tag 8 musst du anfangen, Nahrung selbst zu erzeugen.**
+
+Es gibt zwei Wege, und beide brauchen Vorlauf:
+
+**Der Wintergarten — Anbau.** Vier Beete. Samen einpflanzen (15 min), täglich gießen
+(10 min), nach **10 Tagen** ernten: 3–5 Nahrungseinheiten, etwa 150 Punkte pro Beet.
+Braucht Wasser (Regentonne) und Licht — ein Beet unter elektrischem Licht wächst in
+7 statt 10 Tagen. **Damit bindet der Anbau eine deiner drei Sicherungen.**
+Ereignisse können eine Ernte kurz vor der Reife vernichten.
+
+**Fallen — schnell und ekelhaft.** Eine Falle aus Brett und Draht, aufgestellt in
+Keller oder Dachboden. Alle 2–3 Tage fängt sie etwas: +25 FOOD, aber **20 % *Sick***,
+wenn nicht durchgegart — und Garen braucht wieder den Herd, also wieder Strom.
+
+Der Anbau ist die Investition, die über Tag 20 hinaus trägt. Wer erst an Tag 15
+damit anfängt, kommt nicht bis Tag 50. Wer an Tag 3 damit anfängt, hat drei Tage
+lang nicht nach Hinweisen gesucht.
 
 ### 2.2 REST — Schlaf
 
@@ -273,13 +309,28 @@ nie erfahren hast) und fängst neu an. Was du behältst, ist dein Wissen über d
 
 **Eskalation ohne Countdown** — alle 3 Tage wird ein neues Ereignis-Deck freigeschaltet:
 
-| Ab | Was sich ändert |
+**Ein voller Durchlauf geht bis Tag 50.** Das ist bewusst lang: die Rettung ist der
+Ausdauerweg für Könner, nicht der Normalfall. Die meisten Durchläufe enden früher
+über das Geheimnis.
+
+| Phase | Tage | Charakter |
+|---|---|---|
+| **Ankommen** | 1–5 | Das Haus ist nur ein leeres Haus. Grundvorräte, erste Barrikade, erste ruhige Nacht. |
+| **Aufbau** | 6–15 | Damage und Theft aktiv. Du musst anfangen, Nahrung selbst zu produzieren. |
+| **Die Wende** | 16–25 | Die Hausvorräte sind alle. Das Geheimnis wird lösbar. Räume tauschen Verbindungen. |
+| **Zermürbung** | 26–40 | Du lebst nur noch von dem, was du selbst anbaust. Ereignisse werden persönlich. |
+| **Endspiel** | 41–50 | Das Radio kündigt die Suche an. Jede Nacht kostet mehr, als sie einbringt. |
+
+| Ab | Was neu dazukommt |
 |---|---|
-| Tag 1 | Grunddeck. Die erste Nacht ist immer ruhig. Das Haus ist nur ein leeres Haus. |
-| Tag 4 | Damage- und Theft-Ereignisse aktiv. Vorratsfunde werden seltener. |
-| Tag 7 | Das Haus verändert sich: Räume tauschen Verbindungen, ein Raum wird unbetretbar. |
-| Tag 10 | Schlaf-Ereignisse werden persönlich — sie beziehen sich auf das, was du getan hast. |
-| Tag 12–18 | **Fenster für die Rettung.** Der genaue Tag steht seit Spielbeginn fest, wird aber nie genannt. Vorräte sind jetzt knapp, jede Nacht kostet. |
+| Tag 1 | Grunddeck. Die erste Nacht ist immer ruhig. |
+| Tag 4 | Damage- und Theft-Ereignisse |
+| Tag 8 | Move-Ereignisse. Vorratsfunde werden deutlich seltener. |
+| Tag 16 | Das Haus verändert sich: Räume tauschen Verbindungen, ein Raum wird unbetretbar. |
+| Tag 20 | **Ab hier ist das Geheimnis lösbar** — vorher fehlen zwangsläufig Fragmente. |
+| Tag 26 | Ereignisse werden persönlich: sie beziehen sich auf das, was du getan hast. |
+| Tag 34 | Ein zweiter Raum wird unbetretbar. Der Sicherungskasten wird unzuverlässig. |
+| Tag 50 | **Die Rettung.** Fester Tag, kein Würfeln. Das Radio führt über Wochen darauf hin. |
 
 ---
 
@@ -288,17 +339,19 @@ nie erfahren hast) und fängst neu an. Was du behältst, ist dein Wissen über d
 Es gibt **zwei Arten zu gewinnen**, und sie ziehen in entgegengesetzte Richtungen.
 Das ist die strategische Hauptentscheidung des Spiels.
 
-### Weg 1 — RESCUE: durchhalten
+### Weg 1 — RESCUE: bis Tag 50 durchhalten
 
-Irgendwann kommt Hilfe. Du weißt nur nicht wann.
+Irgendwann kommt Hilfe. An **Tag 50**, fest, ohne Würfeln.
 
-- Der Rettungstag wird **pro Durchlauf zwischen Tag 12 und Tag 18 gewürfelt**
-  und dem Spieler **nie genannt**.
-- Das **Radio im Salon** ist deine einzige Vorwarnung. Die Meldungen werden über die
-  Tage konkreter: erst allgemeine Vermisstenmeldungen, dann Suchgebiete, dann
-  ein Hubschrauber, den man hört. Wer das Radio ignoriert, tappt völlig im Dunkeln.
-- Das ist der **sichere, aber teure Weg**: Du brauchst Vorräte für eine unbekannt
-  lange Zeit und musst zwei Wochen lang jede Nacht überstehen.
+- Der Spieler erfährt das Datum nie direkt. Das **Radio im Salon** ist die einzige
+  Informationsquelle, und es tastet sich über Wochen heran: erst Wetter, dann ein
+  gefundenes Fahrzeug, dann eine Vermisstenmeldung, ein Suchgebiet, ein Hubschrauber.
+  Wer das Radio ignoriert, weiß nie, ob er noch drei Tage oder noch dreißig vor sich hat.
+- Das ist der **Ausdauerweg und ausdrücklich der schwerere**: fünfzig Nächte,
+  und die Hausvorräte reichen für elf davon. Ohne eigene Nahrungsproduktion
+  (siehe 2.1) ist er nicht zu schaffen.
+- Er ist **nicht der Normalfall.** Die meisten Durchläufe sollen über Weg 2 enden.
+  Weg 1 ist für die, die es wissen wollen.
 
 ### Weg 2 — THE DOOR: verstehen
 
@@ -312,8 +365,11 @@ Ein **Notizbuch** mit vier Fragen — sie fragen alle nach **Regeln**, nie nach 
 4. **Where does it have to go?**
 
 Jede Frage braucht 3 gefundene Fragmente, dann wählst du eine Antwort aus mehreren
-Möglichkeiten. Der Versuch an der Haustür ist **jederzeit möglich**, sobald alle vier
-beantwortet sind — es gibt keine vorgeschriebene Nacht dafür.
+Möglichkeiten. Der Versuch an der Haustür ist möglich, sobald alle vier beantwortet sind.
+
+**Frühestens an Tag 20** — vorher sind zwangsläufig nicht alle zwölf Fragmente
+erreichbar, weil drei davon in Räumen liegen, die sich erst ab Tag 16 öffnen.
+Ein sehr guter Durchlauf endet um **Tag 22–28**. Das ist der gedachte Normalweg.
 
 | Ergebnis | Was passiert |
 |---|---|
@@ -353,13 +409,30 @@ Nur Wirkungen: eine offene Tür, ein fehlendes Glas, ein warmer Stuhl.
 
 ### Übersicht der Enden
 
-| Ende | Wie | Ton |
-|---|---|---|
-| **RESCUE** | Bis zum Rettungstag durchhalten | Erleichterung, aber du erklärst nie, was war |
-| **THE DOOR** | Alle vier Fragen richtig | Du gehst selbst. Ruhig. |
-| **THE THRESHOLD** | 2–3 Fragen richtig | Du kommst raus, aber nicht allein |
-| **THE WINDOW** | Fenster einschlagen | Jederzeit verfügbar. Schlecht. |
-| **DEATH** | Zustand oder Verhungern | Endgültig, Zusammenfassung, Neustart |
+| Ende | Wie | Frühestens | Ton |
+|---|---|---|---|
+| **THE DOOR** | Alle vier Fragen richtig | Tag 20 | Du gehst selbst. Ruhig. Der gedachte Normalweg. |
+| **THE THRESHOLD** | 2–3 Fragen richtig | Tag 20 | Du kommst raus, aber nicht allein |
+| **RESCUE** | Bis Tag 50 durchhalten | Tag 50 | Der Ausdauerweg. Erleichterung — und du erklärst nie, was war. |
+| **THE WINDOW** | Fenster einschlagen | Tag 1 | Immer verfügbar. Schlecht. |
+| **DEATH** | Zustand oder Verhungern | — | Endgültig, Zusammenfassung, Neustart |
+
+## 6.1 Ein Wort zu Permadeath bei fünfzig Tagen
+
+Ein Durchlauf über 50 Tage sind grob **6–10 Stunden Spielzeit**. Ein endgültiger Tod
+an Tag 38 ist ein sehr harter Schlag — härter als bei den ursprünglich geplanten
+zwei Wochen. Damit das trotzdem fair bleibt, drei Regeln:
+
+1. **Kein Tod ohne 24 Stunden Vorwarnung.** Zustände eskalieren sichtbar,
+   FOOD-Warnungen kommen deutlich, das Spiel sagt dir, dass du gerade stirbst.
+2. **Zwischen den Tagen wird automatisch gespeichert** — ein Speicherstand, der
+   beim Tod gelöscht wird. Das schützt vor Abstürzen und Stromausfall, nicht vor Fehlern.
+3. **Kartenwissen bleibt.** Beim Neustart ist der Grundriss bereits bekannt und
+   Räume müssen nicht neu entdeckt werden. Vorräte, Fragmente und die Lösung werden
+   neu gewürfelt. Du beginnst schneller, aber nicht leichter.
+
+Wenn sich das im Test trotzdem zu bitter anfühlt, ist die naheliegende Stellschraube
+ein **freiwilliger Modus mit Speicherpunkten**, nicht eine Aufweichung des Todes.
 
 ---
 
