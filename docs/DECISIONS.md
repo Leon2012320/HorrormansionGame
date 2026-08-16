@@ -52,7 +52,7 @@ anders müssen. Alles andere gilt als angenommen.
 | C1 | **20 Tage** statt 50 | Trifft die 1–2 Stunden | 💡 |
 | C2 | Geheimnis lösbar | Ab Tag 8, Normalweg endet Tag 10–14 | 💡 |
 | C3 | Rettung | Tag 20, fester Tag, wird nie genannt | 💡 |
-| C4 | Nebeneffekt | ⚠️ Ein Durchlauf zieht jetzt ~14 Nachtereignisse statt 150. **Damit reichen die 45 geschriebenen Ereignisse** — das alte Deck-Problem ist erledigt. | ⚠️ |
+| C4 | Nebeneffekt | Ein Durchlauf zieht ~14 Nachtereignisse statt 150. Damit reichen die geschriebenen aus — das alte Deck-Problem ist erledigt. | 💡 |
 
 ## D · Die vier Achsen
 
@@ -63,7 +63,7 @@ anders müssen. Alles andere gilt als angenommen.
 | D3 | **REST-Leiste gestrichen** | Schlaf ist keine Anzeige mehr, sondern bestimmt direkt die ENERGY von morgen | 💡 |
 | D4 | Keine Angst-Leiste | Bleibt gestrichen | ✅ |
 | D5 | Kein Wasser | Wäre dieselbe Entscheidung doppelt | 💡 |
-| D6 | FOOD-Verbrauch | −10 pro Tag plus −3 pro Handlung → normaler Tag −28 | 💡 |
+| D6 | FOOD-Verbrauch | −8 pro Tag plus −2 pro Handlung → normaler Tag −20. **Gemessen**: mit −10/−3 verhungerte jeder Testlauf um Tag 8. | 💡 |
 | D7 | Arbeiten macht hungrig | Die eingebaute Bremse gegen Vielspielen | 💡 |
 | D8 | LIGHT-Stufen | 0 dunkel · 1 Taschenlampe · 2 Kerze · 3 elektrisch | 💡 |
 | D9 | SAFETY-Stufen | 0 offen · 1 zu · 2 Möbel davor · 3 vernagelt | 💡 |
@@ -93,29 +93,30 @@ anders müssen. Alles andere gilt als angenommen.
 | F4 | Ziehung | 45 % pro Segment, abzüglich SAFETY und LIGHT | 💡 |
 | F5 | Bester Schlafplatz | 15 % pro Segment. Nie ganz sicher. | 💡 |
 | F6 | Risiko vorher sichtbar | In Worten, nicht als Prozentzahl | 💡 |
-| F7 | Wake-Ereignisse | Wecken dich → echte Entscheidung mitten in der Nacht | 💡 |
-| F8 | Aufwachen kostet | Das Segment zählt dann nicht für ENERGY | 💡 |
+| F7 | Problem-Ereignisse | Wecken dich → du setzt einen Gegenstand ein oder zahlst | 💡 |
+| F8 | Gelöst kostet nichts | Wer vorbereitet war, schläft weiter. Ungelöst kostet das Segment. | 💡 |
 | F9 | Night Report | Morgens eine Seite: was passiert ist | 💡 |
 | F10 | Erste Nacht ruhig | Immer | 💡 |
 | F11 | *Exhausted* | Zwei Nächte hintereinander nur 1 Segment → Halluzinationen, ENERGY −2 | 💡 |
-| F12 | Stolperschnur | Wandelt schwere Ereignisse in Aufwachen, wird dabei zerstört | 💡 |
+| F12 | Stolperschnur | Muss **getragen** werden; wandelt Diebstahl in ein lösbares Problem, wird dabei zerstört | 💡 |
 
 ## G · Ereignisse
 
 | # | Thema | Festlegung | |
 |---|---|---|---|
 | G1 | Einzige Bedrohung | Keine Kreatur, kein Verfolger, keine Bedrohungsanzeige | ✅ |
-| G2 | **Ereignisse werden mit Gegenständen gelöst** | Keine Verhaltensoptionen mehr — das Spiel fragt, was du dabei hast | ✅ |
+| G2 | **Mit Gegenständen lösen, nicht mit Entscheidungen** | Das Spiel fragt nicht, was du tun willst, sondern was du dabei hast | ✅ |
 | G3 | **Nur Getragenes zählt nachts** | Das Lager nützt um drei Uhr morgens nichts. Damit werden die sechs Slots zur Kernentscheidung. | 💡 |
-| G4 | Kategorien | Problem (40 %) · Sound · Damage · Theft · Clue · Move | 💡 |
-| G5 | Drei Kategorien bleiben unlösbar | Damage, Theft, Move — sonst wäre das Haus nur eine Packliste | 💡 |
-| G6 | Umpacken kostet nichts | Die Entscheidung soll nur Nachdenken kosten | 💡 |
-| G4 | Kein Ereignis tötet | Sie geben Zustände, Zustände töten bei Vernachlässigung | ✅ |
-| G5 | Fairness | Nie zwei Damage pro Nacht, höchstens ein Mark, jedes nur einmal pro Tag | 💡 |
-| G6 | Leise Hilfe | FOOD unter 25 → Fundereignisse verdreifacht | 💡 |
-| G7 | Abgeschwächt | "Missing page" ist wieder holbar · "Tucked In" gibt das Item später zurück | ✅ |
-| G8 | Deckgröße | 45 Nacht- und 22 Tagereignisse, **alle vollständig ausgeschrieben** | ✅ |
-| G9 | Ausbaustufe | Später Wake auf 20 und Sound auf 12 bringen, Rest kann bleiben | 💡 |
+| G4 | Umpacken kostet nichts | Die Entscheidung soll nur Nachdenken kosten, keine Handlung | 💡 |
+| G5 | Kategorien | Problem (40 %) · Sound (25 %) · Damage · Theft · Clue · Move | 💡 |
+| G6 | Drei bleiben unlösbar | Damage, Theft, Move — sonst wäre das Haus nur eine Packliste | 💡 |
+| G7 | Jede Lösung muss naheliegen | Wer bei "etwas arbeitet an den Brettern" an einen Hammer denkt, soll recht haben | 💡 |
+| G8 | Kein Ereignis tötet | Sie geben Zustände, Zustände töten bei Vernachlässigung | ✅ |
+| G9 | Fairness | Nie zwei Damage pro Nacht, jedes Ereignis nur einmal pro Tag | 💡 |
+| G10 | Leise Hilfe | FOOD unter 25 → Fundereignisse verdreifacht | 💡 |
+| G11 | Abgeschwächt | "Missing page" ist wieder holbar · gestohlene Sachen tauchen wieder auf | ✅ |
+| G12 | Deckgröße | 16 Problem- und 24 weitere Nachtereignisse, 11 am Tag — alle ausgeschrieben | ✅ |
+| G13 | Ausbaustufe | Problem-Ereignisse später auf 25 bringen; sie sind die Kategorie, die trägt | 💡 |
 
 ## H · Tod
 
@@ -132,7 +133,7 @@ anders müssen. Alles andere gilt als angenommen.
 
 | # | Thema | Festlegung | |
 |---|---|---|---|
-| I1 | Hausvorräte | ~350 Punkte = **12 von 20 Tagen** | 💡 |
+| I1 | Hausvorräte | ~350 Punkte = 12 von 20 Tagen; Möbelstücke füllen sich nach 4 Tagen mit halber Ausbeute wieder auf | 💡 |
 | I2 | Geheimnisweg | Geht knapp ohne Anbau auf | 💡 |
 | I3 | Rettungsweg | Braucht eigene Produktion | 💡 |
 | I4 | Wintergarten | **2 Beete** (statt 4), 5 Tage Reife, Gießen alle 2 Tage, ~100 Punkte pro Ernte | 💡 |
@@ -190,35 +191,33 @@ anders müssen. Alles andere gilt als angenommen.
 
 ---
 
-## Was sich gegenüber v0.4 geändert hat
+## Was sich zuletzt geändert hat
 
 | Weg | Neu |
 |---|---|
-| Uhr mit 480 Minuten pro Nacht | ENERGY: feste Zahl Handlungen pro Tag |
+| Uhr mit Minuten | ENERGY: feste Zahl Handlungen pro Tag |
 | REST als Leiste | Schlaf bestimmt direkt die ENERGY von morgen |
-| Zeitkosten in Minuten | Kosten in Handlungen (0, 1 oder 2) |
 | 50 Tage | 20 Tage |
-| Autosave zwischen den Tagen | Keine Speicherung |
-| Kartenwissen bleibt beim Neustart | Vorschlag: fällt weg (H6) |
-| 4 Beete, 10 Tage Reife | 2 Beete, 5 Tage Reife |
-| Deck muss auf 150 wachsen | 45 reichen |
+| Autosave | Keine Speicherung |
+| **Ereignisse mit Verhaltensoptionen** | **Ereignisse mit Gegenständen lösen** |
+| Inventar egal für Ereignisse | **Nur Getragenes zählt nachts** |
 
----
+## Die Punkte, auf die ich dich hinweisen will
 
-## Die drei Punkte, auf die ich dich hinweisen will
+**1 · Die Packliste ist jetzt das Spiel (G3).** Nachts zählt nur, was du am Körper
+trägst. Der Smoke-Test zeigt die Wirkung: Solange das Lager mitzählte, löste der Bot
+50 % aller Probleme, mit der Beschränkung sind es 28 %. Das frühere Problem — sechs
+Inventarplätze ohne Bedeutung — ist damit erledigt.
 
-**1 · Das Traglimit könnte zahnlos sein (D11).** Sechs Slots waren eine echte
-Beschränkung, solange Laufen Zeit gekostet hat. Jetzt ist Laufen kostenlos — du kannst
-also beliebig oft hin- und herrennen. Entweder das Limit fällt weg, oder Laufen zwischen
-Etagen kostet doch etwas. Ich würde es erst einmal so lassen und im Test anschauen.
+**2 · Sechs von sechzehn Problemen brauchen Bretter.** Das ist viel für ein
+einzelnes Material. Vielleicht sollte ein zweites Baumaterial her, sonst ist die
+Packliste in Wahrheit immer dieselbe.
 
-**2 · Kartenwissen beim Neustart (H6).** Bei 50 Tagen war es sinnvoll, den zweiten
-Durchlauf abzukürzen. Bei 20 Tagen und einer Stunde Spielzeit würde ich es streichen —
-sonst ist der zweite Durchlauf deutlich leichter als der erste, und Permadeath
-verliert seinen Sinn.
+**3 · Werkzeuge halten ewig.** Hammer und Brecheisen gehen nie kaputt. Ein
+Bruchrisiko von etwa 5 % pro Nacht würde Ersatzbeschaffung erzwingen und dem
+Mittelspiel eine Sorge geben, die es gerade nicht hat.
 
-**3 · Die Abwärtsspirale ist scharf (I9).** Wenig schlafen heißt wenig Handlungen,
-heißt wenig finden, heißt schlechter schlafen. Wer zwei schlechte Nächte hintereinander
-hat, kommt kaum zurück. Das ist gutes Survival-Design, aber es muss im Test geprüft
-werden — sonst ist ein Durchlauf an Tag 6 faktisch verloren, während der Spieler noch
-zehn Tage weiterspielt.
+**4 · Der Bot überlebt zu 55 %, ohne je eine Barrikade zu bauen.** Die
+SAFETY-Achse ist immer noch schwächer als gedacht — sie senkt nur die
+Ziehungschance, verhindert aber kein einziges Problem. Denkbar wäre, dass
+bestimmte Probleme bei SAFETY 3 gar nicht erst gezogen werden.
