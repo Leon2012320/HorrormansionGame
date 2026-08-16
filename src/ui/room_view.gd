@@ -15,17 +15,17 @@ var _exit_bar: HBoxContainer
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 	_image = TextureRect.new()
-	_image.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_image.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_image.stretch_mode = TextureRect.STRETCH_SCALE
 	_image.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_image)
 
 	_hotspot_layer = Control.new()
-	_hotspot_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_hotspot_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_hotspot_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_hotspot_layer)
 
@@ -64,7 +64,6 @@ func _build_hotspots(id: String) -> void:
 		button.size = Vector2(float(rect[2]), float(rect[3]))
 		button.text = ""
 		button.tooltip_text = str(spot.get("name", ""))
-		button.flat = true
 		button.add_theme_stylebox_override("normal", _hotspot_style(AshTheme.HOTSPOT, false))
 		button.add_theme_stylebox_override("hover", _hotspot_style(AshTheme.HOTSPOT, true))
 		button.add_theme_stylebox_override("pressed", _hotspot_style(AshTheme.HOTSPOT, true))
@@ -82,8 +81,8 @@ func _build_hotspots(id: String) -> void:
 
 func _hotspot_style(fill: Color, highlight: bool) -> StyleBoxFlat:
 	var s := StyleBoxFlat.new()
-	s.bg_color = fill
-	s.border_color = AshTheme.HOTSPOT_HOVER if highlight else Color(1, 1, 1, 0.18)
+	s.bg_color = Color(1, 1, 1, 0.16) if highlight else fill
+	s.border_color = AshTheme.HOTSPOT_HOVER if highlight else Color(0.85, 0.80, 0.68, 0.55)
 	s.set_border_width_all(1)
 	return s
 

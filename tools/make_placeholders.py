@@ -24,9 +24,11 @@ ROOM_SIZE = (640, 360)
 ITEM_SIZE = (32, 32)
 
 # Palette aus docs/ASSET_PLAN.md: kein reines Schwarz, kein reines Weiß.
-INK = (11, 14, 16)
-PANEL = (21, 25, 28)
-EDGE = (42, 49, 54)
+# Bewusst heller als die UI-Palette: ein Platzhalter, den man nicht sieht,
+# ist als Malvorlage wertlos — und im Spiel wird ohnehin nachgedunkelt.
+INK = (52, 58, 64)
+PANEL = (40, 46, 52)
+EDGE = (86, 95, 102)
 TEXT = (200, 196, 184)
 DIM = (111, 119, 115)
 WARM = (216, 162, 74)
@@ -81,7 +83,10 @@ def make_room(room_id, room, out_dir):
     draw.rectangle([0, 250, 639, 359], fill=PANEL + (255,))
     draw.line([0, 250, 639, 250], fill=EDGE + (255,))
     for x in range(0, 640, 80):
-        draw.line([x, 250, x, 359], fill=(30, 35, 39, 255))
+        draw.line([x, 250, x, 359], fill=(62, 69, 76, 255))
+    # Andeutung von Wandkanten, damit die Perspektive lesbar ist
+    draw.line([90, 0, 90, 250], fill=(66, 73, 80, 255))
+    draw.line([549, 0, 549, 250], fill=(66, 73, 80, 255))
 
     draw.text((10, 8), room["name"].upper(), fill=TEXT)
     draw.text((10, 22), f"assets/rooms/room_{room_id}.png  ·  640x360", fill=DIM)

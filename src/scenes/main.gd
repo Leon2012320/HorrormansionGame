@@ -19,9 +19,9 @@ var _log_lines: Array[String] = []
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var bg := ColorRect.new()
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bg.color = AshTheme.INK
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
@@ -43,6 +43,10 @@ func _ready() -> void:
 	add_child(log_label)
 
 	_build_toolbar()
+
+	var bag_bar := AshInventoryBar.new()
+	bag_bar.position = Vector2(424, 322)
+	add_child(bag_bar)
 
 	dialog = AshDialog.new()
 	dialog.position = Vector2(105, 50)

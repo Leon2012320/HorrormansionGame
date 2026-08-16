@@ -52,10 +52,15 @@ static func apply_label(label: Label, dim: bool = false) -> void:
 	label.add_theme_font_size_override("font_size", 10)
 
 
-## Wie dunkel der Bildschirm bei einer LIGHT-Stufe wird.
+## Wie stark das Raumbild gedimmt wird.
+##
+## Stufe 0 war ursprünglich 0.16 — zusammen mit dunkel gezeichneten Räumen
+## ergab das ein komplett schwarzes Bild. Dunkelheit muss unangenehm sein,
+## nicht unsichtbar: man soll Umrisse erkennen und trotzdem merken, dass
+## man Licht braucht.
 static func light_tint(level: int) -> Color:
 	match level:
-		0: return Color(0.16, 0.18, 0.22, 1.0)
-		1: return Color(0.45, 0.46, 0.48, 1.0)
-		2: return Color(0.80, 0.72, 0.58, 1.0)
+		0: return Color(0.42, 0.45, 0.52, 1.0)
+		1: return Color(0.68, 0.69, 0.72, 1.0)
+		2: return Color(0.92, 0.84, 0.70, 1.0)
 		_: return Color(1.0, 0.98, 0.92, 1.0)

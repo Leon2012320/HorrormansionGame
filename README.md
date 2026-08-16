@@ -91,7 +91,7 @@ ignorierst. **Tod ist endgültig, es wird nicht gespeichert.**
 | [`docs/ITEMS.md`](docs/ITEMS.md) | Gegenstände mit Werten, Fundorten und Mengen |
 | [`docs/SPECIAL_ITEMS.md`](docs/SPECIAL_ITEMS.md) | 16 einmalige Fundstücke, fünf pro Durchlauf |
 | [`docs/EVENTS.md`](docs/EVENTS.md) | Jedes Ereignis vollständig ausgeschrieben |
-| [`docs/ASSET_PLAN.md`](docs/ASSET_PLAN.md) | Grafik- und Tonliste mit Größen und Dateinamen |
+| [`docs/ASSET_PLAN.md`](docs/ASSET_PLAN.md) | **Texturliste: was zu zeichnen ist, in welcher Reihenfolge** |
 
 ## Stand
 

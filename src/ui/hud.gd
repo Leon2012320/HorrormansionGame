@@ -14,12 +14,13 @@ var _condition_label: Label
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_TOP_WIDE)
+	set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
 	custom_minimum_size = Vector2(640, 40)
+	size = Vector2(640, 40)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	var bg := PanelContainer.new()
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bg.add_theme_stylebox_override("panel", AshTheme.panel_style())
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
