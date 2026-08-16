@@ -347,7 +347,16 @@ Ein **Notizbuch** mit vier Fragen — sie fragen nach **Regeln**, nie nach Ident
 3. **What has to go back?**
 4. **Where does it have to go?**
 
-Jede Frage braucht **3 Fragmente**, dann wählst du eine Antwort aus mehreren.
+**Jedes Fragment streicht eine falsche Antwort.** Bei vier Möglichkeiten und drei
+Fragmenten bleibt genau eine übrig — wer alle drei findet, weiß die Antwort. Wer zwei
+hat, steht vor einer Münze. Das Spiel meldet es beim Fund:
+*"Whatever it is, it is not the cellar."*
+
+Ohne diese Regel wären Fragmente bloße Zähler und der Spieler müsste raten:
+vier Fragen mit je vier Antworten sind 1 zu 256. Ein Fragment nimmt dir immer
+etwas weg, nie die Lösung selbst.
+
+Jede Frage braucht **3 Fragmente**, dann wählst du eine Antwort aus den verbliebenen.
 **Frühestens Tag 8** — vorher sind nicht alle zwölf erreichbar, weil drei in Räumen
 liegen, die sich erst ab Tag 7 öffnen. Ein guter Durchlauf endet **Tag 10–14.**
 

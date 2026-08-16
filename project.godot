@@ -18,6 +18,8 @@ Rooms="*res://src/autoload/rooms.gd"
 Inventory="*res://src/autoload/inventory.gd"
 Notebook="*res://src/autoload/notebook.gd"
 Garden="*res://src/autoload/garden.gd"
+Crafting="*res://src/autoload/crafting.gd"
+Specials="*res://src/autoload/specials.gd"
 EventDeck="*res://src/autoload/event_deck.gd"
 DayCycle="*res://src/autoload/day_cycle.gd"
 

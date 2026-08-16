@@ -33,6 +33,8 @@ func start_run() -> void:
 	Inventory.reset()
 	Notebook.reset()
 	Garden.reset()
+	Crafting.reset()
+	Specials.reset()
 	EventDeck.reset()
 	had_hot_meal = false
 	phase = Phase.DAY
@@ -141,6 +143,7 @@ func _finish_night() -> void:
 
 	Rooms.advance_day()
 	_night_log.append_array(Garden.advance_day())
+	_night_log.append_array(Specials.advance_day())
 	EventDeck.begin_day()
 	if not Inventory.consume_daily_power():
 		_night_log.append("The flashlight is dead.")

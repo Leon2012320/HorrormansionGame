@@ -6,6 +6,9 @@ extends Node
 
 signal fragment_added(question: int, total: int)
 signal answer_set(question: int, answer: String)
+## Feuert, wenn ein Fragment eine Antwort ausschließt — dafür gibt es den Text
+## "Whatever it is, it is not X." im Spiel.
+signal answer_excluded(question: int, answer: String)
 
 const FRAGMENTS_PER_QUESTION := 3
 
@@ -27,6 +30,10 @@ const ANSWERS := [
 var fragments := [0, 0, 0, 0]
 var answers := ["", "", "", ""]
 var solution := [0, 0, 0, 0]
+## Pro Frage die Antworten, die durch Fragmente ausgeschlossen wurden.
+## Drei Fragmente schließen drei von vier Möglichkeiten aus — wer alle
+## findet, weiß die Antwort. Wer zwei hat, steht vor einer Münze.
+var excluded: Array = [[], [], [], []]
 
 
 func _ready() -> void:
@@ -37,8 +44,11 @@ func reset() -> void:
 	fragments = [0, 0, 0, 0]
 	answers = ["", "", "", ""]
 	solution = []
+	excluded = []
 	for i in QUESTIONS.size():
-		solution.append(randi() % ANSWERS[i].size())
+		var options: Array = ANSWERS[i]
+		solution.append(randi() % options.size())
+		excluded.append([])
 
 
 ## Fügt ein Fragment hinzu. Ohne Argument geht es an die Frage, die
@@ -56,8 +66,38 @@ func add_fragment(question: int = -1) -> int:
 				target = i
 				break
 	fragments[target] = mini(fragments[target] + 1, FRAGMENTS_PER_QUESTION)
+	_exclude_one(target)
 	fragment_added.emit(target, total_fragments())
 	return target
+
+
+## Streicht eine falsche Antwort. Nie die richtige — ein Fragment nimmt
+## dir immer etwas weg, nie die Lösung selbst.
+func _exclude_one(question: int) -> void:
+	var options: Array = ANSWERS[question]
+	var candidates: Array[int] = []
+	for i in options.size():
+		if i != int(solution[question]) and not i in excluded[question]:
+			candidates.append(i)
+	if candidates.is_empty():
+		return
+	var picked: int = candidates[randi() % candidates.size()]
+	excluded[question].append(picked)
+	answer_excluded.emit(question, str(options[picked]))
+
+
+func is_excluded(question: int, index: int) -> bool:
+	return index in excluded[question]
+
+
+## Welche Antworten sind für diese Frage noch im Rennen?
+func remaining_answers(question: int) -> Array[int]:
+	var result: Array[int] = []
+	var options: Array = ANSWERS[question]
+	for i in options.size():
+		if not is_excluded(question, i):
+			result.append(i)
+	return result
 
 
 ## Macht ein Fragment unleserlich (Ereignis N-T-05). Trifft nie das letzte

@@ -153,6 +153,8 @@ anders müssen. Alles andere gilt als angenommen.
 | J4 | Die Sache draußen | Wird nie geklärt | ✅ |
 | J5 | Vier Fragen | Fragen nach **Regeln**, nie nach Identität | 💡 |
 | J6 | 12 Fragmente | 3 pro Frage, im Haus liegen mehr Fundorte als nötig | 💡 |
+| J6b | **Jedes Fragment streicht eine falsche Antwort** | Drei Fragmente lassen genau eine Möglichkeit übrig. Ohne das müsste der Spieler mit 1:256 raten — die Fragmente wären reine Zähler. | 💡 |
+| J6c | Hinweis-Gegenstände geben Fragmente | War im Code nicht verdrahtet: das Geheimnis war schlicht nicht lösbar | ✅ |
 | J7 | Lösung gewürfelt | Pro Durchlauf neu | 💡 |
 | J8 | Falsche Antwort | Kostet die Gegenstände und einen Tag, kein Tod | 💡 |
 

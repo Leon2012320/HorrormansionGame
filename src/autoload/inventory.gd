@@ -132,6 +132,7 @@ func add_carried(id: String, amount: int = 1) -> bool:
 		return false
 	carried[id] = int(carried.get(id, 0)) + amount
 	carried_changed.emit()
+	_note_clue(id, amount)
 	item_found.emit(id, amount)
 	return true
 
@@ -139,7 +140,19 @@ func add_carried(id: String, amount: int = 1) -> bool:
 func add_stash(id: String, amount: int = 1) -> void:
 	stash[id] = int(stash.get(id, 0)) + amount
 	stash_changed.emit()
+	_note_clue(id, amount)
 	item_found.emit(id, amount)
+
+
+## Ein gefundener Hinweis wandert sofort ins Notizbuch — das ist die
+## Hauptquelle für Fragmente. Ohne diesen Schritt ist das Geheimnis
+## nicht lösbar, egal wie gründlich man sucht.
+func _note_clue(id: String, amount: int) -> void:
+	var d := item_def(id)
+	if str(d.get("category", "")) != "clue":
+		return
+	for i in amount:
+		Notebook.add_fragment(int(d.get("question", -1)))
 
 
 ## Verbraucht aus dem Getragenen, dann aus dem Lager.

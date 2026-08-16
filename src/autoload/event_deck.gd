@@ -51,6 +51,7 @@ func night_chance(room_id: String) -> int:
 	chance += int(LIGHT_BONUS.get(Rooms.light_of(room_id), 0))
 	if _last_night_was_harsh:
 		chance -= 15  # Nach einer sehr schlechten Nacht ist die nächste milder.
+	chance += Specials.night_chance_modifier(room_id)
 	return clampi(chance, 5, 90)
 
 
@@ -94,7 +95,11 @@ func _pick_category(room_id: String) -> String:
 			continue
 		if category == "theft" and _damage_this_night:
 			continue
-		if category == "move" and GameState.day < 5:
+		if category == "move" and (GameState.day < 5 or Specials.blocks_move_events()):
+			continue
+		# Schlaftabletten: du wachst nicht auf, also gibt es kein lösbares Problem.
+		# Alles andere trifft dich trotzdem — ungebremst und ohne Wahl.
+		if category == "problem" and Specials.sleep_pills_armed:
 			continue
 		var weight := int(EventsDB.NIGHT_WEIGHTS[category])
 		for i in weight:
@@ -206,12 +211,18 @@ func available_solutions(event: Dictionary) -> Array:
 func _solution_possible(solution: Dictionary) -> bool:
 	if bool(solution.get("kitchen_powered", false)):
 		return Rooms.light_of("kitchen") >= Rooms.Light.ELECTRIC
-	if solution.has("tool") and not Inventory.has_carried(str(solution["tool"])):
+	if solution.has("tool") and not _has_tool(str(solution["tool"])):
 		return false
 	for id in solution.get("needs", {}):
 		if not Inventory.has_carried(str(id), int(solution["needs"][id])):
 			return false
 	return true
+
+
+## Werkzeug kann im Rucksack liegen oder ein Sonder-Item sein — die trägt man
+## nicht in Slots, man hat sie einfach.
+func _has_tool(id: String) -> bool:
+	return Inventory.has_carried(id) or Specials.has(id)
 
 
 ## Beschreibt eine Lösung so, wie sie im Dialog steht: "Board ×1 + Hammer".
@@ -221,7 +232,9 @@ func solution_label(solution: Dictionary) -> String:
 		var amount := int(solution["needs"][id])
 		parts.append(Inventory.display_name(str(id)) + ("" if amount == 1 else " ×%d" % amount))
 	if solution.has("tool"):
-		parts.append(Inventory.display_name(str(solution["tool"])))
+		var tool_id := str(solution["tool"])
+		parts.append(Specials.display_name(tool_id) if Specials.has(tool_id)
+			else Inventory.display_name(tool_id))
 	if bool(solution.get("kitchen_powered", false)):
 		parts.append("power in the kitchen")
 	return " + ".join(parts)

@@ -95,8 +95,11 @@ ignorierst. **Tod ist endgültig, es wird nicht gespeichert.**
 
 ## Stand
 
-Spielbares Gerüst: 13 Räume, Tagesablauf, Schlafsystem mit Ereignissen, Notizbuch,
-Sicherungskasten, Anbau, alle fünf Enden. Grafik durchgehend Platzhalter.
+Vollständig spielbar: 13 Räume, Tagesablauf mit Energiebudget, Schlafsystem mit
+Problem-Ereignissen, Türen sichern und barrikadieren, vier Bau-Rezepte, Fallen,
+Anbau, Sicherungskasten, Notizbuch mit Ausschluss-Mechanik, 16 Sonder-Items,
+Karte, alle fünf Enden. Grafik durchgehend Platzhalter.
 
-Der Smoke-Test spielt 40 Durchläufe headless durch: Schnitt 17 Tage, 27 erreichen
-die Rettung. Die Balancing-Zahlen im Konzept sind damit gemessen, nicht geschätzt.
+Der Smoke-Test spielt 40 Durchläufe headless durch: Schnitt 15,3 Tage, 16 enden
+über THE DOOR, 13 über RESCUE, 11 mit dem Tod. Die Balancing-Zahlen sind damit
+gemessen, nicht geschätzt.

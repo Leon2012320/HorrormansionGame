@@ -91,7 +91,7 @@ func travel_to(id: String) -> bool:
 func light_of(id: String) -> int:
 	var s: Dictionary = state.get(id, {})
 	var value := int(s.get("light", Light.DARK))
-	if bool(s.get("has_fuse", false)):
+	if bool(s.get("has_fuse", false)) or Specials.powers(id):
 		value = maxi(value, Light.ELECTRIC)
 	elif int(s.get("candle_days_left", 0)) > 0:
 		value = maxi(value, Light.PLACED)
@@ -118,6 +118,17 @@ func light_candle(id: String) -> String:
 	Inventory.use_match()
 	place_candle(id, 2)
 	return "The candle takes. It will last about two days."
+
+
+## Steht in diesem Raum eine Stolperschnur? Sie liegt im Raum, nicht im Rucksack —
+## anders als beim Lösen von Problemen, wo nur Getragenes zählt.
+func has_trip_line(id: String) -> bool:
+	return bool(state.get(id, {}).get("trip_line", false))
+
+
+func set_trip_line(id: String, on: bool) -> void:
+	state[id]["trip_line"] = on
+	room_state_changed.emit(id)
 
 
 ## Wo es sich lohnt, Licht zu machen: dunkle Räume, in denen noch etwas zu holen ist.
@@ -161,6 +172,54 @@ func set_safety(id: String, value: int) -> void:
 ## Ereignisse setzen Barrikaden herunter — sie halten nie dauerhaft.
 func damage_safety(id: String, amount: int = 1) -> void:
 	set_safety(id, safety_of(id) - amount)
+
+
+## Was kostet es, diesen Raum auf die nächste Stufe zu bringen?
+## Gibt {} zurück, wenn die Stufe nicht erreichbar ist.
+func fortify_cost(id: String, level: int) -> Dictionary:
+	if level > int(state.get(id, {}).get("safety_cap", Safety.BARRICADED)):
+		return {}
+	match level:
+		Safety.CLOSED:
+			return {"actions": 0, "needs": {}}
+		Safety.BLOCKED:
+			return {"actions": 1, "needs": {}}
+		Safety.BARRICADED:
+			return {"actions": 2, "needs": {"board": 2, "nails": 1}, "tool": "hammer"}
+	return {}
+
+
+## Prüft, ob der Spieler die Stufe gerade bezahlen kann.
+func can_fortify(id: String, level: int) -> bool:
+	if level <= safety_of(id):
+		return false
+	var cost := fortify_cost(id, level)
+	if cost.is_empty():
+		return false
+	if not GameState.can_spend(int(cost.get("actions", 0))):
+		return false
+	if cost.has("tool") and not Inventory.has(str(cost["tool"])):
+		return false
+	for item in cost.get("needs", {}):
+		if not Inventory.has(str(item), int(cost["needs"][item])):
+			return false
+	return true
+
+
+## Sichert die Tür. Zieht Handlungen und Material.
+func fortify(id: String, level: int) -> String:
+	if not can_fortify(id, level):
+		return "You cannot do that."
+	var cost := fortify_cost(id, level)
+	if int(cost.get("actions", 0)) > 0 and not GameState.spend_action(int(cost["actions"])):
+		return "You are too tired for that today."
+	for item in cost.get("needs", {}):
+		Inventory.consume(str(item), int(cost["needs"][item]))
+	set_safety(id, level)
+	match level:
+		Safety.CLOSED: return "You close the door."
+		Safety.BLOCKED: return "You drag something heavy across the door."
+		_: return "Boarded shut. It will hold for a few nights."
 
 
 ## Eine aufgebrochene Tür kommt nie wieder über SAFETY 1 hinaus.
@@ -218,6 +277,11 @@ func search_hotspot(room_id: String, hotspot_id: String, action: Dictionary) -> 
 			amount = randi_range(int(entry.get("min", 1)), int(entry["max"]))
 		Inventory.add_carried(str(entry["item"]), amount)
 		found.append(str(entry["item"]))
+	# Sonder-Items liegen nicht in den Loot-Tabellen — sie sollen sich wie ein
+	# Fund anfühlen und nicht wie eine Dose Bohnen.
+	var special := Specials.try_find(room_id)
+	if special != "":
+		found.append(special)
 	if refilled and not found.is_empty():
 		restocked_found.emit(room_id, hotspot_id)
 	return found

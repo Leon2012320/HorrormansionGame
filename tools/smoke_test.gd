@@ -13,6 +13,7 @@ var _endings := {}
 var _days: Array[int] = []
 var _errors: Array[String] = []
 var _solved := 0
+var _specials_found := 0
 var _unsolved := 0
 
 
@@ -28,6 +29,8 @@ func _play_one_run(index: int) -> void:
 	DayCycle.start_run()
 	if not DayCycle.problem_event.is_connected(_auto_answer):
 		DayCycle.problem_event.connect(_auto_answer)
+	if not Specials.special_found.is_connected(_note_special):
+		Specials.special_found.connect(_note_special)
 
 	var guard := 0
 	while GameState.run_active and guard < 400:
@@ -66,6 +69,10 @@ func _play_one_run(index: int) -> void:
 	DayCycle.problem_event.disconnect(_auto_answer)
 
 
+func _note_special(_id: String) -> void:
+	_specials_found += 1
+
+
 func _eat_if_hungry() -> void:
 	if GameState.food >= 45:
 		return
@@ -88,6 +95,34 @@ func _goto(room_id: String) -> void:
 
 ## Gibt false zurück, wenn keine Handlung mehr möglich war — dann endet der Tag.
 func _take_one_action() -> bool:
+	# Den Schlafplatz sichern, sobald Material da ist. Die SAFETY-Achse ist
+	# sonst tot — der Bot schlief zwanzig Nächte bei offener Tür.
+	if Rooms.safety_of("bedroom") < Rooms.Safety.BARRICADED:
+		_goto("bedroom")
+		if Rooms.can_fortify("bedroom", Rooms.Safety.BARRICADED):
+			Rooms.fortify("bedroom", Rooms.Safety.BARRICADED)
+			return true
+		if Rooms.can_fortify("bedroom", Rooms.Safety.BLOCKED):
+			Rooms.fortify("bedroom", Rooms.Safety.BLOCKED)
+			return true
+		Rooms.fortify("bedroom", Rooms.Safety.CLOSED)   # kostenlos
+
+	# Eine Falle stellen, solange Platz ist.
+	if Crafting.traps.size() < Crafting.MAX_TRAPS and Inventory.has("wire") and Inventory.has("board"):
+		_goto("cellar")
+		if Crafting.can_build("snare"):
+			Crafting.build("snare")
+			return true
+
+	# Fallen leeren ist kostenlos.
+	for room_id in Crafting.traps.keys():
+		if Crafting.trap_ready(str(room_id)):
+			Crafting.collect_trap(str(room_id))
+
+	# Sobald alle vier Fragen beantwortbar sind: antworten und zur Tür gehen.
+	if _try_the_door():
+		return true
+
 	# Der Garten hat Vorrang: er ist die einzige Quelle, die nachwächst.
 	if Garden.has_ripe():
 		_goto(Garden.ROOM)
@@ -158,6 +193,34 @@ func _pack_for_the_night() -> void:
 
 
 ## Der Bot benutzt die erste Lösung, die er dabei hat — oder gar keine.
+## Der Bot rät die Antworten — er kennt die Lösung so wenig wie ein Spieler
+## beim ersten Durchlauf. Damit misst der Test auch, wie oft THE_DOOR fällt.
+func _try_the_door() -> bool:
+	if not GameState.mystery_unlocked():
+		return false
+	for i in Notebook.QUESTIONS.size():
+		if str(Notebook.answers[i]) != "":
+			continue
+		if not Notebook.can_answer(i):
+			return false
+		# Fragmente haben falsche Antworten gestrichen — der Bot wählt aus dem Rest.
+		var left := Notebook.remaining_answers(i)
+		Notebook.set_answer(i, left[randi() % left.size()] if not left.is_empty() else 0)
+	if not Notebook.all_answered():
+		return false
+	_goto("entrance")
+	match Notebook.attempt_door():
+		"THE_DOOR":
+			GameState.end_run("THE_DOOR", "You went out through the front door.")
+		"THE_THRESHOLD":
+			GameState.end_run("THE_THRESHOLD", "The door opened. It did not close behind you.")
+		_:
+			for i in Notebook.answers.size():
+				Notebook.answers[i] = ""
+			GameState.begin_new_day()
+	return true
+
+
 func _auto_answer(event: Dictionary, solutions: Array) -> void:
 	if solutions.is_empty():
 		_unsolved += 1
@@ -191,6 +254,8 @@ func _report() -> void:
 	print("endings:")
 	for key in _endings:
 		print("   %-40s %d" % [key, _endings[key]])
+	print("special items found: %d over %d runs (%.1f per run)" % [
+		_specials_found, RUNS, float(_specials_found) / float(RUNS)])
 	print("problems solved with an item: %d of %d (%d%%)" % [
 		_solved, _solved + _unsolved,
 		int(round(100.0 * float(_solved) / float(maxi(_solved + _unsolved, 1))))])

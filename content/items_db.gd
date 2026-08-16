@@ -41,6 +41,8 @@ const ITEMS := {
 	"rag": {"name": "Oily rag", "category": "build", "stack": 3},
 	"wire": {"name": "Coil of wire", "category": "build", "stack": 3},
 	"trip_line": {"name": "Trip line", "category": "build", "stack": 2},
+	"torch": {"name": "Torch", "category": "light", "stack": 2},
+	"trap": {"name": "Snare", "category": "build", "stack": 3},
 
 	# --- Anbau ---------------------------------------------------------------
 	"seeds": {"name": "Packet of seeds", "category": "farm", "stack": 4},

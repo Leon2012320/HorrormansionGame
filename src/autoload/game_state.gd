@@ -19,7 +19,6 @@ const FOOD_MAX := 100
 ## was der Smoke-Test als unspielbar entlarvt hat: das Haus gibt nicht genug her.
 const FOOD_PER_DAY := 8
 const FOOD_PER_ACTION := 2
-const RESCUE_DAY := 20
 const MYSTERY_UNLOCK_DAY := 8
 
 ## Zustände: id -> wie viele Tage er schon anliegt.
@@ -45,6 +44,10 @@ var run_active := true
 var special_items_in_run: Array[String] = []
 var ending := ""
 var ending_detail := ""
+## Der Rettungstag steht fest — außer die Signalfackel zieht ihn vor.
+var rescue_day := 20
+## Schaltet das Radio-Namenlesen früher frei (Sonder-Item "Visitors' book").
+var radio_reads_names := false
 
 ## --- Tagesbudget -------------------------------------------------------------
 
@@ -62,6 +65,7 @@ func compute_energy(segments: int, in_bed: bool, had_hot_meal: bool) -> int:
 		value -= 1
 	for id in conditions:
 		value += int(CONDITIONS.get(id, {}).get("energy", 0))
+	value += Specials.energy_modifier()
 	return clampi(value, ENERGY_MIN, ENERGY_MAX)
 
 
@@ -158,7 +162,7 @@ func begin_new_day() -> Array[String]:
 			return messages
 	else:
 		days_at_zero_food = 0
-	if day >= RESCUE_DAY:
+	if day >= rescue_day:
 		end_run("RESCUE", "They found you.")
 	return messages
 
@@ -186,6 +190,9 @@ func reset_run() -> void:
 	short_sleep_streak = 0
 	run_active = true
 	ending = ""
+	ending_detail = ""
+	rescue_day = 20
+	radio_reads_names = false
 	special_items_in_run.clear()
 	set_energy(6)
 	food_changed.emit(food)
