@@ -1,0 +1,1323 @@
+<title>Ashgrove Manual</title>
+<style>
+  :root {
+    --ink:   #0b0e10;
+    --panel: #15191c;
+    --sunk:  #101417;
+    --edge:  #2a3136;
+    --text:  #c8c4b8;
+    --dim:   #7d857f;
+    --warm:  #d8a24a;
+    --cold:  #a8564a;
+    --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .shell { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 0; }
+
+  /* ---- Navigation ---- */
+  nav {
+    position: sticky; top: 0; align-self: start;
+    height: 100vh; overflow-y: auto;
+    padding: 28px 18px 40px;
+    border-right: 1px solid var(--edge);
+    background: var(--sunk);
+  }
+  nav .brand {
+    font-family: var(--serif); font-size: 19px; letter-spacing: .06em;
+    color: var(--warm); margin-bottom: 2px;
+  }
+  nav .sub { font-size: 11px; color: var(--dim); margin-bottom: 22px; letter-spacing: .04em; }
+  nav a {
+    display: block; padding: 3px 0; color: var(--text);
+    text-decoration: none; font-size: 13px; border-left: 2px solid transparent;
+    padding-left: 9px; margin-left: -9px;
+  }
+  nav a:hover, nav a:focus-visible { color: var(--warm); border-left-color: var(--warm); }
+  nav .group {
+    font-size: 10px; text-transform: uppercase; letter-spacing: .14em;
+    color: var(--dim); margin: 18px 0 5px;
+  }
+
+  main { padding: 40px 44px 120px; max-width: 900px; }
+
+  /* ---- Typografie ---- */
+  h1 {
+    font-family: var(--serif); font-weight: 400; font-size: 40px;
+    margin: 0 0 6px; letter-spacing: .01em; text-wrap: balance;
+  }
+  h2 {
+    font-family: var(--serif); font-weight: 400; font-size: 25px;
+    margin: 52px 0 14px; padding-bottom: 8px;
+    border-bottom: 1px solid var(--edge); color: var(--warm);
+    text-wrap: balance; scroll-margin-top: 20px;
+  }
+  h3 {
+    font-family: var(--sans); font-weight: 600; font-size: 15px;
+    margin: 26px 0 8px; letter-spacing: .02em;
+  }
+  p { margin: 0 0 12px; max-width: 68ch; }
+  .lede { font-size: 16px; color: var(--dim); max-width: 62ch; }
+  .note { font-size: 13px; color: var(--dim); max-width: 66ch; }
+  strong { color: #e2ded1; font-weight: 600; }
+  em { color: var(--warm); font-style: italic; }
+  code, .val {
+    font-family: var(--mono); font-size: 12.5px;
+    background: var(--sunk); border: 1px solid var(--edge);
+    padding: 1px 5px; border-radius: 2px; color: var(--text);
+  }
+
+  /* ---- Tabellen ---- */
+  .scroll { overflow-x: auto; margin: 12px 0 18px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 460px; }
+  th {
+    text-align: left; font-weight: 600; font-size: 10.5px;
+    text-transform: uppercase; letter-spacing: .12em; color: var(--dim);
+    padding: 6px 12px 6px 0; border-bottom: 1px solid var(--edge); white-space: nowrap;
+  }
+  td {
+    padding: 7px 12px 7px 0; border-bottom: 1px solid #1c2124; vertical-align: top;
+  }
+  td.num, th.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr:last-child td { border-bottom: none; }
+
+  /* ---- Ereignis-Karten ---- */
+  .event {
+    background: var(--panel); border: 1px solid var(--edge);
+    border-left: 2px solid var(--warm);
+    padding: 16px 18px; margin: 14px 0;
+  }
+  .event > header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+  .event .eid {
+    font-family: var(--mono); font-size: 11px; color: var(--warm);
+    letter-spacing: .08em;
+  }
+  .event .etitle { font-family: var(--serif); font-size: 17px; }
+  .event .meta { font-size: 11px; color: var(--dim); font-family: var(--mono); }
+  .flavour {
+    font-family: var(--mono); font-size: 13px; line-height: 1.65;
+    color: #b6b2a6; border-left: 1px solid var(--edge);
+    padding: 2px 0 2px 14px; margin: 0 0 14px; max-width: 64ch;
+  }
+  .solutions { list-style: none; margin: 0; padding: 0; }
+  .solutions li {
+    display: grid; grid-template-columns: minmax(150px, 250px) 1fr; gap: 14px;
+    padding: 6px 0; border-top: 1px solid #1c2124; font-size: 13.5px;
+  }
+  .solutions li:first-child { border-top: none; }
+  .kit { font-family: var(--mono); font-size: 12.5px; color: var(--warm); }
+  .fail .kit { color: var(--cold); }
+  .fail { color: #b0a99b; }
+
+  /* ---- Kleinteile ---- */
+  .pill {
+    display: inline-block; font-family: var(--mono); font-size: 10.5px;
+    letter-spacing: .08em; text-transform: uppercase;
+    border: 1px solid var(--edge); padding: 2px 7px; border-radius: 2px;
+    color: var(--dim);
+  }
+  .pill.warm { color: var(--warm); border-color: #4a3a1e; }
+  .pill.cold { color: var(--cold); border-color: #4a2a25; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin: 14px 0 20px; }
+  .card { background: var(--panel); border: 1px solid var(--edge); padding: 14px 16px; }
+  .card h4 { margin: 0 0 4px; font-size: 14px; font-weight: 600; }
+  .card .big {
+    font-family: var(--mono); font-size: 26px; color: var(--warm);
+    line-height: 1.1; margin: 2px 0 6px; font-variant-numeric: tabular-nums;
+  }
+  .card p { font-size: 12.5px; color: var(--dim); margin: 0; }
+
+  .callout {
+    background: var(--sunk); border: 1px solid var(--edge);
+    border-left: 2px solid var(--cold); padding: 14px 18px; margin: 16px 0;
+  }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout .pill { margin-bottom: 6px; }
+
+  pre.map {
+    font-family: var(--mono); font-size: 11.5px; line-height: 1.5;
+    background: var(--sunk); border: 1px solid var(--edge);
+    padding: 16px; overflow-x: auto; color: var(--dim); margin: 14px 0 20px;
+  }
+  pre.map b { color: var(--warm); font-weight: 400; }
+
+  .room { margin: 18px 0 26px; }
+  .room > header {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--edge); margin-bottom: 8px;
+  }
+  .room h3 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: 18px; }
+  .loot { font-family: var(--mono); font-size: 12px; color: var(--dim); }
+  .loot b { color: var(--text); font-weight: 400; }
+
+  hr.rule { border: none; border-top: 1px solid var(--edge); margin: 44px 0 0; }
+
+  @media (max-width: 820px) {
+    .shell { grid-template-columns: 1fr; }
+    nav {
+      position: static; height: auto; border-right: none;
+      border-bottom: 1px solid var(--edge); padding: 20px 20px 22px;
+    }
+    nav .cols { columns: 2; column-gap: 20px; }
+    main { padding: 26px 20px 80px; }
+    h1 { font-size: 30px; }
+    .solutions li { grid-template-columns: 1fr; gap: 2px; }
+  }
+</style>
+
+<div class="shell">
+<nav>
+  <div class="brand">ASHGROVE</div>
+  <div class="sub">Vollständige Referenz · v0.6</div>
+  <div class="cols">
+    <div class="group">Grundlagen</div>
+    <a href="#ueberblick">Überblick</a>
+    <a href="#tag">Der Tagesablauf</a>
+    <a href="#energie">Energie</a>
+    <a href="#essen">Essen</a>
+    <a href="#licht">Licht</a>
+    <a href="#sicherheit">Sicherheit</a>
+    <a href="#handlungen">Handlungen &amp; Kosten</a>
+    <a href="#zustaende">Zustände &amp; Tod</a>
+
+    <div class="group">Die Nacht</div>
+    <a href="#nacht">Ablauf &amp; Ziehung</a>
+    <a href="#probleme">16 Problem-Ereignisse</a>
+    <a href="#unloesbar">Unlösbare Ereignisse</a>
+    <a href="#tagereignisse">Tag &amp; Radio</a>
+
+    <div class="group">Gegenstände</div>
+    <a href="#items">Alle Gegenstände</a>
+    <a href="#bauen">Bauen &amp; Anbau</a>
+    <a href="#sonder">16 Sonder-Items</a>
+    <a href="#packliste">Die Packliste</a>
+
+    <div class="group">Die Villa</div>
+    <a href="#karte">Karte</a>
+    <a href="#raeume">Alle 13 Räume</a>
+
+    <div class="group">Ziel</div>
+    <a href="#geheimnis">Das Geheimnis</a>
+    <a href="#enden">Die fünf Enden</a>
+  </div>
+</nav>
+
+<main>
+
+<h1>Ashgrove</h1>
+<p class="lede">2D-Horror-Survival in einer Villa, die dich nicht gehen lässt.
+Godot&nbsp;4, ein festes Bild pro Raum, Point&nbsp;&amp;&nbsp;Click. Setting Anfang der
+1960er, Spieltexte auf Englisch. Ein Durchlauf geht über 20 Tage und dauert
+60–80 Minuten.</p>
+
+<p class="note">Diese Seite ist die vollständige Referenz: jede Mechanik, jedes
+Ereignis, jeder Gegenstand, jeder Raum. Alle Zahlen entsprechen dem, was im Code
+steht — sie sind am Smoke-Test gemessen, nicht geschätzt.</p>
+
+<h2 id="ueberblick">Überblick</h2>
+
+<p>Du bist nachts vor <em>etwas</em> weggelaufen und in das erstbeste Haus geflüchtet.
+Die Tür ist hinter dir zugefallen. Sie geht nicht mehr auf.</p>
+
+<div class="cards">
+  <div class="card">
+    <h4>Sechs Handlungen am Tag</h4>
+    <div class="big">6</div>
+    <p>Keine Uhr, keine Minuten. Sechsmal etwas tun, dann wird es dunkel.</p>
+  </div>
+  <div class="card">
+    <h4>Ereignisse im Schlaf</h4>
+    <div class="big">90 %</div>
+    <p>Tagsüber passiert fast nichts. Alles passiert nachts.</p>
+  </div>
+  <div class="card">
+    <h4>Inventarplätze</h4>
+    <div class="big">6</div>
+    <p>Nachts zählt nur, was du am Körper trägst.</p>
+  </div>
+  <div class="card">
+    <h4>Tage bis zur Rettung</h4>
+    <div class="big">20</div>
+    <p>Der Ausdauerweg. Der Normalweg endet früher.</p>
+  </div>
+</div>
+
+<h3>Die drei Grundregeln</h3>
+<p><strong>1 · Es gibt kein Monster.</strong> Keine Kreatur mit Wegfindung, kein
+Verfolger, keine Bedrohungsanzeige. Alles, was dir zustößt, kommt aus dem
+Ereignis-System.</p>
+<p><strong>2 · Ereignisse werden mit Gegenständen gelöst.</strong> Das Spiel fragt
+nie, was du tun willst. Es fragt, was du dabei hast.</p>
+<p><strong>3 · Nichts wird aufgelöst.</strong> Du erfährst, <em>was</em> das Haus
+verlangt, nie <em>warum</em>. In keinem Ende.</p>
+
+<h3>Wer du bist</h3>
+<p><strong>Niemand.</strong> Kein Name, kein Alter, kein Geschlecht, keine
+Vorgeschichte. Die Figur wird nie beschrieben und nie gezeigt, auch nicht in
+Spiegeln. Harte Regel für alle Texte: kein Ereignis darf etwas über die Figur
+behaupten.</p>
+
+<h2 id="tag">Der Tagesablauf</h2>
+
+<pre class="map">   <b>MORGEN</b>     Night Report: was in der Nacht passiert ist
+              ENERGY wird gesetzt (aus dem Schlaf berechnet)
+                 │
+   <b>TAG</b>        Du gibst deine Handlungen aus.
+              Laufen, ansehen, lesen, Notizbuch: kostenlos.
+              Suchen, bauen, kochen, pflanzen: kostet.
+              Fast nichts passiert. Das ist Absicht.
+                 │
+   <b>ABEND</b>      Essen · Rucksack packen · Schlafplatz wählen
+              Alles kostenlos. Nur Nachdenken kostet.
+                 │
+   <b>NACHT</b>      Pro Schlaf-Segment eine Ziehung.
+              Hier passieren 90 % aller Ereignisse.</pre>
+
+<p class="note">Ein Tag dauert am Bildschirm zwei bis vier Minuten.</p>
+
+<h3>Die zwanzig Tage</h3>
+<div class="scroll">
+<table>
+  <tr><th class="num">Tage</th><th>Phase</th><th>Charakter</th></tr>
+  <tr><td class="num">1–4</td><td>Ankommen</td><td>Das Haus ist nur ein leeres Haus. Die erste Nacht ist immer ruhig.</td></tr>
+  <tr><td class="num">5–9</td><td>Aufbau</td><td>Damage und Theft aktiv. Hausvorräte gehen zur Neige.</td></tr>
+  <tr><td class="num">10–14</td><td>Die Wende</td><td>Das Geheimnis ist lösbar. Dachboden und Kinderzimmer offen.</td></tr>
+  <tr><td class="num">15–20</td><td>Endspiel</td><td>Nur noch eigene Nahrung. Das Radio kündigt die Suche an.</td></tr>
+</table>
+</div>
+
+<h3>Was ab wann dazukommt</h3>
+<div class="scroll">
+<table>
+  <tr><th class="num">Ab Tag</th><th>Neu</th></tr>
+  <tr><td class="num">1</td><td>Grunddeck. Die erste Nacht ist garantiert ruhig.</td></tr>
+  <tr><td class="num">3</td><td>Damage-Ereignisse</td></tr>
+  <tr><td class="num">4</td><td>Theft-Ereignisse</td></tr>
+  <tr><td class="num">5</td><td>Move-Ereignisse</td></tr>
+  <tr><td class="num">7</td><td>Dachboden und Kinderzimmer öffnen sich</td></tr>
+  <tr><td class="num">8</td><td><strong>Ab hier ist das Geheimnis lösbar</strong></td></tr>
+  <tr><td class="num">12</td><td>Das Radio liest manchmal Namen vor</td></tr>
+  <tr><td class="num">20</td><td><strong>Die Rettung</strong></td></tr>
+</table>
+</div>
+
+<h2 id="energie">ENERGY — dein Tagesbudget</h2>
+
+<p>Wird jeden Morgen neu berechnet. Basis ist, wie lange du geschlafen hast.</p>
+
+<div class="scroll">
+<table>
+  <tr><th>Grundlage</th><th class="num">ENERGY</th></tr>
+  <tr><td>1 Segment geschlafen (kurz)</td><td class="num">2</td></tr>
+  <tr><td>2 Segmente (normal)</td><td class="num">4</td></tr>
+  <tr><td>3 Segmente (volle Nacht)</td><td class="num">6</td></tr>
+</table>
+</div>
+
+<div class="scroll">
+<table>
+  <tr><th>Modifikator</th><th class="num">ENERGY</th></tr>
+  <tr><td>In einem Bett geschlafen (oder mit Decke)</td><td class="num">+1</td></tr>
+  <tr><td>Warme Mahlzeit am Vorabend</td><td class="num">+1</td></tr>
+  <tr><td>FOOD unter 30</td><td class="num">−1</td></tr>
+  <tr><td>FOOD unter 10</td><td class="num">−2</td></tr>
+  <tr><td><em>Injured</em></td><td class="num">−1</td></tr>
+  <tr><td><em>Sick</em></td><td class="num">−1</td></tr>
+  <tr><td><em>Bleeding</em> / <em>Fevered</em></td><td class="num">−2</td></tr>
+  <tr><td><em>Exhausted</em></td><td class="num">−2</td></tr>
+  <tr><td><em>Starving</em></td><td class="num">−2</td></tr>
+</table>
+</div>
+
+<p><strong>Maximum 8, Minimum 1.</strong> Selbst am schlimmsten Morgen bekommst du
+eine Handlung — das Spiel sperrt sich nie zu.</p>
+
+<p class="note">Ein guter Tag: volle Nacht im Bett, satt, warme Mahlzeit → <span
+class="val">8</span> Handlungen. Ein schlechter: kurz geschlafen, hungrig, verletzt
+→ <span class="val">1</span>.</p>
+
+<h2 id="essen">FOOD — Essen</h2>
+
+<div class="scroll">
+<table>
+  <tr><th>Posten</th><th class="num">Wert</th></tr>
+  <tr><td>Grundverbrauch pro Tag</td><td class="num">−8</td></tr>
+  <tr><td>Pro ausgegebener Handlung</td><td class="num">−2</td></tr>
+  <tr><td>Normaler Tag (6 Handlungen)</td><td class="num">−20</td></tr>
+  <tr><td>Aktiver Tag (8 Handlungen)</td><td class="num">−24</td></tr>
+  <tr><td>Schlechter Tag (2 Handlungen)</td><td class="num">−12</td></tr>
+</table>
+</div>
+
+<p><strong>Arbeiten macht hungrig.</strong> Das ist die eingebaute Bremse dagegen,
+jeden Tag alles zu tun.</p>
+
+<div class="scroll">
+<table>
+  <tr><th class="num">Bei FOOD</th><th>passiert</th></tr>
+  <tr><td class="num">unter 30</td><td>ENERGY −1</td></tr>
+  <tr><td class="num">unter 10</td><td>ENERGY −2, Zustand <em>Starving</em></td></tr>
+  <tr><td class="num">0 für 2 Tage</td><td><span class="pill cold">Tod</span></td></tr>
+</table>
+</div>
+
+<div class="callout">
+  <span class="pill cold">Gemessen, nicht geschätzt</span>
+  <p>Der Verbrauch lag zuerst bei −10 und −3. Der Smoke-Test hat gezeigt, dass ein
+  Durchlauf damit unmöglich ist: <strong>jeder Testlauf verhungerte um Tag 8.</strong>
+  Im Haus liegen rund 350 FOOD-Punkte, das deckt 12 von 20 Tagen.</p>
+</div>
+
+<h3>Das Haus füllt sich wieder auf</h3>
+<p>Es gibt 33 durchsuchbare Möbelstücke. Bei sechs Handlungen am Tag ist das ganze
+Haus nach <strong>fünf Tagen leer</strong> — und der Durchlauf geht zwanzig. Deshalb:</p>
+<p><strong>Ein durchsuchtes Möbelstück ist nach vier Tagen wieder durchsuchbar</strong>,
+mit halber Ausbeute. Das Spiel sagt es dir:</p>
+<p class="flavour">You emptied this one days ago. There is something in it again.</p>
+<p class="note">Das ist keine Bequemlichkeit, sondern die Voraussetzung dafür, dass
+zwanzig Tage funktionieren. Und erzählerisch das unheimlichste Element im Spiel,
+weil es nie erklärt wird: jemand räumt auf.</p>
+
+<h2 id="licht">LIGHT — Licht im Raum</h2>
+
+<div class="scroll">
+<table>
+  <tr><th class="num">Stufe</th><th>Quelle</th><th>Kosten</th><th>Wirkung</th></tr>
+  <tr><td class="num">0</td><td>Dark</td><td>—</td><td>Suchen findet nur 60 %, Ereignisse schlimmer</td></tr>
+  <tr><td class="num">1</td><td>Taschenlampe</td><td>1 Batterie pro Tag</td><td>Reicht zum Arbeiten</td></tr>
+  <tr><td class="num">2</td><td>Kerze, Petroleumlampe</td><td>Kerze hält 2 Tage</td><td>Ganzer Raum hell, bleibt auch ohne dich an</td></tr>
+  <tr><td class="num">3</td><td>Deckenlicht</td><td>1 Sicherung, dauerhaft</td><td>Beste Sicht, kostet laufend nichts</td></tr>
+</table>
+</div>
+
+<p><strong>Der Sicherungskasten</strong> im Keller hat <strong>drei</strong> Sicherungen
+für dreizehn Räume. Umstecken kostet eine Handlung und den Weg. Elektrisches Licht
+kostet laufend nichts — aber es verändert, welche Ereignisse gezogen werden.
+Licht ist nicht besser, es ist anders.</p>
+
+<p class="note">Eine Kerze aufstellen kostet <strong>keine Handlung</strong>, aber eine
+Kerze und ein Streichholz. Licht ist Material, nicht Zeit. Eine Streichholzschachtel
+enthält acht Stück.</p>
+
+<h2 id="sicherheit">SAFETY — Sicherheit im Raum</h2>
+
+<div class="scroll">
+<table>
+  <tr><th class="num">Stufe</th><th>Zustand</th><th>Kosten</th></tr>
+  <tr><td class="num">0</td><td>Open — Tür offen</td><td>—</td></tr>
+  <tr><td class="num">1</td><td>Closed — Tür zu</td><td>kostenlos</td></tr>
+  <tr><td class="num">2</td><td>Blocked — Möbel davor</td><td>1 Handlung</td></tr>
+  <tr><td class="num">3</td><td>Barricaded — Bretter vernagelt</td><td>2 Handlungen + 2 Bretter + Nägel + Hammer</td></tr>
+</table>
+</div>
+
+<p>Barrikaden halten nicht: Nachtereignisse setzen sie herunter. Reparieren kostet
+wieder Material und Handlungen. <strong>Das ist der Grund, warum du jeden Tag raus
+musst.</strong></p>
+
+<p class="note">Eine mit dem Brecheisen aufgebrochene Tür kommt <strong>nie über
+SAFETY 1</strong> hinaus. Der schnelle Weg heute kostet dich jede weitere Nacht.</p>
+
+<h2 id="handlungen">Handlungen &amp; Kosten</h2>
+
+<div class="scroll">
+<table>
+  <tr><th>Kostenlos</th><th>1 Handlung</th><th>2 Handlungen</th></tr>
+  <tr>
+    <td>Zwischen Räumen laufen</td>
+    <td>Möbelstück durchsuchen</td>
+    <td>Barrikade bauen (SAFETY 3)</td>
+  </tr>
+  <tr>
+    <td>Ansehen, Text lesen</td>
+    <td>Tür mit Brecheisen öffnen</td>
+    <td>Möbel zerlegen (2–3 Bretter)</td>
+  </tr>
+  <tr>
+    <td>Notizbuch und Karte</td>
+    <td>Radio hören</td>
+    <td>Safe knacken</td>
+  </tr>
+  <tr>
+    <td>Essen</td>
+    <td>Am Herd kochen</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Kerze aufstellen <span class="note">(Material)</span></td>
+    <td>Beete gießen (alle zusammen)</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Zustand behandeln <span class="note">(Material)</span></td>
+    <td>Beet bepflanzen · ernten</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Rucksack umpacken</td>
+    <td>Falle bauen · aufstellen</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Taschenlampe an/aus</td>
+    <td>Sicherung umstecken</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Schlafplatz wählen</td>
+    <td>Möbel vor die Tür (SAFETY 2)</td>
+    <td></td>
+  </tr>
+</table>
+</div>
+
+<p><strong>Laufen ist kostenlos.</strong> Sonst wird jeder Weg zur Buchhaltung.
+Was kostet, ist das Tun, nicht das Gehen.</p>
+
+<h2 id="zustaende">Zustände &amp; Tod</h2>
+
+<p>Ein Ereignis tötet dich <strong>nie direkt</strong>. Es gibt dir einen Zustand,
+und der bringt dich um, wenn du ihn ignorierst.</p>
+
+<div class="scroll">
+<table>
+  <tr><th>Zustand</th><th class="num">ENERGY</th><th>Behandlung</th><th>Unbehandelt</th></tr>
+  <tr><td><em>Injured</em></td><td class="num">−1</td><td>First aid tin</td><td>nach 2 Tagen → <em>Bleeding</em></td></tr>
+  <tr><td><em>Sick</em></td><td class="num">−1</td><td>Pills</td><td>nach 3 Tagen → <em>Fevered</em></td></tr>
+  <tr><td><em>Shaken</em></td><td class="num">0</td><td>Whiskey, warme Mahlzeit</td><td>vergeht nach 2 Tagen · nur 1 Segment Schlaf möglich</td></tr>
+  <tr><td><em>Exhausted</em></td><td class="num">−2</td><td>Eine volle Nacht (3 Segmente)</td><td>bleibt · Halluzinationen</td></tr>
+  <tr><td><em>Starving</em></td><td class="num">−2</td><td>Essen</td><td>zieht Richtung Tod</td></tr>
+  <tr><td><em>Bleeding</em></td><td class="num">−2</td><td>First aid tin</td><td><span class="pill cold">Tod nach 2 Tagen</span></td></tr>
+  <tr><td><em>Fevered</em></td><td class="num">−2</td><td>Pills</td><td><span class="pill cold">Tod nach 2 Tagen</span></td></tr>
+</table>
+</div>
+
+<p><em>Exhausted</em> ersetzt die frühere Schlaf-Leiste: zwei Nächte hintereinander
+nur ein Segment, und du bekommst ihn. Dann erscheinen Hotspots, die nicht existieren,
+und Hinweise, die falsch sind.</p>
+
+<div class="callout">
+  <span class="pill cold">Permadeath</span>
+  <p><strong>Tod ist endgültig. Es wird nicht gespeichert.</strong> Kein Autosave,
+  kein Speicherpunkt, kein Laden. Dafür gilt: <strong>kein Tod ohne zwei Tage
+  sichtbare Vorwarnung.</strong> Zustände eskalieren erkennbar, das Spiel sagt dir
+  deutlich, dass du gerade stirbst.</p>
+</div>
+
+<h2 id="nacht">Die Nacht</h2>
+
+<p><strong>90 % aller Ereignisse passieren im Schlaf.</strong> Tagsüber ist es fast
+still — nicht weil nichts da ist, sondern damit die Stille unangenehm wird.</p>
+
+<h3>Ablauf</h3>
+<p>Du wählst <strong>Raum</strong> und <strong>Länge</strong> (1, 2 oder 3 Segmente).
+Ein Dialog zeigt die Einschätzung in Worten, nicht als Prozentzahl:</p>
+<p class="flavour">Dark. Open. You should not sleep here.<br>
+Boarded up, and something is burning. This is as good as it gets.</p>
+<p>Pro Segment eine Ziehung. Ein Problem hält die Nacht an und wartet auf dich.
+Morgens siehst du den <strong>Night Report</strong>: eine Seite, was passiert ist.</p>
+
+<h3>Ziehungswahrscheinlichkeit</h3>
+<div class="scroll">
+<table>
+  <tr><th>Faktor</th><th class="num">Punkte</th></tr>
+  <tr><td>Grundwert pro Segment</td><td class="num">45</td></tr>
+  <tr><td>SAFETY 3 (vernagelt)</td><td class="num">−20</td></tr>
+  <tr><td>SAFETY 2 (Möbel davor)</td><td class="num">−10</td></tr>
+  <tr><td>LIGHT ≥ 2 (Kerze brennt)</td><td class="num">−10</td></tr>
+  <tr><td>Nach einer sehr schlechten Nacht</td><td class="num">−15</td></tr>
+  <tr><td>Erste Nacht des Durchlaufs</td><td class="num">0 (garantiert ruhig)</td></tr>
+</table>
+</div>
+<p class="note">Bester Schlafplatz: <span class="val">15 %</span> pro Segment.
+Schlechtester (dunkel, offen): <span class="val">45 %</span>. Vollständige Sicherheit
+gibt es nie, und sie kostet jeden Tag neu Material und Handlungen.</p>
+
+<h3>Die Kategorien</h3>
+<div class="scroll">
+<table>
+  <tr><th>Kategorie</th><th class="num">Anteil</th><th>Lösbar?</th><th>Was es tut</th></tr>
+  <tr><td><strong>Problem</strong></td><td class="num">40 %</td><td><span class="pill warm">mit Gegenstand</span></td><td>Der Kern des Spiels</td></tr>
+  <tr><td>Sound</td><td class="num">25 %</td><td>nein</td><td>Nur ein Geräusch, ENERGY −1</td></tr>
+  <tr><td>Damage</td><td class="num">10 %</td><td>nein</td><td>Es ist schon passiert</td></tr>
+  <tr><td>Theft</td><td class="num">10 %</td><td>nur Stolperschnur</td><td>Etwas fehlt</td></tr>
+  <tr><td>Clue</td><td class="num">10 %</td><td>nein</td><td>Das Haus gibt dir etwas</td></tr>
+  <tr><td>Move</td><td class="num">5 %</td><td>nein</td><td>Du wachst woanders auf</td></tr>
+</table>
+</div>
+
+<h3>Das Lösungsprinzip</h3>
+<p><strong>Das Spiel fragt nie, was du tun willst. Es fragt, was du dabei hast.</strong></p>
+<p>Es gibt keine Auswahl zwischen Verhaltensweisen — kein „nachsehen / ignorieren /
+zurückrufen". Die Entscheidung ist längst gefallen: am Abend, beim Packen.</p>
+
+<div class="callout">
+  <span class="pill warm">Die wichtigste Regel</span>
+  <p><strong>Nachts zählt nur, was du am Körper trägst.</strong> Der Vorratsstapel
+  drei Räume weiter nützt um drei Uhr morgens nichts. Damit werden die sechs
+  Inventarplätze zur eigentlichen Frage des Spiels.</p>
+  <p class="note">Umpacken zwischen Lager und Rucksack kostet keine Handlung —
+  die Entscheidung soll nichts kosten außer Nachdenken.</p>
+</div>
+
+<p class="note">Damage, Theft und Move sind bewusst <strong>nicht</strong> lösbar.
+Sonst hätte alles eine Antwort, und das Haus wäre nur noch eine Packliste.</p>
+
+<h2 id="probleme">Die 16 Problem-Ereignisse</h2>
+
+<p class="note">Lesehilfe: <span class="kit">warm</span> = Lösung mit Gegenstand ·
+<span class="kit" style="color:var(--cold)">rot</span> = was passiert, wenn nichts
+davon dabei ist. <code>needs</code> wird verbraucht, <code>tool</code> bleibt erhalten.</p>
+
+<div class="event">
+  <header><span class="eid">N-P-01</span><span class="etitle">The Boards</span>
+  <span class="meta">Gewicht 5 · ab Tag 3 · nur bei SAFETY ≥ 2</span></header>
+  <p class="flavour">Something is working at the boards across the door. Not forcing
+  them. Testing where the wood is thinnest.</p>
+  <ul class="solutions">
+    <li><span class="kit">Wooden board + Hammer</span><span>Du nagelst nach. Die Barrikade bleibt, wie sie war.</span></li>
+    <li><span class="kit">Crowbar</span><span>Du verkeilst die Tür. Hält bis zum Morgen.</span></li>
+    <li class="fail"><span class="kit">nichts davon</span><span>Barrikade −2 Stufen. Das Segment zählt nicht für ENERGY.</span></li>
+  </ul>
+</div>
+
+<div class="event">
+  <header><span class="eid">N-P-02</span><span class="etitle">The Door Standing Open</span>
+  <span class="meta">Gewicht 5 · ab Tag 1 · nur bei SAFETY ≥ 1</span></header>
+  <p class="flavour">The door is open. Not forced — opened. Whatever you wedged under
+  the handle has been set neatly against the wall.</p>
+  <ul class="solutions">
+    <li><span class="kit">2 × Board + Nails + Hammer</span><span>SAFETY 3. Der Rest der Nacht ist ruhig.</span></li>
+    <li><span class="kit">Padlock and Chain</span><span>Diese Tür ist ab jetzt dauerhaft dicht.</span></li>
+    <li><span class="kit">Trip line</span><span>Du hörst es beim nächsten Mal. Die Nacht läuft normal weiter.</span></li>
+    <li class="fail"><span class="kit">nichts davon</span><span>ENERGY −1, und ein zufälliger Gegenstand ist am Morgen weg.</span></li>
+  </ul>
+</div>
+
+<div class="event">
+  <header><span class="eid">N-P-03</span><span class="etitle">Breathing in the Dark</span>
+  <span class="meta">Gewicht 5 · ab Tag 1 · nur bei LIGHT ≤ 1</span></header>
+  <p class="flavour">Someone in the room is breathing. Slow, even, patient. When you
+  hold your breath to listen, so do they.</p>
+  <ul class="solutions">
+    <li><span class="kit">Candle + Matches</span><span>Der Raum ist leer. LIGHT 2 für den Rest der Nacht.</span></li>
+    <li><span class="kit">Battery + Flashlight</span><span>Der Raum ist leer. LIGHT 1 für den Rest der Nacht.</span></li>
+    <li><span class="kit">Lamp oil + Lantern</span><span>Der Raum ist leer, und er bleibt hell.</span></li>
+    <li class="fail"><span class="kit">nichts davon</span><span>Zustand <em>Shaken</em>, Segment verfällt.</span></li>
+  </ul>
+  <p class="note">Das häufigste Ereignis im Spiel und die klarste Lektion:
+  <strong>nimm Licht mit ins Bett.</strong></p>
+</div>
+
+<div class="event">
+  <header><span class="eid">N-P-04</span><span class="etitle">The Cold</span>
+  <span class="meta">Gewicht 4 · ab Tag 2</span></header>
+  <p class="flavour">Your breath is showing. The window is shut. It is not that time
+  of year.</p>
+  <ul class="solutions">
+    <li><span class="kit">Wool blanket</span><span>Du schläfst weiter. Nichts passiert. Die Decke bleibt.</span></li>
+    <li><span class="kit">Board + Matches</span><span>Ein Feuer. Der Raum bleibt bis zum Morgen warm.</span></li>
+    <li><span class="kit">Whiskey</span><span>Hilft gegen die Kälte. ENERGY −1 am nächsten Tag.</span></li>
+    <li class="fail"><span class="kit">nichts davon</span><span>Zustand <em>Sick</em>, Segment verfällt.</span></li>
+  </ul>
+</div>
+
+<div class="event">
+  <header><span class="eid">N-P-05</span><span class="etitle">The Cut</span>
+  <span class="meta">Gewicht 4 · ab Tag 2</span></header>
+  <p class="flavour">You wake up bleeding. Four thin lines along the forearm, evenly
+  spaced. They did not hurt until you looked at them.</p>
+  <ul class="solutions">
+    <li><span class="kit">First aid tin</span><span>Verbunden. Kein Zustand.</span></li>
+    <li><span class="kit">Whiskey</span><span>Ausgewaschen. <em>Injured</em>, aber es wird nicht schlimmer.</span></li>
+    <li class="fail"><span class="kit">nichts davon</span><span>Zustand <em>Injured</em>. Unbehandelt nach zwei Tagen <em>Bleeding</em>.</span></li>
+  </ul>
+</div>
+
+<div class="event">
+  <header><span class="eid">N-P-06</span><span class="etitle">The Fuse</span>
+  <span class="meta">Gewicht 3 · ab Tag 4 · nur wenn eine Sicherung steckt</span></header>
+  <p class="flavour">Everything electric goes out at once. The box in the cellar is
+  warm to the touch.</p>
+  <ul class="solutions">
+    <li><span class="kit">Fuse + Screwdriver</span><span>Ersetzt. Das Licht kommt zurück.</span></li>
+    <li><span class="kit">Fuse</span><span>Ersetzt, aber du reißt dir die Hand auf: <em>Injured</em>.</span></li>
+    <li class="fail"><span class="kit">nichts davon</span><span>Die Sicherung ist zerstört. Der Raum fällt auf LIGHT 0.</span></li>
+  </ul>
+</div>
+
+<div class="event">
+  <header><span class="eid">N-P-07</span><span class="etitle">The Window</span>
+  <span class="meta">Gewicht 4 · ab Tag 2 · nur in Räumen mit Fenster</span></header>
+  <p class="flavour">The window is open. You did not open it. Outside there is no wind,
+  no sound, no insects — as if the night is holding still to see what you do.</p>
+  <ul class="solutions">
+    <li><span class="kit">Board + Nails + Hammer</span><span>Zugenagelt. Dieser Raum bekommt <strong>dauerhaft +1 SAFETY</strong>.</span></li>
+    <li><span class="kit">Crowbar</span><span>Du klemmst es fest. Hält diese Nacht.</span></li>
+    <li class="fail"><span class="kit">nichts davon</span><span>ENERGY −1.</span></li>
+  </ul>
+  <p class="note">Die einzige Gelegenheit, einen Raum <strong>dauerhaft</strong> zu
+  verbessern. Wer nie Bretter dabei hat, bekommt sie nie.</p>
+</div>
+
+<div class="event">
+  <header><span class="eid">N-P-08</span><span class="etitle">Something Under the Floor</span>
+  <span class="meta">Gewicht 4 · ab Tag 5 · nur Erdgeschoss oder Keller</span></header>
+  <p class="flavour">Under the boards, something shifts its weight. It is not
+  scratching. It is making itself comfortable.</p>
+  <ul class="solutions">
+    <li><span class="kit">Crowbar</span><span>Du hebst ein Brett an. Darunter ist ein Hohlraum: <strong>1 Fragment</strong>.</span></li>
+    <li><span class="kit">Snare</span><span>Du stellst die Falle darüber. Am Morgen ist sie zugeschnappt: <strong>+25 FOOD</strong>.</span></li>
+    <li class="fail"><span class="kit">nichts davon</span><span>ENERGY −1, Segment verfällt.</span></li>
+  </ul>
+</div>
+
+<div class="event">
+  <header><span class="eid">N-P-09</span><span class="etitle">In the Stores</span>
+  <span class="meta">Gewicht 4 · ab Tag 4 · nur mit Nahrung im Bestand</span></header>
+  <p class="flavour">Something is in the stores. You can hear the tins moving against
+  each other, unhurried, one at a time.</p>
+  <ul class="solutions">
+    <li><span class="kit">Snare</span><span>Gestellt und zugeschnappt. Nichts fehlt, und <strong>+25 FOOD</strong> dazu.</span></li>
+    <li><span class="kit">Trip line</span><span>Du wachst rechtzeitig auf. Nichts fehlt. <em>Die Schnur wird zerstört.</em></span></li>
+    <li class="fail"><span class="kit">nichts davon</span><span><strong>Zwei</strong> Nahrungsgegenstände sind weg.</span></li>
+  </ul>
+</div>
+
+<div class="event">
+  <header><span class="eid">N-P-10</span><span class="etitle">The Lock</span>
+  <span class="meta">Gewicht 3 · ab Tag 6</span></header>
+  <p class="flavour">The door you came through will not open from this side. It has
+  no lock. It has never had a lock.</p>
+  <ul class="solutions">
+    <li><span class="kit">Crowbar</span><span>Aufgehebelt. Der Raum kommt danach nie über SAFETY 1.</span></li>
+    <li><span class="kit">Set of picks</span><span>Sauber geöffnet, ohne Schaden.</span></li>
+    <li><span class="kit">Board + Hammer</span><span>Du schlägst dich durch die Wandverkleidung. Laut, aber es geht.</span></li>
+    <li class="fail"><span class="kit">nichts davon</span><span>Nacht endet, ENERGY morgen 2.</span></li>
+  </ul>
+</div>
+
+<div class="event">
+  <header><span class="eid">N-P-11</span><span class="etitle">The Damp</span>
+  <span class="meta">Gewicht 3 · ab Tag 5</span></header>
+  <p class="flavour">Water is coming through the ceiling, exactly and only above the
+  place where you keep your things.</p>
+  <ul class="solutions">
+    <li><span class="kit">Oily rag</span><span>Aufgefangen und abgedeckt. Nichts wird nass.</span></li>
+    <li><span class="kit">Wool blanket</span><span>Deine Sachen sind trocken, du frierst: ENERGY −1.</span></li>
+    <li class="fail"><span class="kit">nichts davon</span><span>Ein zufälliger Gegenstand ist ruiniert.</span></li>
+  </ul>
+</div>
+
+<div class="event">
+  <header><span class="eid">N-P-12</span><span class="etitle">Rot</span>
+  <span class="meta">Gewicht 3 · ab Tag 6 · nur mit verderblichen Vorräten</span></header>
+  <p class="flavour">There is a smell. Everything soft you own has turned overnight,
+  and it has turned further than one night allows.</p>
+  <ul class="solutions">
+    <li><span class="kit">Jar of preserves</span><span>Du sortierst rechtzeitig aus. Nur das eine Glas geht verloren.</span></li>
+    <li><span class="kit">Strom in der Küche</span><span>Was kühl stand, hat gehalten. Nichts verdirbt.</span></li>
+    <li class="fail"><span class="kit">nichts davon</span><span><strong>Alle verderblichen Lebensmittel</strong> sind hin.</span></li>
+  </ul>
+  <p class="note">Das einzige Ereignis, das eine <strong>Sicherung</strong> als Lösung
+  akzeptiert — und damit ein Grund, Strom in die Küche zu legen statt ins Schlafzimmer.</p>
+</div>
+
+<div class="event">
+  <header><span class="eid">N-P-13</span><span class="etitle">The Fever</span>
+  <span class="meta">Gewicht 3 · ab Tag 4 · nur wenn du <em>Sick</em> bist</span></header>
+  <p class="flavour">You are burning up. The room is cold and you are soaked through,
+  and you cannot tell which of those two things is the wrong one.</p>
+  <ul class="solutions">
+    <li><span class="kit">Bottle of pills</span><span>Heruntergefiebert. <em>Sick</em> ist weg.</span></li>
+    <li><span class="kit">Ampoule</span><span>Alles weg, sofort. ENERGY −1.</span></li>
+    <li class="fail"><span class="kit">nichts davon</span><span><em>Sick</em> wird zu <em>Fevered</em>. Von da sind es zwei Tage bis zum Tod.</span></li>
+  </ul>
+</div>
+
+<div class="event">
+  <header><span class="eid">N-P-14</span><span class="etitle">Scratching at the Cellar Door</span>
+  <span class="meta">Gewicht 4 · ab Tag 3</span></header>
+  <p class="flavour">Something is at the cellar door. Not knocking. Testing.</p>
+  <ul class="solutions">
+    <li><span class="kit">2 × Board + Nails + Hammer</span><span>Zugenagelt. Der Keller ist bis auf Weiteres zu.</span></li>
+    <li><span class="kit">Trip line</span><span>Es geht weg, als die Dosen fallen. <em>Die Schnur wird zerstört.</em></span></li>
+    <li><span class="kit">Candle + Matches</span><span>Licht im Flur. Es hört auf.</span></li>
+    <li class="fail"><span class="kit">nichts davon</span><span>Barrikade −1, ENERGY −1.</span></li>
+  </ul>
+</div>
+
+<div class="event">
+  <header><span class="eid">N-P-15</span><span class="etitle">The Weight</span>
+  <span class="meta">Gewicht 3 · ab Tag 6 · nur in Räumen mit Bett</span></header>
+  <p class="flavour">The mattress dips beside you. Not much. Just the weight of someone
+  sitting down on the edge, careful not to wake you.</p>
+  <ul class="solutions">
+    <li><span class="kit">Candle + Matches</span><span>Beim Licht ist niemand da. Die Seite des Betts ist warm. <strong>1 Fragment</strong>.</span></li>
+    <li><span class="kit">Whiskey</span><span>Du schläfst darüber hinweg. ENERGY −1.</span></li>
+    <li class="fail"><span class="kit">nichts davon</span><span>Zustand <em>Shaken</em>, Nacht endet.</span></li>
+  </ul>
+</div>
+
+<div class="event">
+  <header><span class="eid">N-P-16</span><span class="etitle">The Smell of Cooking</span>
+  <span class="meta">Gewicht 2 · ab Tag 5 · einmal pro Durchlauf</span></header>
+  <p class="flavour">Something is cooking. It smells like a proper meal, the kind you
+  have not had in days. The stove has no power.</p>
+  <ul class="solutions">
+    <li><span class="kit">Eine eigene Konserve</span><span>Du isst deine eigene, im Dunkeln, und gehst nicht nachsehen.</span></li>
+    <li class="fail"><span class="kit">nichts dabei</span><span>Du gehst hin und isst, was da steht: <strong>FOOD +55</strong>, <strong>1 Fragment</strong>, und <em>Shaken</em>.</span></li>
+  </ul>
+  <p class="note">Das einzige Ereignis, bei dem <strong>die Lösung schlechter ist als
+  das Scheitern</strong> — wer nichts zu essen hat, bekommt das beste Ergebnis und
+  bezahlt mit dem Verstand.</p>
+</div>
+
+<h2 id="unloesbar">Unlösbare Ereignisse</h2>
+
+<p>Diese passieren einfach. Sie sind das Gegengewicht: Wären alle Ereignisse mit
+Werkzeug abzuwenden, wäre das Haus nur eine Packliste.</p>
+
+<h3>Sound — nur Geräusch <span class="pill">8 Stück · je ENERGY −1</span></h3>
+<div class="scroll">
+<table>
+  <tr><th class="num">ID</th><th>Text</th></tr>
+  <tr><td class="num">N-S-01</td><td class="flavour" style="border:none;padding-left:0;margin:0">Water running somewhere below. It stops when you notice it.</td></tr>
+  <tr><td class="num">N-S-02</td><td class="flavour" style="border:none;padding-left:0;margin:0">A door closes, two floors down. Then again. Then again, more quietly.</td></tr>
+  <tr><td class="num">N-S-03</td><td class="flavour" style="border:none;padding-left:0;margin:0">Something is dragged across the ceiling, corner to corner, and back.</td></tr>
+  <tr><td class="num">N-S-04</td><td class="flavour" style="border:none;padding-left:0;margin:0">A chair scrapes in the room next to yours. There is no chair in that room.</td></tr>
+  <tr><td class="num">N-S-05</td><td class="flavour" style="border:none;padding-left:0;margin:0">Someone is humming. It is a tune you know, but not from anywhere you can name.</td></tr>
+  <tr><td class="num">N-S-06</td><td class="flavour" style="border:none;padding-left:0;margin:0">The house settles. It settles again. It settles in perfect rhythm, like breathing.</td></tr>
+  <tr><td class="num">N-S-07</td><td class="flavour" style="border:none;padding-left:0;margin:0">A cough. Close. Politely muffled, the way you cough in a room where someone is sleeping.</td></tr>
+  <tr><td class="num">N-S-08</td><td class="flavour" style="border:none;padding-left:0;margin:0">Footsteps on the stairs, going down. They stop halfway and do not continue.</td></tr>
+</table>
+</div>
+
+<h3>Damage — schon passiert <span class="pill">ab Tag 4 · höchstens eines pro Nacht</span></h3>
+<div class="scroll">
+<table>
+  <tr><th class="num">ID</th><th>Text</th><th>Folge</th></tr>
+  <tr><td class="num">N-D-01</td><td class="flavour" style="border:none;padding-left:0;margin:0">Two of the jars have burst. The shelf is wet and the cellar smells sweet.</td><td>2 × Preserves weg</td></tr>
+  <tr><td class="num">N-D-02</td><td class="flavour" style="border:none;padding-left:0;margin:0">The window in the next room has cracked from corner to corner. Nothing hit it.</td><td>Nachbarraum nie über SAFETY 2</td></tr>
+  <tr><td class="num">N-D-03</td><td class="flavour" style="border:none;padding-left:0;margin:0">The boards have come away at one corner. The nails are on the floor, in a row.</td><td>Barrikade −1</td></tr>
+</table>
+</div>
+
+<h3>Theft — etwas fehlt <span class="pill">ab Tag 4 · nur die Stolperschnur wendet es ab</span></h3>
+<div class="scroll">
+<table>
+  <tr><th class="num">ID</th><th>Text</th><th>Folge</th></tr>
+  <tr><td class="num">N-T-01</td><td class="flavour" style="border:none;padding-left:0;margin:0">One tin is missing. You counted them last night. You counted them twice.</td><td>1 Konserve</td></tr>
+  <tr><td class="num">N-T-02</td><td class="flavour" style="border:none;padding-left:0;margin:0">The hammer is not where you left it.</td><td>Hammer weg, taucht in 1–3 Tagen woanders auf</td></tr>
+  <tr><td class="num">N-T-03</td><td class="flavour" style="border:none;padding-left:0;margin:0">The batteries are flat. All of them. You have not used the flashlight since yesterday.</td><td>alle Batterien</td></tr>
+  <tr><td class="num">N-T-04</td><td class="flavour" style="border:none;padding-left:0;margin:0">The matches are damp. The box has been sitting in something.</td><td>1 Schachtel</td></tr>
+  <tr><td class="num">N-T-05</td><td class="flavour" style="border:none;padding-left:0;margin:0">A page in your notebook has run. The ink is smeared edge to edge. You remember writing it. You do not remember what it said.</td><td>1 Fragment unleserlich — am Fundort wieder holbar</td></tr>
+</table>
+</div>
+
+<h3>Move — du wachst woanders auf <span class="pill">ab Tag 5</span></h3>
+<div class="scroll">
+<table>
+  <tr><th class="num">ID</th><th>Text</th><th>Folge</th></tr>
+  <tr><td class="num">N-V-01</td><td class="flavour" style="border:none;padding-left:0;margin:0">You wake in the upstairs hall. Your shoes are beside you, set side by side.</td><td>Nacht endet</td></tr>
+  <tr><td class="num">N-V-02</td><td class="flavour" style="border:none;padding-left:0;margin:0">You wake in front of the door. Your hand is on the handle. It is still locked.</td><td>Nacht endet, ENERGY morgen 2</td></tr>
+  <tr><td class="num">N-V-03</td><td class="flavour" style="border:none;padding-left:0;margin:0">You wake in the cellar. There is no light and you do not remember the stairs.</td><td>Getragenes bleibt im alten Raum</td></tr>
+</table>
+</div>
+
+<h3>Clue — das Haus gibt dir etwas <span class="pill">ab Tag 2</span></h3>
+<div class="scroll">
+<table>
+  <tr><th class="num">ID</th><th>Text</th><th>Folge</th></tr>
+  <tr><td class="num">N-C-01</td><td class="flavour" style="border:none;padding-left:0;margin:0">There is writing on the last page of your notebook. It is your handwriting. It is not your sentence.</td><td>1 Fragment</td></tr>
+  <tr><td class="num">N-C-02</td><td class="flavour" style="border:none;padding-left:0;margin:0">You dreamed about a room in this house. You have not been in it yet. You know where the door is.</td><td>Raum aufgedeckt</td></tr>
+  <tr><td class="num">N-C-03</td><td class="flavour" style="border:none;padding-left:0;margin:0">A word has been written in the dust on the floor. It is a name, or half of one.</td><td>1 Fragment</td></tr>
+  <tr><td class="num">N-C-04</td><td class="flavour" style="border:none;padding-left:0;margin:0">You remember something clearly that you know you did not do.</td><td>1 Fragment</td></tr>
+  <tr><td class="num">N-C-05</td><td class="flavour" style="border:none;padding-left:0;margin:0">There is a note under the door. The paper is old. The ink is not.</td><td>1 Fragment</td></tr>
+</table>
+</div>
+
+<h2 id="tagereignisse">Tag &amp; Radio</h2>
+
+<p>4 % Chance pro Raumwechsel. Fast nur Atmosphäre.</p>
+
+<h3>Ambient — folgenlos</h3>
+<div class="scroll">
+<table>
+  <tr><th class="num">ID</th><th>Text</th></tr>
+  <tr><td class="num">D-A-01</td><td class="flavour" style="border:none;padding-left:0;margin:0">The picture in the hall is crooked. You straighten it. Later, it is crooked again.</td></tr>
+  <tr><td class="num">D-A-02</td><td class="flavour" style="border:none;padding-left:0;margin:0">There are footprints in the dust. Your size. Facing the other way.</td></tr>
+  <tr><td class="num">D-A-03</td><td class="flavour" style="border:none;padding-left:0;margin:0">The hall clock is running. It was not running yesterday and there is no key for it.</td></tr>
+  <tr><td class="num">D-A-04</td><td class="flavour" style="border:none;padding-left:0;margin:0">The seat of the armchair is warm.</td></tr>
+  <tr><td class="num">D-A-05</td><td class="flavour" style="border:none;padding-left:0;margin:0">Every door upstairs is open. You closed them all this morning.</td></tr>
+  <tr><td class="num">D-A-06</td><td class="flavour" style="border:none;padding-left:0;margin:0">You can hear yourself moving around upstairs.</td></tr>
+</table>
+</div>
+
+<h3>Supply — Funde <span class="pill warm">Gewicht ×3 bei FOOD unter 25</span></h3>
+<div class="scroll">
+<table>
+  <tr><th class="num">ID</th><th>Text</th><th>Fund</th></tr>
+  <tr><td class="num">D-S-01</td><td class="flavour" style="border:none;padding-left:0;margin:0">Something has rolled behind the dresser and been there a long time.</td><td>1 Konserve</td></tr>
+  <tr><td class="num">D-S-02</td><td class="flavour" style="border:none;padding-left:0;margin:0">There is a box of matches in the coat by the door. The coat is not yours.</td><td>1 Schachtel Streichhölzer</td></tr>
+  <tr><td class="num">D-S-03</td><td class="flavour" style="border:none;padding-left:0;margin:0">A toolbox under the workbench, closed with a latch that still works.</td><td>Nägel + Draht</td></tr>
+  <tr><td class="num">D-S-04</td><td class="flavour" style="border:none;padding-left:0;margin:0">A drawer of candle stubs. Household candles, kept for power cuts.</td><td>3 Kerzen</td></tr>
+  <tr><td class="num">D-S-05</td><td class="flavour" style="border:none;padding-left:0;margin:0">Somebody kept a bag packed by the back door.</td><td>Verband, Konserve, Batterie</td></tr>
+</table>
+</div>
+
+<h3>Das Radio — die einzige Vorwarnung</h3>
+<p>Im Salon, 1 Handlung, einmal am Tag. Es wird nie ein Datum genannt.</p>
+<div class="scroll">
+<table>
+  <tr><th class="num">Ab Tag</th><th>Meldung</th></tr>
+  <tr><td class="num">1</td><td class="flavour" style="border:none;padding-left:0;margin:0">"...scattered showers through the county, clearing towards the weekend..."</td></tr>
+  <tr><td class="num">3</td><td class="flavour" style="border:none;padding-left:0;margin:0">"...police are asking motorists to avoid the old county road following an incident..."</td></tr>
+  <tr><td class="num">5</td><td class="flavour" style="border:none;padding-left:0;margin:0">"...a vehicle was recovered abandoned near the Ashgrove turning. The owner has not been traced..."</td></tr>
+  <tr><td class="num">8</td><td class="flavour" style="border:none;padding-left:0;margin:0">"...now being treated as a missing person enquiry..."</td></tr>
+  <tr><td class="num">11</td><td class="flavour" style="border:none;padding-left:0;margin:0">"...the search has been scaled back after almost two weeks without..." Then static.</td></tr>
+  <tr><td class="num">14</td><td class="flavour" style="border:none;padding-left:0;margin:0">"...following new information, officers will begin searching properties on the estate itself..."</td></tr>
+  <tr><td class="num">17</td><td class="flavour" style="border:none;padding-left:0;margin:0">No words. A helicopter, a long way off, but real.</td></tr>
+  <tr><td class="num">19</td><td class="flavour" style="border:none;padding-left:0;margin:0">Vehicles on the gravel. Engines being switched off. Then nothing.</td></tr>
+  <tr><td class="num">20</td><td class="flavour" style="border:none;padding-left:0;margin:0">Voices outside. Several. They are calling.</td></tr>
+</table>
+</div>
+
+<div class="callout">
+  <span class="pill cold">Der Tiefpunkt</span>
+  <p><strong>Tag 11 ist der wichtigste Eintrag der Staffel:</strong> Die Suche wird
+  eingestellt. Wer nur auf die Rettung gesetzt hat, bekommt hier die Nachricht,
+  dass es vorbei ist — und muss drei Tage weitermachen, bevor Tag 14 zeigt, dass es
+  doch nicht vorbei war.</p>
+</div>
+
+<p class="note"><strong>Ab Tag 12</strong> liest das Radio mit 20 % Chance stattdessen
+Namen vor. Folge: <em>Shaken</em>, aber garantiert ein Fragment. Ob einer der Namen
+deiner ist, wird nie geklärt — die Figur hat keinen.</p>
+
+<h2 id="items">Alle Gegenstände</h2>
+
+<h3>Essen</h3>
+<div class="scroll">
+<table>
+  <tr><th>Name</th><th class="num">FOOD</th><th class="num">Stapel</th><th>Besonderheit</th></tr>
+  <tr><td>Tin of beans</td><td class="num">+35</td><td class="num">4</td><td>hält ewig</td></tr>
+  <tr><td>Tin of meat</td><td class="num">+40</td><td class="num">4</td><td>hält ewig</td></tr>
+  <tr><td>Tin of soup</td><td class="num">+30</td><td class="num">4</td><td>am Herd aufgewärmt +55</td></tr>
+  <tr><td>Jar of preserves</td><td class="num">+30</td><td class="num">3</td><td>Glas zerbricht bei N-D-01</td></tr>
+  <tr><td>Stale bread</td><td class="num">+25</td><td class="num">2</td><td>verdirbt nach 2 Tagen</td></tr>
+  <tr><td>Withered apples</td><td class="num">+20</td><td class="num">3</td><td>verdirbt nach 3 Tagen</td></tr>
+  <tr><td>Bar of chocolate</td><td class="num">+15</td><td class="num">3</td><td><strong>ENERGY +1</strong> am selben Tag</td></tr>
+  <tr><td>Hot meal</td><td class="num">+55</td><td class="num">1</td><td>nur am Herd, nicht lagerbar</td></tr>
+  <tr><td>Bottle of water</td><td class="num">+10</td><td class="num">3</td><td>Kleinigkeit</td></tr>
+  <tr><td>Raw catch</td><td class="num">+25</td><td class="num">2</td><td>roh 20 % <em>Sick</em></td></tr>
+  <tr><td>Crop</td><td class="num">+50</td><td class="num">3</td><td>aus dem Wintergarten</td></tr>
+  <tr><td>Spoiled food</td><td class="num">+10</td><td class="num">3</td><td>60 % <em>Sick</em></td></tr>
+</table>
+</div>
+<p class="note"><strong>Der Herd</strong> verwandelt eine Konserve in eine warme
+Mahlzeit (+55) und gibt ENERGY +1 am nächsten Morgen. Er braucht Strom — also eine
+deiner drei Sicherungen.</p>
+
+<h3>Licht</h3>
+<div class="scroll">
+<table>
+  <tr><th>Name</th><th>Wirkung</th><th class="num">Im Haus</th></tr>
+  <tr><td>Flashlight</td><td>LIGHT 1, 1 Batterie pro Tag</td><td class="num">Start</td></tr>
+  <tr><td>Battery</td><td>Ein Tag Taschenlampe</td><td class="num">6–10</td></tr>
+  <tr><td>Candle</td><td>LIGHT 2 im Raum, hält 2 Tage</td><td class="num">6–10</td></tr>
+  <tr><td>Box of matches</td><td>8 Streichhölzer pro Schachtel</td><td class="num">2–3</td></tr>
+  <tr><td>Oil lantern</td><td>LIGHT 2, hält 4 Tage, wiederbefüllbar</td><td class="num">0–1</td></tr>
+  <tr><td>Can of lamp oil</td><td>Füllt die Laterne auf</td><td class="num">1–2</td></tr>
+  <tr><td>Fuse</td><td>Ein Raum bekommt dauerhaft LIGHT 3</td><td class="num">3 + 2–3</td></tr>
+  <tr><td>Light bulb</td><td>Ersatzbirne</td><td class="num">2–4</td></tr>
+</table>
+</div>
+
+<h3>Werkzeug &amp; Baumaterial</h3>
+<div class="scroll">
+<table>
+  <tr><th>Name</th><th>Wirkung</th><th class="num">Im Haus</th></tr>
+  <tr><td><strong>Hammer</strong></td><td>Werkzeug, wird nicht verbraucht. Für alles Vernageln.</td><td class="num">1</td></tr>
+  <tr><td><strong>Wooden board</strong></td><td>2 pro Barrikade. Wichtigstes Material.</td><td class="num">8–12</td></tr>
+  <tr><td>Box of nails</td><td>4 Nägel pro Barrikade</td><td class="num">3–4</td></tr>
+  <tr><td><strong>Crowbar</strong></td><td>Werkzeug. Öffnet Türen und Kisten, löst vier Probleme.</td><td class="num">0–1</td></tr>
+  <tr><td>Screwdriver</td><td>Werkzeug. Für den Sicherungskasten.</td><td class="num">1</td></tr>
+  <tr><td>Length of rope</td><td>Bauteil für die Stolperschnur</td><td class="num">1–2</td></tr>
+  <tr><td>Empty tin</td><td>Bauteil für die Stolperschnur, entsteht beim Essen</td><td class="num">—</td></tr>
+  <tr><td>Coil of wire</td><td>Bauteil für Fallen</td><td class="num">2–3</td></tr>
+  <tr><td>Oily rag</td><td>Löst N-P-11, Bauteil für die Fackel</td><td class="num">1–3</td></tr>
+</table>
+</div>
+
+<h3>Gesundheit</h3>
+<div class="scroll">
+<table>
+  <tr><th>Name</th><th>Wirkung</th><th class="num">Im Haus</th></tr>
+  <tr><td>First aid tin</td><td>Heilt <em>Injured</em> und <em>Bleeding</em></td><td class="num">2–4</td></tr>
+  <tr><td>Bottle of pills</td><td>Heilt <em>Sick</em> und <em>Fevered</em></td><td class="num">2–3</td></tr>
+  <tr><td>Bottle of whiskey</td><td>Heilt <em>Shaken</em> · ENERGY −1 am Folgetag</td><td class="num">1–2</td></tr>
+  <tr><td>Wool blanket</td><td>Schlafen ohne Bett zählt wie im Bett (ENERGY +1)</td><td class="num">1–2</td></tr>
+</table>
+</div>
+
+<h3>Schlüssel</h3>
+<div class="scroll">
+<table>
+  <tr><th>Name</th><th>Öffnet</th><th>Fundort</th></tr>
+  <tr><td>Cellar key</td><td>Kellertür</td><td>Entrance Hall, Garderobe</td></tr>
+  <tr><td>Small brass key</td><td>Schreibtischschublade</td><td>Bedroom, Schrank</td></tr>
+  <tr><td>Attic key</td><td>Dachbodenluke (ab Tag 7)</td><td>Library, Lesepult</td></tr>
+</table>
+</div>
+<p class="note">Alle Türen lassen sich mit dem <strong>Brecheisen</strong> öffnen:
+1 Handlung, aber der Raum kommt nie über SAFETY 1 hinaus.</p>
+
+<h2 id="bauen">Bauen &amp; Anbau</h2>
+
+<h3>Die vier Bau-Rezepte</h3>
+<p class="note">Mehr Crafting gibt es nicht — das Spiel ist kein Bastelsimulator.</p>
+<div class="scroll">
+<table>
+  <tr><th>Ergebnis</th><th>Zutaten</th><th class="num">Kosten</th><th>Wirkung</th></tr>
+  <tr><td>Barricade</td><td>2 × Board, Nails, Hammer</td><td class="num">2</td><td>SAFETY 3, hält 2–4 Nächte</td></tr>
+  <tr><td>Trip line</td><td>Rope + 2 × Empty tin</td><td class="num">1</td><td>Siehe unten</td></tr>
+  <tr><td>Snare</td><td>Board + Wire</td><td class="num">1</td><td>Alle 2 Tage +25 FOOD</td></tr>
+  <tr><td>Torch</td><td>Board + Rag + Matches</td><td class="num">1</td><td>LIGHT 1 für einen Tag</td></tr>
+</table>
+</div>
+
+<div class="callout" style="border-left-color: var(--warm)">
+  <span class="pill warm">Trip line — die Stolperschnur</span>
+  <p><strong>Wirkung:</strong> Wandelt ein Diebstahl-Ereignis in ein <em>lösbares
+  Problem</em> um — du wachst rechtzeitig auf und bekommst eine Wahl statt einer
+  Rechnung. Löst außerdem N-P-02, N-P-09 und N-P-14.</p>
+  <p><strong>Der Haken:</strong> Sie wird dabei zerstört und muss neu gebaut werden.
+  Und sie muss <strong>getragen</strong> werden, nicht im Lager liegen.</p>
+</div>
+
+<h3>Der Wintergarten — zwei Beete</h3>
+<div class="scroll">
+<table>
+  <tr><th>Handlung</th><th class="num">Kosten</th><th>Bedingung</th></tr>
+  <tr><td>Beet bepflanzen</td><td class="num">1</td><td>1 × Packet of seeds</td></tr>
+  <tr><td>Gießen (alle Beete zusammen)</td><td class="num">1</td><td>alle 2 Tage nötig</td></tr>
+  <tr><td>Ernten</td><td class="num">1</td><td>~100 FOOD-Punkte</td></tr>
+</table>
+</div>
+<p>Reifezeit <strong>5 Tage</strong>, unter elektrischem Licht <strong>4 Tage</strong> —
+eine Sicherung kann also Nahrung beschleunigen statt einen Raum auszuleuchten.
+Jede Ernte gibt mit 50 % Chance Saatgut zurück. <strong>Zwei Tage ohne Gießen und
+die Pflanzung stirbt.</strong></p>
+<p class="note">Wer an Tag 2 beide Beete bepflanzt, erntet ab Tag 7 und noch einmal
+ab Tag 13 — zusammen rund 400 Punkte, genug für den Rettungsweg. Wer erst an Tag 10
+anfängt, schafft Tag 20 nicht mehr und merkt es an Tag 15.</p>
+
+<h3>Fallen</h3>
+<p>Board + Wire, 1 Handlung. Alle 2 Tage <strong>+25 FOOD</strong>. Leeren ist
+kostenlos. Roh gegessen 20 % <em>Sick</em>, am Herd gegart sicher. Maximal 3 Fallen.</p>
+
+<h2 id="sonder">Die 16 Sonder-Items</h2>
+
+<p>Einmalige Fundstücke. <strong>Pro Durchlauf erscheinen nur fünf davon</strong>,
+zufällig gezogen und verteilt — mindestens eines aus Gruppe A ist immer dabei.
+Ein Sonder-Item gibt nie einfach mehr Ressourcen: es ändert eine Regel.</p>
+
+<h3>Gruppe A — ändern eine Regel dauerhaft</h3>
+<div class="scroll">
+<table>
+  <tr><th>Name</th><th>Wirkung</th><th>Der Haken</th></tr>
+  <tr><td><strong>Padlock and Chain</strong></td><td>Eine Tür deiner Wahl wird dauerhaft SAFETY 3 — kein Material, kein Verfall</td><td>Einmal angebracht, geht sie nie wieder ab</td></tr>
+  <tr><td><strong>Paraffin Stove</strong></td><td>Kochen ohne Strom. Befreit eine deiner drei Sicherungen.</td><td>Verbraucht Lampenöl — Licht oder Essen</td></tr>
+  <tr><td><strong>Car Battery</strong></td><td>Ein vierter Stromkreis</td><td>Hält 6 Tage, dann tot. Keine Anzeige.</td></tr>
+  <tr><td><strong>Set of Picks</strong></td><td>Öffnet jede Tür ohne Schaden</td><td>Keiner — das stärkste Item im Spiel</td></tr>
+  <tr><td><strong>Alarm Clock</strong></td><td>Exakte Schlafdauer, Move-Ereignisse gesperrt</td><td>Laut: +5 Ziehungschance pro Segment</td></tr>
+</table>
+</div>
+
+<h3>Gruppe B — Einmalverbrauch mit hartem Tausch</h3>
+<div class="scroll">
+<table>
+  <tr><th>Name</th><th>Wirkung</th><th>Der Haken</th></tr>
+  <tr><td><strong>Sleeping Pills</strong></td><td>Eine Nacht ohne Problem-Ereignisse, alle Segmente zählen voll</td><td>Damage, Theft und Mark treffen ungebremst und ohne jede Wahl</td></tr>
+  <tr><td><strong>Smelling Salts</strong></td><td>ENERGY +2 sofort</td><td>Am nächsten Tag ENERGY −2</td></tr>
+  <tr><td><strong>Ampoule</strong></td><td>Heilt jeden Zustand sofort, auch <em>Bleeding</em> und <em>Fevered</em></td><td>Zwei Tage ENERGY −1</td></tr>
+  <tr><td><strong>Signal Flare</strong></td><td>Ab Tag 14 gezündet: Rettung kommt zwei Tage früher</td><td>Vorher gezündet: gar nichts. Nur das Radio verrät den Zeitpunkt.</td></tr>
+  <tr><td><strong>Unlabelled Jar</strong></td><td>50 % FOOD +60</td><td>50 % <em>Fevered</em>. Öffnen ist essen.</td></tr>
+</table>
+</div>
+
+<h3>Gruppe C — tragen Geschichte</h3>
+<div class="scroll">
+<table>
+  <tr><th>Name</th><th>Wirkung</th><th>Der Haken</th></tr>
+  <tr><td><strong>Visitors' Book</strong></td><td>1 Fragment. Schaltet die Radio-Namenslesung sofort frei.</td><td>Der letzte Eintrag ist von heute, in deiner Handschrift</td></tr>
+  <tr><td><strong>Covered Mirror</strong></td><td>Tuch abnehmen: <strong>2 Fragmente</strong> — die größte Einzelausbeute</td><td>Der Raum verliert dauerhaft 1 SAFETY</td></tr>
+  <tr><td><strong>The Other Flashlight</strong></td><td>LIGHT 1 ohne Batterieverbrauch</td><td>+10 Ziehungschance in jedem Raum, in dem du sie benutzt</td></tr>
+  <tr><td><strong>Child's Drawing</strong></td><td>Deckt die Antwort auf Frage 4 sofort auf</td><td>Keiner — der einzige Fund, der eine Frage direkt beantwortet</td></tr>
+  <tr><td><strong>A Key That Is Warm</strong></td><td>1 Fragment. Öffnet den Raum, in dem du zuletzt geschlafen hast, von außen.</td><td>Nutzlos, bis dich ein Ereignis aussperrt</td></tr>
+  <tr><td><strong>Photograph</strong></td><td>1 Fragment</td><td>Zustand <em>Shaken</em>. Das Zimmer auf dem Foto ist leer.</td></tr>
+</table>
+</div>
+
+<h2 id="packliste">Die Packliste</h2>
+
+<p>Weil Ereignisse Werkzeug verlangen und nachts nur Getragenes zählt, ist die
+eigentliche Frage jedes Abends: <strong>was kommt in die sechs Plätze?</strong></p>
+
+<div class="scroll">
+<table>
+  <tr><th>Gegenstand</th><th>Löst</th></tr>
+  <tr><td><strong>Hammer</strong> <span class="pill warm">Werkzeug</span></td><td>N-P-01 · N-P-02 · N-P-07 · N-P-10 · N-P-14</td></tr>
+  <tr><td><strong>Wooden board</strong></td><td>N-P-01 · N-P-02 · N-P-04 · N-P-07 · N-P-10 · N-P-14</td></tr>
+  <tr><td><strong>Candle + Matches</strong></td><td>N-P-03 · N-P-14 · N-P-15</td></tr>
+  <tr><td><strong>Crowbar</strong> <span class="pill warm">Werkzeug</span></td><td>N-P-01 · N-P-07 · N-P-08 · N-P-10</td></tr>
+  <tr><td>Whiskey</td><td>N-P-04 · N-P-05 · N-P-15</td></tr>
+  <tr><td>Trip line</td><td>N-P-02 · N-P-09 · N-P-14 · wendet Diebstahl ab</td></tr>
+  <tr><td>Snare</td><td>N-P-08 · N-P-09</td></tr>
+  <tr><td>First aid tin</td><td>N-P-05</td></tr>
+  <tr><td>Bottle of pills</td><td>N-P-13</td></tr>
+  <tr><td>Fuse + Screwdriver</td><td>N-P-06</td></tr>
+  <tr><td>Wool blanket</td><td>N-P-04 · N-P-11</td></tr>
+  <tr><td>Oily rag</td><td>N-P-11</td></tr>
+</table>
+</div>
+
+<p><strong>Hammer und Bretter decken die meisten Probleme ab</strong> — und belegen
+die meisten Plätze. Kerzen sind die zweitbeste Wahl, weil Dunkelheit die häufigste
+Ursache ist. Verbände und Pillen liegen tot in der Tasche, bis du sie brauchst,
+und dann ist es zu spät, sie zu holen.</p>
+
+<p class="note">Wer alles mitnehmen will, nimmt nichts mit: sechs Plätze sind sechs Plätze.</p>
+
+<h2 id="karte">Die Karte</h2>
+
+<pre class="map">   DACHBODEN                    <b>[12] Attic</b>
+                                     │
+   OBERGESCHOSS   <b>[8]</b>──<b>[7 Upper Landing]</b>──<b>[9]</b>      <b>[10] Bathroom</b>
+               Bedroom        │      │     Nursery      │
+                              │      └──<b>[11] Study</b> ────┘
+                              │
+   ERDGESCHOSS  <b>[3]</b>──<b>[2]</b>──<b>[1 ENTRANCE HALL]</b>──<b>[4]</b>──<b>[5]</b>──<b>[6]</b>
+              Library Parlor       ▲ AUSGANG   Dining Kitchen Conservatory
+                                   │
+   KELLER                    <b>[13] Cellar</b> ── [Sicherungskasten]</pre>
+
+<h2 id="raeume">Alle 13 Räume</h2>
+
+<p class="note">Prozentwerte sind Fundchancen bei vollem Licht. Im Dunkeln 60 %
+davon, erschöpft 70 %, beim Nachfüllen (ab dem zweiten Mal) 50 %.</p>
+
+<div class="room">
+  <header><h3>1 · Entrance Hall</h3><span class="pill">ab Tag 1</span>
+  <span class="pill warm">Der Ausgang</span></header>
+  <p class="note">Ausgänge: Parlor, Dining Room, Upper Landing</p>
+  <p><strong>The front door</strong> — der Ausgang. Sie geht nicht auf.
+  <span class="note">Hier wird der Ausgangsversuch unternommen (kostenlos).</span></p>
+  <p><strong>Coat stand</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Box of matches</b> 50 % · <b>Cellar key</b> 30 % · <b>Household ledger</b> 20 %</span></p>
+  <p><strong>Hall table</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Candle</b> 50 % (1–2) · <b>Bar of chocolate</b> 30 % · <b>Unsent letter</b> 25 %</span></p>
+</div>
+
+<div class="room">
+  <header><h3>2 · Parlor</h3><span class="pill">ab Tag 1</span>
+  <span class="pill warm">Radio</span></header>
+  <p class="note">Ausgänge: Entrance Hall, Library · Fenster</p>
+  <p><strong>Radio set</strong> · hören (1) — die einzige Vorwarnung auf die Rettung</p>
+  <p><strong>Heavy sofa</strong> · durchsuchen (1) · zerlegen (2) → 3 Bretter<br>
+  <span class="loot"><b>Tin of beans</b> 50 % · <b>Bar of chocolate</b> 30 % · <b>Family photograph</b> 30 % · <b>Pocket watch</b> 15 %</span></p>
+  <p><strong>Display cabinet</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Bottle of whiskey</b> 40 % · <b>Candle</b> 40 % · <b>Locket</b> 20 %</span></p>
+</div>
+
+<div class="room">
+  <header><h3>3 · Library</h3><span class="pill">ab Tag 1</span>
+  <span class="pill warm">Fragmente</span></header>
+  <p class="note">Ausgänge: Parlor · Fenster</p>
+  <p><strong>Bookshelves</strong> · durchsuchen (1) · zerlegen (2) → 3 Bretter
+  <span class="note">(ergiebigste Bretterquelle)</span><br>
+  <span class="loot"><b>Torn page</b> 45 % · <b>Surveyor's note</b> 30 % · <b>Box of matches</b> 30 %</span></p>
+  <p><strong>Reading desk</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Floor plan, amended</b> 40 % · <b>Candle</b> 40 % · <b>Attic key</b> 20 %</span></p>
+</div>
+
+<div class="room">
+  <header><h3>4 · Dining Room</h3><span class="pill">ab Tag 1</span>
+  <span class="pill warm">Kerzen</span></header>
+  <p class="note">Ausgänge: Entrance Hall, Kitchen · Fenster</p>
+  <p><strong>Sideboard</strong> · durchsuchen (1) — die beste Kerzenquelle<br>
+  <span class="loot"><b>Candle</b> 70 % (1–3) · <b>Jar of preserves</b> 50 % · <b>Box of matches</b> 40 % · <b>Bar of chocolate</b> 30 %</span></p>
+  <p><strong>Long table</strong> · zerlegen (2) → 2 Bretter</p>
+</div>
+
+<div class="room">
+  <header><h3>5 · Kitchen</h3><span class="pill">ab Tag 1</span>
+  <span class="pill warm">Essen · Herd</span></header>
+  <p class="note">Ausgänge: Dining Room, Conservatory, Cellar · Fenster</p>
+  <p><strong>Pantry</strong> · durchsuchen (1) — die wichtigste Nahrungsquelle im Haus<br>
+  <span class="loot"><b>Tin of beans</b> 90 % (1–3) · <b>Tin of soup</b> 70 % (1–2) · <b>Tin of meat</b> 60 % (1–2) · <b>Stale bread</b> 50 %</span></p>
+  <p><strong>Stove</strong> · kochen (1) — <strong>braucht Strom</strong></p>
+  <p><strong>Sink and drawers</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Bottle of water</b> 70 % (1–2) · <b>First aid tin</b> 40 % · <b>Screwdriver</b> 40 % · <b>Tin of soup</b> 40 % · <b>Repair receipt</b> 30 %</span></p>
+</div>
+
+<div class="room">
+  <header><h3>6 · Conservatory</h3><span class="pill">ab Tag 1</span>
+  <span class="pill warm">Anbau</span><span class="pill cold">Fenster-Ende</span></header>
+  <p class="note">Ausgänge: Kitchen · Glasfront</p>
+  <p><strong>Planting beds</strong> · pflanzen (1) · gießen (1) · ernten (1)</p>
+  <p><strong>The glass front</strong> — der einzige Blick nach draußen.
+  <span class="note">Hier lässt sich das Fenster einschlagen: das Ende THE WINDOW, ab Tag 1 verfügbar.</span></p>
+  <p><strong>Potting bench</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Watering can</b> 90 % · <b>Packet of seeds</b> 80 % (1–2) · <b>Withered apples</b> 60 % (1–2) · <b>Rubbing from a marker</b> 20 %</span></p>
+</div>
+
+<div class="room">
+  <header><h3>7 · Upper Landing</h3><span class="pill">ab Tag 1</span></header>
+  <p class="note">Ausgänge: Entrance Hall, Bedroom, Study, Bathroom, Nursery, Attic · Fenster</p>
+  <p><strong>Linen chest</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Wool blanket</b> 50 % · <b>Oily rag</b> 50 % (1–2)</span></p>
+</div>
+
+<div class="room">
+  <header><h3>8 · Bedroom</h3><span class="pill">ab Tag 1</span>
+  <span class="pill warm">Bett · ENERGY +1</span></header>
+  <p class="note">Ausgänge: Upper Landing · Bett · Fenster</p>
+  <p><strong>The bed</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Locket</b> 35 % · <b>Unsent letter</b> 30 % · <b>Bottle of pills</b> 30 %</span></p>
+  <p><strong>Wardrobe</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Wool blanket</b> 40 % · <b>Small brass key</b> 35 % · <b>Candle</b> 30 %</span></p>
+</div>
+
+<div class="room">
+  <header><h3>9 · Nursery</h3><span class="pill cold">ab Tag 7</span>
+  <span class="pill warm">Bett · Fragmente</span></header>
+  <p class="note">Ausgänge: Upper Landing · Bett · Fenster</p>
+  <p><strong>The cot</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Cloth doll</b> 50 % · <b>The same photograph, later</b> 40 %</span></p>
+  <p><strong>Toy box</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>The same photograph, later</b> 35 % · <b>Torn page</b> 35 %</span></p>
+</div>
+
+<div class="room">
+  <header><h3>10 · Bathroom</h3><span class="pill">ab Tag 1</span>
+  <span class="pill warm">Medizin</span></header>
+  <p class="note">Ausgänge: Upper Landing · Fenster</p>
+  <p><strong>Mirror cabinet</strong> · durchsuchen (1) — die Medizinquelle<br>
+  <span class="loot"><b>First aid tin</b> 60 % · <b>Bottle of pills</b> 45 %</span></p>
+  <p><strong>Bath</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Wedding ring</b> 40 % · <b>Tally on a doorframe</b> 30 %</span></p>
+</div>
+
+<div class="room">
+  <header><h3>11 · Study</h3><span class="pill">ab Tag 1</span>
+  <span class="pill warm">Telefon · Safe</span></header>
+  <p class="note">Ausgänge: Upper Landing · Fenster</p>
+  <p><strong>Telephone</strong> · abnehmen (1) — die Leitung ist tot. Es klingelt trotzdem.
+  <span class="note">35 % Fragment · 35 % <em>Shaken</em> · 30 % Freizeichen</span></p>
+  <p><strong>Writing desk</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Deed to the house</b> 40 % · <b>Box of nails</b> 40 % · <b>List of belongings</b> 25 %</span></p>
+  <p><strong>Wall safe</strong> · knacken (2)<br>
+  <span class="loot"><b>Deed to the house</b> 50 % · <b>Fuse</b> 40 % · <b>Wedding ring</b> 30 %</span></p>
+</div>
+
+<div class="room">
+  <header><h3>12 · Attic</h3><span class="pill cold">ab Tag 7</span>
+  <span class="pill warm">Werkzeug · Bretter</span></header>
+  <p class="note">Ausgänge: Upper Landing · kein Fenster</p>
+  <p><strong>Workbench</strong> · durchsuchen (1) — <strong>hier liegt der Hammer</strong><br>
+  <span class="loot"><b>Hammer</b> 60 % · <b>Box of nails</b> 60 % (1–2) · <b>Coil of wire</b> 50 % · <b>Crowbar</b> 30 %</span></p>
+  <p><strong>Stack of boards</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Wooden board</b> 90 % (1–3) · <b>Length of rope</b> 40 %</span></p>
+  <p><strong>Suitcases</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Tin of meat</b> 50 % · <b>List of belongings</b> 40 % · <b>Packet of seeds</b> 30 % · <b>Oil lantern</b> 25 %</span></p>
+  <div class="callout">
+    <p class="note" style="margin:0">Der Dachboden öffnet sich erst an <strong>Tag 7</strong> —
+    bis dahin gibt es keinen Hammer und kaum Bretter. Die ersten sechs Tage muss man
+    Probleme ohne Werkzeug überstehen oder Möbel zerlegen.</p>
+  </div>
+</div>
+
+<div class="room">
+  <header><h3>13 · Cellar</h3><span class="pill">ab Tag 1</span>
+  <span class="pill warm">Sicherungskasten</span><span class="pill cold">ganz dunkel</span></header>
+  <p class="note">Ausgänge: Kitchen · kein Fenster</p>
+  <p><strong>Fuse box</strong> · umstecken (1) — drei Sicherungen für dreizehn Räume</p>
+  <p><strong>Preserve shelves</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Jar of preserves</b> 90 % (1–3) · <b>Withered apples</b> 40 % · <b>Can of lamp oil</b> 30 %</span></p>
+  <p><strong>Coal store</strong> · durchsuchen (1)<br>
+  <span class="loot"><b>Fuse</b> 40 % · <b>Coil of wire</b> 40 % · <b>Rubbing from a marker</b> 35 % · <b>Crowbar</b> 25 %</span></p>
+</div>
+
+<h2 id="geheimnis">Das Geheimnis</h2>
+
+<p>Ein <strong>Notizbuch</strong> mit vier Fragen. Sie fragen alle nach
+<strong>Regeln</strong>, nie nach Identität:</p>
+
+<div class="scroll">
+<table>
+  <tr><th class="num">#</th><th>Frage</th><th>Mögliche Antworten</th></tr>
+  <tr><td class="num">1</td><td>What does it take from you?</td><td>Time · Warmth · What you were carrying · The way back</td></tr>
+  <tr><td class="num">2</td><td>Which room is the wrong one?</td><td>The nursery · The cellar · The study · The room you sleep in</td></tr>
+  <tr><td class="num">3</td><td>What has to go back?</td><td>A wedding ring · A cloth doll · A locket · A stopped watch</td></tr>
+  <tr><td class="num">4</td><td>Where does it have to go?</td><td>The cellar floor · The conservatory ground · The nursery hearth · Behind the front door</td></tr>
+</table>
+</div>
+
+<p>Jede Frage braucht <strong>3 Fragmente</strong>, dann wählst du eine Antwort.
+Zwölf Fragmente insgesamt, aber es gibt mehr Fundorte als nötig — du findest nie alle.
+<strong>Die richtige Kombination wird pro Durchlauf neu gewürfelt.</strong></p>
+
+<h3>Woher Fragmente kommen</h3>
+<p>Notizen und Fotos in den Räumen · Clue-Ereignisse in der Nacht · das Telefon ·
+das Radio ab Tag 12 · einzelne Problem-Lösungen (N-P-08, N-P-15) · zwei Sonder-Items.</p>
+
+<div class="callout">
+  <span class="pill cold">Was du nie erfährst</span>
+  <p><strong>Es wird nicht aufgelöst.</strong> In keinem Ende. Du erfährst, <em>was</em>
+  das Haus verlangt, nie <em>warum</em>. Die Fragmente passen nicht restlos zusammen:
+  zwei Notizen widersprechen sich, ein Datum ergibt keinen Sinn, auf einem Foto ist
+  eine Person zu viel. Das ist Absicht und wird nicht repariert.</p>
+  <p>Auch das, wovor du zu Beginn weggelaufen bist, bleibt ungeklärt.</p>
+</div>
+
+<h2 id="enden">Die fünf Enden</h2>
+
+<div class="scroll">
+<table>
+  <tr><th>Ende</th><th>Wie</th><th class="num">Ab Tag</th><th>Ton</th></tr>
+  <tr><td><strong>THE DOOR</strong></td><td>Alle vier Fragen richtig</td><td class="num">8</td><td>Du gehst selbst. Ruhig. Der gedachte Normalweg.</td></tr>
+  <tr><td><strong>THE THRESHOLD</strong></td><td>2–3 Fragen richtig</td><td class="num">8</td><td>Die Tür geht auf, aber sie schließt sich nicht hinter dir.</td></tr>
+  <tr><td><strong>RESCUE</strong></td><td>Tag 20 erreichen</td><td class="num">20</td><td>Erleichterung — und du erklärst nie, was war.</td></tr>
+  <tr><td><strong>THE WINDOW</strong></td><td>Glas im Wintergarten einschlagen</td><td class="num">1</td><td>Immer verfügbar. Schlecht.</td></tr>
+  <tr><td><strong>DEATH</strong></td><td>Zustand zweiter Stufe oder FOOD 0</td><td class="num">—</td><td>Endgültig. Zusammenfassung, dann von vorn.</td></tr>
+</table>
+</div>
+
+<p class="note"><strong>0–1 Fragen richtig</strong> ist kein Ende: der Versuch schlägt
+fehl, du verlierst die verwendeten Gegenstände und einen Tag, und musst weitersuchen.</p>
+
+<hr class="rule">
+
+<p class="note" style="margin-top:26px">Ashgrove ist ein Arbeitstitel. Alle Zahlen auf
+dieser Seite entsprechen dem Stand in <code>content/</code> und
+<code>src/autoload/</code> und sind mit <code>tools/smoke_test.gd</code> über
+40 Durchläufe geprüft: Schnitt 15,6 Tage, 22 von 40 erreichen die Rettung,
+28 % aller Probleme werden mit einem Gegenstand gelöst.</p>
+
+</main>
+</div>

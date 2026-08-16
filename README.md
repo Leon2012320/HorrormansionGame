@@ -85,6 +85,7 @@ ignorierst. **Tod ist endgültig, es wird nicht gespeichert.**
 
 | Datei | Inhalt |
 |---|---|
+| [`docs/manual.html`](docs/manual.html) | **Das vollständige Handbuch — alles auf einer Seite** |
 | [`docs/DECISIONS.md`](docs/DECISIONS.md) | **Alle Festlegungen in einer Tabelle — hier anfangen** |
 | [`docs/GAME_DESIGN.md`](docs/GAME_DESIGN.md) | Spielkonzept, Mechaniken, Raumplan, Roadmap |
 | [`docs/ITEMS.md`](docs/ITEMS.md) | Gegenstände mit Werten, Fundorten und Mengen |
