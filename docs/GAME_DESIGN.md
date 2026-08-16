@@ -117,11 +117,11 @@ Ein schlechter: kurz geschlafen, hungrig, verletzt → **1 Handlung.**
 | Etwas ansehen, Text lesen | Tür mit Brecheisen öffnen | Möbel zerlegen (2–3 Bretter) |
 | Notizbuch und Karte | Radio hören | Schloss ohne Werkzeug knacken |
 | Essen | Am Herd kochen | Safe knacken |
-| Kerze aufstellen und anzünden | Beete gießen (alle auf einmal) | |
-| Taschenlampe an/aus | Beet bepflanzen · ernten | |
-| Fallen leeren | Falle bauen · aufstellen | |
-| Schlafplatz wählen | Sicherung umstecken | |
-| | Möbel vor die Tür schieben (SAFETY 2) | |
+| Kerze aufstellen *(kostet Kerze + Streichholz)* | Beete gießen (alle auf einmal) | |
+| Zustand behandeln *(kostet Material)* | Beet bepflanzen · ernten | |
+| Taschenlampe an/aus | Falle bauen · aufstellen | |
+| Fallen leeren | Sicherung umstecken | |
+| Schlafplatz wählen | Möbel vor die Tür schieben (SAFETY 2) | |
 
 **Laufen ist kostenlos.** Sonst wird jeder Weg zur Buchhaltung. Was Zeit kostet, ist
 das Tun, nicht das Gehen.
@@ -130,12 +130,17 @@ das Tun, nicht das Gehen.
 
 | Posten | Wert |
 |---|---|
-| Grundverbrauch pro Tag | **−10** |
-| Pro ausgegebener Handlung | **−3** |
-| Ein normaler Tag (6 Handlungen) | **−28** |
+| Grundverbrauch pro Tag | **−8** |
+| Pro ausgegebener Handlung | **−2** |
+| Ein normaler Tag (6 Handlungen) | **−20** |
 
-→ **Etwa eine Konserve pro Tag.** Ein aktiver Tag mit 8 Handlungen kostet 34 —
-viel arbeiten macht hungrig, und das ist die Bremse gegen Vielspielen.
+→ **Etwa eine Konserve alle anderthalb Tage.** Ein aktiver Tag mit 8 Handlungen
+kostet 24 statt 20 — viel arbeiten macht hungrig, und das ist die Bremse gegen
+Vielspielen.
+
+> Diese Werte lagen zuerst bei −10 und −3. Der Smoke-Test in `tools/` hat gezeigt,
+> dass ein Durchlauf damit unmöglich ist: das Haus gibt nicht genug her, jeder
+> Testlauf verhungerte um Tag 8. Die Zahlen stammen also aus Messung, nicht aus Gefühl.
 
 | Bei FOOD | passiert |
 |---|---|
@@ -143,7 +148,20 @@ viel arbeiten macht hungrig, und das ist die Bremse gegen Vielspielen.
 | unter 10 | ENERGY −2, Zustand *Starving* |
 | 0 für zwei Tage | Tod |
 
-**Im Haus liegen etwa 350 FOOD-Punkte — Vorräte für zwölf Tage.**
+#### Das Haus füllt sich wieder auf
+
+Es gibt 33 durchsuchbare Möbelstücke. Bei sechs Handlungen am Tag ist das ganze
+Haus nach **fünf Tagen leer** — und der Durchlauf geht zwanzig. Deshalb:
+
+**Ein durchsuchtes Möbelstück ist nach vier Tagen wieder durchsuchbar**, mit
+halber Ausbeute. Das Spiel sagt es dir, wenn es passiert:
+*"You emptied this one days ago. There is something in it again."*
+
+Das ist keine Bequemlichkeit, sondern die Voraussetzung dafür, dass zwanzig Tage
+überhaupt funktionieren. Und erzählerisch ist es das unheimlichste Element im Spiel,
+weil es nie erklärt wird: jemand räumt auf.
+
+**Im Haus liegen etwa 350 FOOD-Punkte in der ersten Runde.**
 Der Weg über das Geheimnis (Tag 10–14) geht damit knapp auf. Der Weg über die
 Rettung (Tag 20) braucht **560** — also eigene Produktion, siehe 3.6.
 

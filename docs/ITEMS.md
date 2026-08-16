@@ -13,14 +13,18 @@ Stapelbare Dinge belegen einen Slot bis zur Stapelgröße.
 
 | Posten | Wert |
 |---|---|
-| FOOD-Grundverbrauch pro Tag | **−10** |
-| FOOD pro ausgegebener Handlung | **−3** |
-| Normaler Tag (6 Handlungen) | **−28** |
-| Aktiver Tag (8 Handlungen) | **−34** |
-| Schlechter Tag (2 Handlungen) | **−16** |
+| FOOD-Grundverbrauch pro Tag | **−8** |
+| FOOD pro ausgegebener Handlung | **−2** |
+| Normaler Tag (6 Handlungen) | **−20** |
+| Aktiver Tag (8 Handlungen) | **−24** |
+| Schlechter Tag (2 Handlungen) | **−12** |
 
-→ **Etwa eine Konserve pro Tag.** Viel arbeiten macht hungrig — das ist die eingebaute
-Bremse dagegen, jeden Tag alles zu tun.
+→ **Etwa eine Konserve alle anderthalb Tage.** Viel arbeiten macht hungrig — das ist
+die eingebaute Bremse dagegen, jeden Tag alles zu tun.
+
+Diese Werte sind gemessen, nicht geschätzt: `tools/smoke_test.gd` spielt 40 Durchläufe
+headless durch. Bei −10/−3 verhungerte **jeder** Testlauf um Tag 8. Bei −8/−2 und mit
+dem Nachfüllen der Möbelstücke erreichen 27 von 40 die Rettung an Tag 20.
 
 | | Bedarf | Hausvorräte decken |
 |---|---|---|
@@ -236,7 +240,7 @@ Und einer von vier Orten ist der richtige — Frage 4:
 
 | Kategorie | Menge zu Beginn | Reicht für | Nachschub |
 |---|---|---|---|
-| Nahrung | 12–20 Einheiten, ~350 Punkte | **12 von 20 Tagen** | Anbau, Fallen, Funde |
+| Nahrung | 12–20 Einheiten, ~350 Punkte | **erste Runde: 12 Tage** | Nachfüllen, Anbau, Fallen |
 | Batterien | 6–10 | 6–10 Tage Taschenlampe | nur Funde |
 | Kerzen | 6–10 | 12–20 Tage Raumlicht | nur Funde |
 | Sicherungen | 3 aktiv + 2–3 Ersatz | dauerhaft, brennen aber durch | Funde |
@@ -245,7 +249,8 @@ Und einer von vier Orten ist der richtige — Frage 4:
 | Verbandsmaterial | 2–4 | 2–4 Verletzungen | nur Funde |
 | Samen | 2–4 | 2–4 Pflanzungen | 50 % Rückfluss pro Ernte |
 
-**Nur zwei Dinge wachsen nach:** die Ernte und die Fallen. Licht, Material und
+**Drei Dinge wachsen nach:** die Ernte, die Fallen — und die Möbelstücke selbst,
+die sich alle vier Tage mit halber Ausbeute wieder füllen. Licht, Material und
 Medizin werden über zwanzig Tage unweigerlich weniger.
 
 **Sparen ist auch falsch.** Wer nichts verbraucht, findet nichts, sichert nichts und
