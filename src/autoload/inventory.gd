@@ -71,6 +71,52 @@ func count(id: String) -> int:
 	return int(carried.get(id, 0)) + int(stash.get(id, 0))
 
 
+## Nur das, was du am Körper trägst. Nachts zählt ausschließlich das:
+## was im Lager liegt, nützt um drei Uhr morgens nichts.
+func carried_count(id: String) -> int:
+	return int(carried.get(id, 0))
+
+
+func has_carried(id: String, amount: int = 1) -> bool:
+	return carried_count(id) >= amount
+
+
+func consume_carried(id: String, amount: int = 1) -> bool:
+	if not has_carried(id, amount):
+		return false
+	carried[id] = int(carried[id]) - amount
+	if int(carried[id]) <= 0:
+		carried.erase(id)
+	carried_changed.emit()
+	return true
+
+
+## Abends umpacken: aus dem Lager in den Rucksack und zurück. Kostet nichts,
+## geht aber nur, wenn du im Lagerraum stehst.
+func take_from_stash(id: String, amount: int = 1) -> bool:
+	if int(stash.get(id, 0)) < amount or not can_carry(id, amount):
+		return false
+	stash[id] = int(stash[id]) - amount
+	if int(stash[id]) <= 0:
+		stash.erase(id)
+	carried[id] = int(carried.get(id, 0)) + amount
+	carried_changed.emit()
+	stash_changed.emit()
+	return true
+
+
+func put_in_stash(id: String, amount: int = 1) -> bool:
+	if not has_carried(id, amount):
+		return false
+	carried[id] = int(carried[id]) - amount
+	if int(carried[id]) <= 0:
+		carried.erase(id)
+	stash[id] = int(stash.get(id, 0)) + amount
+	carried_changed.emit()
+	stash_changed.emit()
+	return true
+
+
 func can_carry(id: String, amount: int = 1) -> bool:
 	if is_weightless(id):
 		return true

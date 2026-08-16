@@ -1,6 +1,6 @@
 # Entscheidungstabelle — ASHGROVE
 
-Alles, was bisher festgelegt wurde. **Stand: Konzept v0.5**
+Alles, was bisher festgelegt wurde. **Stand: Konzept v0.6**
 
 | Zeichen | Bedeutung |
 |---|---|
@@ -68,7 +68,7 @@ anders müssen. Alles andere gilt als angenommen.
 | D8 | LIGHT-Stufen | 0 dunkel · 1 Taschenlampe · 2 Kerze · 3 elektrisch | 💡 |
 | D9 | SAFETY-Stufen | 0 offen · 1 zu · 2 Möbel davor · 3 vernagelt | 💡 |
 | D10 | Barrikaden halten nicht | Ereignisse setzen sie herunter, Reparatur kostet wieder | 💡 |
-| D11 | Traglimit | ⚠️ 6 Slots — aber weil Laufen kostenlos ist, könnte die Beschränkung zahnlos sein | ⚠️ |
+| D11 | Traglimit | 6 Slots — **jetzt die wichtigste Entscheidung des Spiels**, weil nachts nur Getragenes zählt. Der frühere Einwand ist damit erledigt. | 💡 |
 | D12 | Lager frei wählbar | Der Spieler bestimmt selbst, welcher Raum sein Lager wird | 💡 |
 
 ## E · Strom und 60er-Technik
@@ -105,8 +105,11 @@ anders müssen. Alles andere gilt als angenommen.
 | # | Thema | Festlegung | |
 |---|---|---|---|
 | G1 | Einzige Bedrohung | Keine Kreatur, kein Verfolger, keine Bedrohungsanzeige | ✅ |
-| G2 | Kategorien | Sound · Wake · Damage · Theft · Mark · Clue · Move | 💡 |
-| G3 | Choice-Regel | Keine Option darf offensichtlich die beste sein | 💡 |
+| G2 | **Ereignisse werden mit Gegenständen gelöst** | Keine Verhaltensoptionen mehr — das Spiel fragt, was du dabei hast | ✅ |
+| G3 | **Nur Getragenes zählt nachts** | Das Lager nützt um drei Uhr morgens nichts. Damit werden die sechs Slots zur Kernentscheidung. | 💡 |
+| G4 | Kategorien | Problem (40 %) · Sound · Damage · Theft · Clue · Move | 💡 |
+| G5 | Drei Kategorien bleiben unlösbar | Damage, Theft, Move — sonst wäre das Haus nur eine Packliste | 💡 |
+| G6 | Umpacken kostet nichts | Die Entscheidung soll nur Nachdenken kosten | 💡 |
 | G4 | Kein Ereignis tötet | Sie geben Zustände, Zustände töten bei Vernachlässigung | ✅ |
 | G5 | Fairness | Nie zwei Damage pro Nacht, höchstens ein Mark, jedes nur einmal pro Tag | 💡 |
 | G6 | Leise Hilfe | FOOD unter 25 → Fundereignisse verdreifacht | 💡 |

@@ -12,7 +12,8 @@ var hud: AshHud
 var dialog: AshDialog
 var log_label: Label
 
-var _pending_wake: Dictionary = {}
+var _pending_problem: Dictionary = {}
+var _pending_solutions: Array = []
 var _pending_hotspot: Dictionary = {}
 var _log_lines: Array[String] = []
 
@@ -49,7 +50,7 @@ func _ready() -> void:
 	add_child(dialog)
 	dialog.choice_made.connect(_on_dialog_choice)
 
-	DayCycle.wake_event.connect(_on_wake_event)
+	DayCycle.problem_event.connect(_on_problem_event)
 	DayCycle.night_finished.connect(_on_night_finished)
 	GameState.run_ended.connect(_on_run_ended)
 	Inventory.item_found.connect(func(id, n): _log("Found %s ×%d." % [Inventory.display_name(id), n]))
@@ -65,7 +66,7 @@ func _build_toolbar() -> void:
 	bar.position = Vector2(430, 322)
 	bar.add_theme_constant_override("separation", 4)
 	add_child(bar)
-	for entry in [["Sleep", _open_sleep], ["Notebook", _open_notebook],
+	for entry in [["Sleep", _open_sleep], ["Bag", _open_bag], ["Notebook", _open_notebook],
 			["Torch", _toggle_light], ["Candle", _light_candle]]:
 		var button := Button.new()
 		button.text = str(entry[0])
@@ -103,8 +104,8 @@ func _on_hotspot(spot: Dictionary) -> void:
 
 
 func _on_dialog_choice(index: int) -> void:
-	if not _pending_wake.is_empty():
-		_resolve_wake(index)
+	if not _pending_problem.is_empty():
+		_resolve_problem(index)
 		return
 	if _pending_hotspot.is_empty():
 		dialog.close()
@@ -302,7 +303,13 @@ func _do_window() -> void:
 
 func _open_sleep() -> void:
 	var id := Rooms.current_id
-	var body := "%s\n\n%s" % [Rooms.display_name(id), Rooms.sleep_assessment(id)]
+	var carrying: Array[String] = []
+	for item_id in Inventory.carried.keys():
+		if not Inventory.is_weightless(str(item_id)):
+			carrying.append("%s ×%d" % [Inventory.display_name(str(item_id)), int(Inventory.carried[item_id])])
+	var body := "%s\n\n%s\n\nYou are carrying: %s" % [
+		Rooms.display_name(id), Rooms.sleep_assessment(id),
+		", ".join(carrying) if not carrying.is_empty() else "nothing"]
 	var shaken := GameState.has_condition("shaken")
 	dialog.show_dialog("Sleep", body, [
 		{"label": "One segment", "hint": "energy 2", "enabled": true},
@@ -323,29 +330,34 @@ func _on_sleep_choice(index: int) -> void:
 	DayCycle.sleep(index + 1)
 
 
-func _on_wake_event(event: Dictionary, _segment: int) -> void:
-	_pending_wake = event
+## Zeigt ein Problem und daneben, was im Rucksack dagegen hilft.
+## Es gibt keine Verhaltensoptionen mehr — nur Gegenstände oder gar nichts.
+func _on_problem_event(event: Dictionary, solutions: Array) -> void:
+	_pending_problem = event
+	_pending_solutions = solutions
 	var options: Array = []
-	for option in event.get("options", []):
-		var enabled := true
-		var hint := ""
-		for id in option.get("needs", {}):
-			var amount := int(option["needs"][id])
-			if not Inventory.has(str(id), amount):
-				enabled = false
-			hint += "%s ×%d " % [Inventory.display_name(str(id)), amount]
-		if bool(option.get("costs_segment", true)):
-			hint += "· costs the rest of this segment"
-		options.append({"label": str(option.get("label", "…")), "hint": hint.strip_edges(), "enabled": enabled})
+	for entry in solutions:
+		options.append({
+			"label": EventDeck.solution_label(entry["solution"]),
+			"hint": "use",
+			"enabled": true,
+		})
+	options.append({
+		"label": "You have nothing for this" if solutions.is_empty() else "Do nothing",
+		"hint": "", "enabled": true})
 	dialog.show_dialog(str(event.get("title", "You wake up")), str(event.get("text", "")), options)
 
 
-func _resolve_wake(index: int) -> void:
-	var event := _pending_wake
-	_pending_wake = {}
+func _resolve_problem(index: int) -> void:
+	var event := _pending_problem
+	var solutions := _pending_solutions
+	_pending_problem = {}
+	_pending_solutions = []
 	dialog.close()
-	var lines := DayCycle.resolve_choice(event, index, true)
-	for line in lines:
+	var solution_index := -1
+	if index < solutions.size():
+		solution_index = int(solutions[index]["index"])
+	for line in DayCycle.solve(event, solution_index):
 		_log(line)
 
 
@@ -391,6 +403,51 @@ func _toggle_light() -> void:
 		_log("Off." if not Inventory.flashlight_on else "No batteries.")
 	room_view.refresh()
 	hud.refresh()
+
+
+## Umpacken zwischen Lager und Rucksack. Kostet keine Handlung — aber
+## nachts zählt nur, was hier im Rucksack gelandet ist.
+func _open_bag() -> void:
+	var options: Array = []
+	var moves: Array = []
+	for id in Inventory.carried.keys():
+		if Inventory.is_weightless(str(id)):
+			continue
+		options.append({"label": "PUT DOWN   %s ×%d" % [
+			Inventory.display_name(str(id)), int(Inventory.carried[id])],
+			"hint": "", "enabled": true})
+		moves.append({"dir": "down", "id": str(id)})
+	for id in Inventory.stash.keys():
+		if Inventory.is_weightless(str(id)):
+			continue
+		options.append({"label": "PICK UP    %s ×%d" % [
+			Inventory.display_name(str(id)), int(Inventory.stash[id])],
+			"hint": "", "enabled": Inventory.can_carry(str(id), 1)})
+		moves.append({"dir": "up", "id": str(id)})
+	options.append({"label": "Done", "hint": "", "enabled": true})
+
+	_pending_hotspot = {"bag_moves": moves, "actions": []}
+	dialog.show_dialog("Bag — %d of %d slots" % [Inventory.slots_used(), Inventory.CARRY_SLOTS],
+		"Only what you carry counts at night.", options)
+	if dialog.choice_made.is_connected(_on_dialog_choice):
+		dialog.choice_made.disconnect(_on_dialog_choice)
+	dialog.choice_made.connect(_on_bag_choice, CONNECT_ONE_SHOT)
+
+
+func _on_bag_choice(index: int) -> void:
+	var moves: Array = _pending_hotspot.get("bag_moves", [])
+	dialog.close()
+	dialog.choice_made.connect(_on_dialog_choice)
+	_pending_hotspot = {}
+	if index >= moves.size():
+		return
+	var move: Dictionary = moves[index]
+	if str(move["dir"]) == "up":
+		Inventory.take_from_stash(str(move["id"]), 1)
+	else:
+		Inventory.put_in_stash(str(move["id"]), 1)
+	hud.refresh()
+	_open_bag()   # Dialog bleibt offen, damit man mehrfach umpacken kann
 
 
 func _light_candle() -> void:

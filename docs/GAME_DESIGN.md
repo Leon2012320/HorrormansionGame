@@ -1,7 +1,7 @@
 # ASHGROVE — Game Design Dokument
 
 > Arbeitstitel. 2D-Horror-Survival, Godot 4, ein festes Bild pro Raum, Point & Click.
-> **Version 0.5** — Uhr durch Energie ersetzt, Länge auf 20 Tage, REST-Leiste gestrichen.
+> **Version 0.6** — Ereignisse werden mit Gegenständen gelöst, nicht mit Entscheidungen.
 > Spieltexte Englisch, Setting Anfang der 1960er.
 
 ---
@@ -241,22 +241,51 @@ Grundwert **45 % pro Segment**. Abzüge:
 | SAFETY 3 (vernagelt) | −20 |
 | SAFETY 2 (Möbel davor) | −10 |
 | LIGHT ≥ 2 (Kerze brennt) | −10 |
-| Stolperschnur im Raum | wandelt schwere Ereignisse in Aufwachen |
+| Stolperschnur **im Rucksack** | wandelt Diebstahl in ein lösbares Problem |
 
 Bester Schlafplatz: **15 % pro Segment.** Schlechtester (dunkel, offen): **55 %.**
 Vollständige Sicherheit gibt es nie, und sie kostet jeden Tag neu Material und Handlungen.
 
 ### 4.3 Kategorien im Nacht-Deck
 
-| Kategorie | Anteil | Was es tut |
-|---|---|---|
-| **Sound** | 25 % | Nur ein Geräusch. Folgenlos. |
-| **Wake** | 25 % | Du wachst auf → Entscheidung mit echten Optionen |
-| **Damage** | 15 % | Barrikade beschädigt, Sicherung durch, Vorräte verdorben |
-| **Theft** | 10 % | Etwas ist weg |
-| **Mark** | 10 % | Du wachst mit einem Zustand auf |
-| **Clue** | 10 % | Ein Traum, eine Stimme, deine eigene Handschrift |
-| **Move** | 5 % | Du wachst in einem anderen Raum auf |
+| Kategorie | Anteil | Lösbar? | Was es tut |
+|---|---|---|---|
+| **Problem** | 40 % | **ja, mit Gegenstand** | Der Kern des Spiels |
+| **Sound** | 25 % | nein | Nur ein Geräusch, ENERGY −1 |
+| **Damage** | 10 % | nein | Barrikade beschädigt, Vorräte verdorben |
+| **Theft** | 10 % | nur Stolperschnur | Etwas ist weg |
+| **Clue** | 10 % | nein | Ein Traum, deine eigene Handschrift |
+| **Move** | 5 % | nein | Du wachst in einem anderen Raum auf |
+
+### Ereignisse werden mit Gegenständen gelöst
+
+**Das Spiel fragt nie, was du tun willst. Es fragt, was du dabei hast.**
+
+```
+   Etwas arbeitet an den Brettern deiner Tür.
+
+   [Brett + Hammer]   →  Du nagelst nach. Nichts geht kaputt.
+   [Brecheisen]       →  Du verkeilst es. Hält bis zum Morgen.
+   Nichts davon dabei →  Die Barrikade verliert zwei Stufen.
+```
+
+Es gibt **keine Auswahl zwischen Verhaltensweisen** — kein "nachsehen / ignorieren /
+zurückrufen". Die Entscheidung ist längst gefallen: am Abend, beim Packen.
+
+**Und nachts zählt nur, was du am Körper trägst.** Der Vorratsstapel drei Räume weiter
+nützt um drei Uhr morgens nichts. Damit werden die **sechs Inventarplätze zur eigentlichen
+Frage des Spiels**: Hammer und Bretter? Kerzen? Verbände? Alles passt nicht.
+
+Umpacken zwischen Lager und Rucksack kostet keine Handlung — die Entscheidung soll
+nichts kosten außer Nachdenken.
+
+**Warum das besser ist als Multiple Choice:** Eine Frage ohne erkennbar richtige Antwort
+ist Glücksspiel mit Extraschritten. "Habe ich einen Hammer dabei?" ist eine echte Frage,
+auf die man sich vorbereiten kann — und beim zweiten Durchlauf packt man anders, weil
+man das Haus verstanden hat, nicht weil man die Antwort auswendig kennt.
+
+Drei Kategorien sind bewusst **nicht** lösbar (Damage, Theft, Move). Sonst hätte alles
+eine Antwort, und das Haus wäre nur noch eine Packliste.
 
 ### 4.4 Fairness
 

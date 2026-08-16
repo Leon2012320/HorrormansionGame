@@ -1,176 +1,239 @@
 extends RefCounted
-## Alle Ereignisse als Datentabelle. Siehe docs/EVENTS.md für die Begründungen.
+
+const ItemsDB := preload("res://content/items_db.gd")
+
+## Alle Ereignisse als Datentabelle. Begründungen in docs/EVENTS.md.
 ##
-## Neues Ereignis anlegen: Eintrag ergänzen, fertig. Kein Code nötig.
+## GRUNDPRINZIP: Problem-Ereignisse werden mit GEGENSTÄNDEN gelöst, nicht mit
+## Entscheidungen. Das Spiel fragt nicht, was du tun willst — es fragt, was du
+## dabei hast. Die Entscheidung fiel am Tag, beim Packen der sechs Slots.
 ##
-## Schreibregeln (bitte einhalten):
+## Aufbau eines Problem-Ereignisses:
+##   "solutions": [ {"needs": {...}, "tool": "...", "text": "...", "effects": {...}} ]
+##       needs  — wird VERBRAUCHT
+##       tool   — muss dabei sein, bleibt aber erhalten
+##       Beides muss vorhanden sein, damit die Lösung angeboten wird.
+##   "unsolved": {"text": "...", "effects": {...}}
+##       Was passiert, wenn nichts davon dabei ist.
+##
+## Schreibregeln:
 ##   1. Nie ein Wesen benennen — nur Wirkungen.
 ##   2. Nie erklären.
 ##   3. Alltäglich, dann falsch.
-##   4. Nichts über die Figur behaupten. Sie hat keinen Namen und keine Vergangenheit.
-##   5. Keine Option darf offensichtlich die beste sein.
+##   4. Nichts über die Figur behaupten.
+##   5. Die Lösung muss die sein, auf die man von selbst kommt.
 ##
-## Effekt-Schlüssel: energy · food · condition · heal · damage_safety · cap_safety ·
-##                   blow_fuse · steal · steal_item · give · clue · end_night
+## Effekt-Schlüssel: energy · food · condition · heal · damage_safety · set_safety ·
+##   permanent_safety · cap_safety · blow_fuse · steal · steal_item · steal_food ·
+##   give · clue · end_night · lose_segment · light · spoil_perishables · move_to
 
 const NIGHT_WEIGHTS := {
+	"problem": 40,
 	"sound": 25,
-	"wake": 25,
-	"damage": 15,
+	"damage": 10,
 	"theft": 10,
-	"mark": 10,
 	"clue": 10,
 	"move": 5,
 }
 
 const EVENTS := [
 
-# ==== WAKE ===================================================================
-{"id": "N-W-01", "category": "wake", "weight": 4, "from_day": 2, "max_safety": 2,
- "title": "The Chair",
- "text": "You wake because the room is wrong. The chair from the corner is at the foot of the bed now, turned to face you.",
- "options": [
-	{"label": "Put it back", "costs_segment": true, "effects": {}},
-	{"label": "Leave it. Don't look at it again.", "costs_segment": false, "effects": {"energy": -1}},
-	{"label": "Sit in it", "costs_segment": true, "outcomes": [
-		{"weight": 25, "text": "You sit until it gets light. Something comes back to you.", "effects": {"clue": 1}},
-		{"weight": 25, "text": "You sit until it gets light.", "effects": {"condition": "shaken"}},
-		{"weight": 50, "text": "You sit until it gets light. Nothing happens.", "effects": {}}]}]},
+# ============================================================================
+# PROBLEM — mit Gegenständen lösbar
+# ============================================================================
 
-{"id": "N-W-02", "category": "wake", "weight": 5, "from_day": 1, "min_safety": 1,
- "title": "The Door You Locked",
- "text": "The door is open. Not forced — opened. The chair you wedged under the handle has been set neatly against the wall.",
- "options": [
-	{"label": "Close it and go back to sleep", "costs_segment": false, "effects": {}},
-	{"label": "Barricade it properly", "costs_segment": true, "needs": {"board": 2, "nails": 1},
-	 "effects": {}, "sets_safety": 3},
-	{"label": "Move to another room", "costs_segment": true, "effects": {}},
-	{"label": "Stay awake until morning", "costs_segment": true, "ends_night": true, "effects": {}}]},
+{"id": "N-P-01", "category": "problem", "weight": 5, "from_day": 3, "min_safety": 2,
+ "title": "The Boards",
+ "text": "Something is working at the boards across the door. Not forcing them. Testing where the wood is thinnest.",
+ "solutions": [
+	{"needs": {"board": 1}, "tool": "hammer",
+	 "text": "You nail it back while it is still on the other side. It stops.", "effects": {}},
+	{"tool": "crowbar",
+	 "text": "You jam the bar under the handle. It holds until morning.", "effects": {}}],
+ "unsolved": {"text": "By morning two of the boards are on the floor.",
+	"effects": {"damage_safety": 2, "lose_segment": true}}},
 
-{"id": "N-W-03", "category": "wake", "weight": 4, "from_day": 1, "max_light": 1,
- "title": "Breathing",
+{"id": "N-P-02", "category": "problem", "weight": 5, "from_day": 1, "min_safety": 1,
+ "title": "The Door Standing Open",
+ "text": "The door is open. Not forced — opened. Whatever you wedged under the handle has been set neatly against the wall.",
+ "solutions": [
+	{"needs": {"board": 2, "nails": 1}, "tool": "hammer",
+	 "text": "You board it properly this time. Nothing else happens.", "effects": {"set_safety": 3}},
+	{"tool": "padlock_chain",
+	 "text": "The chain goes on. This door is finished being a door.", "effects": {"set_safety": 3}},
+	{"tool": "trip_line",
+	 "text": "You string the cans across it. If it comes back you will hear it.", "effects": {}}],
+ "unsolved": {"text": "You close it again and lie awake. In the morning something is missing.",
+	"effects": {"energy": -1, "steal": 1}}},
+
+{"id": "N-P-03", "category": "problem", "weight": 5, "from_day": 1, "max_light": 1,
+ "title": "Breathing in the Dark",
  "text": "Someone in the room is breathing. Slow, even, patient. When you hold your breath to listen, so do they.",
- "options": [
-	{"label": "Turn on the flashlight", "costs_segment": false, "needs": {"battery": 1},
-	 "effects": {}, "consumes": {"battery": 1}},
-	{"label": "Light a candle", "costs_segment": false, "needs": {"candle": 1, "matches": 1},
-	 "effects": {}, "consumes": {"candle": 1}, "places_candle": true},
-	{"label": "Lie still and wait", "costs_segment": true, "outcomes": [
-		{"weight": 60, "text": "After a long time, it stops.", "effects": {}},
-		{"weight": 40, "text": "It does not stop until it is light.", "effects": {"condition": "shaken"}}]}]},
+ "solutions": [
+	{"needs": {"candle": 1}, "tool": "matches",
+	 "text": "The room is empty. The candle burns down beside you.", "effects": {"light": 2}},
+	{"needs": {"battery": 1}, "tool": "flashlight",
+	 "text": "The room is empty. You leave the beam on the ceiling.", "effects": {"light": 1}},
+	{"needs": {"lamp_oil": 1}, "tool": "lantern",
+	 "text": "The room is empty, and it stays lit until morning.", "effects": {"light": 2}}],
+ "unsolved": {"text": "It keeps time with you until it is light.",
+	"effects": {"condition": "shaken", "lose_segment": true}}},
 
-{"id": "N-W-04", "category": "wake", "weight": 3, "from_day": 4, "requires_bed": true,
- "title": "The Weight",
- "text": "The mattress dips beside you. Not much. Just the weight of someone sitting down on the edge, careful not to wake you.",
- "options": [
-	{"label": "Don't move", "costs_segment": true, "effects": {}},
-	{"label": "Get up", "costs_segment": true, "outcomes": [
-		{"weight": 40, "text": "The room is empty. The sheet on that side is warm.", "effects": {"clue": 1}},
-		{"weight": 40, "text": "The room is empty.", "effects": {}},
-		{"weight": 20, "text": "You do not sleep again.", "effects": {"condition": "shaken"}}]},
-	{"label": "Reach out", "costs_segment": false, "outcomes": [
-		{"weight": 50, "text": "Something comes back to you, whole and unasked for.", "effects": {"clue": 1}},
-		{"weight": 50, "text": "You pull your hand back.", "effects": {"condition": "shaken"}}]}]},
-
-{"id": "N-W-05", "category": "wake", "weight": 4, "from_day": 2, "min_safety": 2,
- "title": "Three Knocks",
- "text": "Three knocks on the boards. Polite. A pause exactly long enough to be an answer. Then three more.",
- "options": [
-	{"label": "Knock back", "costs_segment": false, "outcomes": [
-		{"weight": 30, "text": "It stops. In the morning there is something written on the other side of the door.", "effects": {"clue": 1}},
-		{"weight": 30, "text": "It stops.", "effects": {}},
-		{"weight": 40, "text": "It answers. It keeps answering until morning.", "effects": {"energy": -1, "end_night": true}}]},
-	{"label": "Say nothing", "costs_segment": true, "effects": {}},
-	{"label": "Check the barricade", "costs_segment": true, "effects": {}, "protects_barricade": true}]},
-
-{"id": "N-W-06", "category": "wake", "weight": 3, "from_day": 5,
- "title": "Your Name",
- "text": "Someone downstairs is calling your name. They sound tired. They sound like they have been looking for you for a while.",
- "options": [
-	{"label": "Answer", "costs_segment": false, "outcomes": [
-		{"weight": 20, "text": "The calling stops. Something else takes its place, briefly, and then that stops too.", "effects": {"clue": 1}},
-		{"weight": 30, "text": "It answers you back in your own voice.", "effects": {"condition": "shaken"}},
-		{"weight": 50, "text": "Silence, for the rest of the night.", "effects": {}}]},
-	{"label": "Go down", "costs_segment": true, "outcomes": [
-		{"weight": 40, "text": "There is nobody. There is something on the bottom step.", "effects": {"clue": 1}},
-		{"weight": 30, "text": "There is nobody, but the pantry door is open.", "effects": {"give": {"can_beans": 1}}},
-		{"weight": 30, "text": "You go down faster than the stairs allow.", "effects": {"condition": "injured"}}]},
-	{"label": "Cover your ears", "costs_segment": false, "effects": {"energy": -1}}]},
-
-{"id": "N-W-07", "category": "wake", "weight": 3, "from_day": 1,
+{"id": "N-P-04", "category": "problem", "weight": 4, "from_day": 2,
  "title": "The Cold",
  "text": "Your breath is showing. The window is shut. It is not that time of year.",
- "options": [
-	{"label": "Get the blanket", "costs_segment": true, "needs": {"blanket": 1}, "effects": {}},
-	{"label": "Light a fire", "costs_segment": false, "needs": {"board": 1, "matches": 1},
-	 "consumes": {"board": 1}, "effects": {}},
-	{"label": "Endure it", "costs_segment": true, "outcomes": [
-		{"weight": 75, "text": "It passes before morning.", "effects": {}},
-		{"weight": 25, "text": "It does not pass.", "effects": {"condition": "sick"}}]}]},
+ "solutions": [
+	{"tool": "blanket", "text": "You pull the blanket over your head and sleep through it.", "effects": {}},
+	{"needs": {"board": 1}, "tool": "matches",
+	 "text": "A small fire. The room is warm by morning.", "effects": {}},
+	{"needs": {"whiskey": 1},
+	 "text": "It helps with the cold. It does not help with the morning.",
+	 "effects": {"energy": -1}}],
+ "unsolved": {"text": "You shiver until it is light.",
+	"effects": {"condition": "sick", "lose_segment": true}}},
 
-{"id": "N-W-09", "category": "wake", "weight": 3, "from_day": 3,
- "title": "Counting the Stairs",
- "text": "Footsteps on the staircase. You count them without meaning to. The staircase has fourteen steps. You are at twenty-one and they are still coming up.",
- "options": [
-	{"label": "Keep counting", "costs_segment": true, "outcomes": [
-		{"weight": 35, "text": "At forty it stops. You write the number down without deciding to.", "effects": {"clue": 1}},
-		{"weight": 65, "text": "At forty it stops.", "effects": {}}]},
-	{"label": "Block the door", "costs_segment": true, "effects": {}, "sets_safety": 2},
-	{"label": "Open the door and look", "costs_segment": false, "outcomes": [
-		{"weight": 20, "text": "An empty staircase, and something left on the landing.", "effects": {"clue": 1}},
-		{"weight": 30, "text": "An empty staircase.", "effects": {"condition": "shaken"}},
-		{"weight": 50, "text": "An empty staircase.", "effects": {}}]}]},
+{"id": "N-P-05", "category": "problem", "weight": 4, "from_day": 2,
+ "title": "The Cut",
+ "text": "You wake up bleeding. Four thin lines along the forearm, evenly spaced. They did not hurt until you looked at them.",
+ "solutions": [
+	{"needs": {"bandage": 1}, "text": "Cleaned and wrapped. It will hold.", "effects": {}},
+	{"needs": {"whiskey": 1},
+	 "text": "You wash it out with what you have. It will scar.",
+	 "effects": {"condition": "injured"}}],
+ "unsolved": {"text": "You have nothing to put on it.",
+	"effects": {"condition": "injured"}}},
 
-{"id": "N-W-10", "category": "wake", "weight": 2, "from_day": 4, "once": true,
- "title": "The Smell of Cooking",
- "text": "Something is cooking. It smells like a proper meal, the kind you have not had in days. The stove has no power.",
- "options": [
-	{"label": "Go to the kitchen and eat it", "costs_segment": true,
-	 "effects": {"food": 55, "clue": 1, "condition": "shaken"}},
-	{"label": "Go and look, but leave it", "costs_segment": true, "effects": {"clue": 1}},
-	{"label": "Stay where you are", "costs_segment": false, "effects": {"food": -10}}]},
+{"id": "N-P-06", "category": "problem", "weight": 3, "from_day": 4, "requires_fuse": true,
+ "title": "The Fuse",
+ "text": "Everything electric goes out at once. The box in the cellar is warm to the touch.",
+ "solutions": [
+	{"needs": {"fuse": 1}, "tool": "screwdriver",
+	 "text": "Replaced. The light comes back on and stays on.", "effects": {}},
+	{"needs": {"fuse": 1},
+	 "text": "You get it in without the screwdriver, and open your hand doing it.",
+	 "effects": {"condition": "injured"}}],
+ "unsolved": {"text": "It stays dark.", "effects": {"blow_fuse": 1}}},
 
-{"id": "N-W-11", "category": "wake", "weight": 3, "from_day": 2, "requires_window": true,
+{"id": "N-P-07", "category": "problem", "weight": 4, "from_day": 2, "requires_window": true,
  "title": "The Window",
- "text": "The window is open. You did not open it. Outside there is no wind, no sound, no insects. It is as if the night is holding still to see what you do.",
- "options": [
-	{"label": "Close and latch it", "costs_segment": false, "effects": {}},
-	{"label": "Board it up", "costs_segment": true, "needs": {"board": 1, "nails": 1},
-	 "consumes": {"board": 1}, "effects": {}, "permanent_safety": 1},
-	{"label": "Look out", "costs_segment": false, "outcomes": [
-		{"weight": 30, "text": "There is something in the garden that is not a shape you know.", "effects": {"clue": 1}},
-		{"weight": 30, "text": "There is nothing, and the nothing goes on a long way.", "effects": {"condition": "shaken"}},
-		{"weight": 40, "text": "There is nothing.", "effects": {}}]}]},
+ "text": "The window is open. You did not open it. Outside there is no wind, no sound, no insects — as if the night is holding still to see what you do.",
+ "solutions": [
+	{"needs": {"board": 1, "nails": 1}, "tool": "hammer",
+	 "text": "Boarded over. That window is done.", "effects": {"permanent_safety": 1}},
+	{"tool": "crowbar",
+	 "text": "You wedge it shut. It will do for tonight.", "effects": {}}],
+ "unsolved": {"text": "It will not latch, and the room does not get warm again.",
+	"effects": {"energy": -1}}},
 
-{"id": "N-W-12", "category": "wake", "weight": 2, "from_day": 6,
- "title": "Tucked In",
- "text": "The blanket has been pulled up to your chin and folded back. Neatly. The way someone does it for a child.",
- "options": [
-	{"label": "Throw it off and get up", "costs_segment": true, "effects": {}},
-	{"label": "Go back to sleep", "costs_segment": false, "effects": {"steal": 1}}]},
-
-{"id": "N-W-13", "category": "wake", "weight": 3, "from_day": 5,
+{"id": "N-P-08", "category": "problem", "weight": 4, "from_day": 5, "ground_or_cellar": true,
  "title": "Something Under the Floor",
  "text": "Under the boards, something shifts its weight. It is not scratching. It is making itself comfortable.",
- "options": [
-	{"label": "Pry up a board", "costs_segment": true, "needs": {"crowbar": 1},
-	 "effects": {"cap_safety": 2}, "outcomes": [
-		{"weight": 35, "text": "There is a space under there, and something in the space.", "effects": {"clue": 1}},
-		{"weight": 25, "text": "There is a space under there.", "effects": {"give": {"board": 2}}},
-		{"weight": 40, "text": "The board comes up faster than you expected.", "effects": {"condition": "injured"}}]},
-	{"label": "Move your bedding", "costs_segment": true, "effects": {}},
-	{"label": "Ignore it", "costs_segment": false, "effects": {"energy": -1}}]},
+ "solutions": [
+	{"tool": "crowbar",
+	 "text": "You lift a board. There is a space under there, and something in the space.",
+	 "effects": {"clue": 1}},
+	{"needs": {"trap": 1},
+	 "text": "You set the snare over the gap. In the morning it has gone off.",
+	 "effects": {"food": 25}}],
+ "unsolved": {"text": "It settles in for the night, and so do you, and only one of you sleeps.",
+	"effects": {"energy": -1, "lose_segment": true}}},
 
-{"id": "N-W-14", "category": "tripline", "weight": 1, "from_day": 1,
- "title": "The Trip Line",
- "text": "The cans go off. Whatever it was, it is on the other side of the door now, and it knows you are awake.",
- "options": [
-	{"label": "Hold the door", "costs_segment": true, "effects": {}},
-	{"label": "Reinforce it now", "costs_segment": true, "needs": {"board": 2, "nails": 1},
-	 "effects": {}, "sets_safety": 3},
-	{"label": "Run to another room", "costs_segment": true, "effects": {"steal": 1}}]},
+{"id": "N-P-09", "category": "problem", "weight": 4, "from_day": 4, "requires_food_stock": true,
+ "title": "In the Stores",
+ "text": "Something is in the stores. You can hear the tins moving against each other, unhurried, one at a time.",
+ "solutions": [
+	{"needs": {"trap": 1},
+	 "text": "The snare goes off before you are properly awake. Nothing is missing.",
+	 "effects": {"food": 25}},
+	{"tool": "trip_line", "consumes_tool": true,
+	 "text": "The cans come down. Whatever it was, it does not come back.", "effects": {}}],
+ "unsolved": {"text": "In the morning the count is short.",
+	"effects": {"steal_food": 2}}},
 
-# ==== SOUND ==================================================================
+{"id": "N-P-10", "category": "problem", "weight": 3, "from_day": 6,
+ "title": "The Lock",
+ "text": "The door you came through will not open from this side. It has no lock. It has never had a lock.",
+ "solutions": [
+	{"tool": "crowbar",
+	 "text": "It comes open with the frame attached.", "effects": {"cap_safety": 1}},
+	{"tool": "lockpicks",
+	 "text": "There is nothing to pick, and it opens anyway.", "effects": {}},
+	{"needs": {"board": 1}, "tool": "hammer",
+	 "text": "You go through the panelling beside it. Loud, but it works.", "effects": {}}],
+ "unsolved": {"text": "You sit against the wall until it is light, and then it opens.",
+	"effects": {"end_night": true, "energy": -2}}},
+
+{"id": "N-P-11", "category": "problem", "weight": 3, "from_day": 5,
+ "title": "The Damp",
+ "text": "Water is coming through the ceiling, exactly and only above the place where you keep your things.",
+ "solutions": [
+	{"needs": {"rag": 1}, "text": "Caught and covered. Everything stays dry.", "effects": {}},
+	{"tool": "blanket",
+	 "text": "You throw the blanket over your things and go cold yourself.",
+	 "effects": {"energy": -1}}],
+ "unsolved": {"text": "By morning something has been sitting in water for hours.",
+	"effects": {"steal": 1}}},
+
+{"id": "N-P-12", "category": "problem", "weight": 3, "from_day": 6, "requires_perishables": true,
+ "title": "Rot",
+ "text": "There is a smell. Everything soft you own has turned overnight, and it has turned further than one night allows.",
+ "solutions": [
+	{"needs": {"preserves": 1},
+	 "text": "You sort it out in time. One jar goes, the rest holds.", "effects": {}},
+	{"kitchen_powered": true,
+	 "text": "What was standing in the cold pantry has kept.", "effects": {}}],
+ "unsolved": {"text": "All of it is gone.", "effects": {"spoil_perishables": true}}},
+
+{"id": "N-P-13", "category": "problem", "weight": 3, "from_day": 4, "requires_condition": "sick",
+ "title": "The Fever",
+ "text": "You are burning up. The room is cold and you are soaked through, and you cannot tell which of those two things is the wrong one.",
+ "solutions": [
+	{"needs": {"pills": 1}, "text": "It breaks before morning.", "effects": {"heal": "sick"}},
+	{"needs": {"morphine": 1}, "text": "Everything goes quiet, including the fever.",
+	 "effects": {"heal": "sick", "energy": -1}}],
+ "unsolved": {"text": "It does not break.",
+	"effects": {"heal": "sick", "condition": "fevered"}}},
+
+{"id": "N-P-14", "category": "problem", "weight": 4, "from_day": 3,
+ "title": "Scratching at the Cellar Door",
+ "text": "Something is at the cellar door. Not knocking. Testing.",
+ "solutions": [
+	{"needs": {"board": 2, "nails": 1}, "tool": "hammer",
+	 "text": "You nail the cellar door shut. Whatever is down there stays down there.", "effects": {}},
+	{"tool": "trip_line", "consumes_tool": true,
+	 "text": "The cans come down and it goes away.", "effects": {}},
+	{"needs": {"candle": 1}, "tool": "matches",
+	 "text": "You put a light in the hall. It stops.", "effects": {}}],
+ "unsolved": {"text": "It works at it most of the night.",
+	"effects": {"damage_safety": 1, "energy": -1}}},
+
+{"id": "N-P-15", "category": "problem", "weight": 3, "from_day": 6, "requires_bed": true,
+ "title": "The Weight",
+ "text": "The mattress dips beside you. Not much. Just the weight of someone sitting down on the edge, careful not to wake you.",
+ "solutions": [
+	{"needs": {"candle": 1}, "tool": "matches",
+	 "text": "There is nobody. That side of the bed is warm, and you write down why that matters.",
+	 "effects": {"clue": 1}},
+	{"needs": {"whiskey": 1}, "text": "You drink until it does not matter.",
+	 "effects": {"energy": -1}}],
+ "unsolved": {"text": "It sits there until it is light.",
+	"effects": {"condition": "shaken", "end_night": true}}},
+
+{"id": "N-P-16", "category": "problem", "weight": 2, "from_day": 5, "once": true,
+ "title": "The Smell of Cooking",
+ "text": "Something is cooking. It smells like a proper meal, the kind you have not had in days. The stove has no power.",
+ "solutions": [
+	{"needs": {"can_beans": 1}, "text": "You eat your own, cold, in the dark, and do not go and look.",
+	 "effects": {"food": 35}},
+	{"needs": {"can_meat": 1}, "text": "You eat your own, cold, in the dark, and do not go and look.",
+	 "effects": {"food": 40}}],
+ "unsolved": {"text": "You go down and eat what is on the table. It is very good.",
+	"effects": {"food": 55, "clue": 1, "condition": "shaken"}}},
+
+# ============================================================================
+# SOUND — nicht lösbar, folgenlos
+# ============================================================================
+
 {"id": "N-S-01", "category": "sound", "weight": 3, "from_day": 2, "effects": {"energy": -1},
  "text": "Water running somewhere below. It stops when you notice it."},
 {"id": "N-S-02", "category": "sound", "weight": 3, "from_day": 2, "effects": {"energy": -1},
@@ -188,44 +251,28 @@ const EVENTS := [
 {"id": "N-S-08", "category": "sound", "weight": 3, "from_day": 2, "effects": {"energy": -1},
  "text": "Footsteps on the stairs, going down. They stop halfway and do not continue."},
 
-# ==== DAMAGE =================================================================
-{"id": "N-D-01", "category": "damage", "weight": 4, "from_day": 3, "effects": {"damage_safety": 1},
- "text": "There are marks on the boards. Not deep. Methodical, like someone testing where the wood is thinnest."},
-{"id": "N-D-02", "category": "damage", "weight": 3, "from_day": 3, "effects": {"blow_fuse": 1},
- "text": "The fuse has blown. The box is warm."},
-{"id": "N-D-03", "category": "damage", "weight": 3, "from_day": 3, "effects": {"steal_item": "preserves"},
- "text": "Two of the jars have burst. The shelf is wet and the cellar smells sweet."},
-{"id": "N-D-04", "category": "damage", "weight": 2, "from_day": 3, "effects": {"cap_safety": 2},
- "text": "The window in the next room has cracked from corner to corner. Nothing hit it."},
-{"id": "N-D-05", "category": "damage", "weight": 3, "from_day": 3, "effects": {"steal": 1},
- "text": "Water came through the ceiling in the night."},
-{"id": "N-D-06", "category": "damage", "weight": 2, "from_day": 3, "effects": {"steal_item": "bread"},
- "text": "The bread has gone. Not eaten — gone the way bread goes in a month, in one night."},
+# ============================================================================
+# DAMAGE / THEFT / MOVE / CLUE — nicht lösbar
+# ============================================================================
 
-# ==== THEFT ==================================================================
-{"id": "N-T-01", "category": "theft", "weight": 4, "from_day": 3, "effects": {"steal_item": "can_beans"},
+{"id": "N-D-01", "category": "damage", "weight": 3, "from_day": 4, "effects": {"steal_item": "preserves"},
+ "text": "Two of the jars have burst. The shelf is wet and the cellar smells sweet."},
+{"id": "N-D-02", "category": "damage", "weight": 2, "from_day": 4, "effects": {"cap_safety": 2},
+ "text": "The window in the next room has cracked from corner to corner. Nothing hit it."},
+{"id": "N-D-03", "category": "damage", "weight": 3, "from_day": 4, "effects": {"damage_safety": 1},
+ "text": "The boards have come away at one corner. The nails are on the floor, in a row."},
+
+{"id": "N-T-01", "category": "theft", "weight": 4, "from_day": 4, "effects": {"steal_food": 1},
  "text": "One tin is missing. You counted them last night. You counted them twice."},
-{"id": "N-T-02", "category": "theft", "weight": 3, "from_day": 3, "effects": {"steal_item": "hammer"},
+{"id": "N-T-02", "category": "theft", "weight": 3, "from_day": 4, "effects": {"steal_item": "hammer"},
  "text": "The hammer is not where you left it."},
-{"id": "N-T-03", "category": "theft", "weight": 3, "from_day": 3, "effects": {"steal_item": "battery"},
+{"id": "N-T-03", "category": "theft", "weight": 3, "from_day": 4, "effects": {"steal_item": "battery"},
  "text": "The batteries are flat. All of them. You have not used the flashlight since yesterday."},
-{"id": "N-T-04", "category": "theft", "weight": 3, "from_day": 3, "effects": {"steal_item": "matches"},
+{"id": "N-T-04", "category": "theft", "weight": 3, "from_day": 4, "effects": {"steal_item": "matches"},
  "text": "The matches are damp. The box has been sitting in something."},
 {"id": "N-T-05", "category": "theft", "weight": 1, "from_day": 6, "effects": {"smudge": 1},
  "text": "A page in your notebook has run. The ink is smeared edge to edge and the paper is damp. You remember writing it. You do not remember what it said."},
 
-# ==== MARK ===================================================================
-{"id": "N-M-01", "category": "mark", "weight": 4, "from_day": 2, "effects": {"condition": "injured"},
- "text": "There are four thin scratches along your forearm. They are evenly spaced and they do not hurt yet."},
-{"id": "N-M-02", "category": "mark", "weight": 3, "from_day": 2, "effects": {"condition": "sick"},
- "text": "You are burning up. The room is cold and you are soaked through."},
-{"id": "N-M-03", "category": "mark", "weight": 3, "from_day": 2, "effects": {"condition": "shaken", "end_night": true},
- "text": "You wake up already sitting, already shouting, and you do not know at what."},
-{"id": "N-M-04", "category": "mark", "weight": 2, "from_day": 2, "requires_condition": "injured",
- "effects": {"heal": "injured", "condition": "shaken"},
- "text": "Your hand has been bandaged. Neatly, properly, with a knot you do not tie."},
-
-# ==== MOVE ===================================================================
 {"id": "N-V-01", "category": "move", "weight": 3, "from_day": 5, "effects": {"end_night": true, "move_to": "upper_landing"},
  "text": "You wake in the upstairs hall. Your shoes are beside you, set side by side."},
 {"id": "N-V-02", "category": "move", "weight": 2, "from_day": 5, "effects": {"end_night": true, "move_to": "entrance", "energy": -1},
@@ -233,7 +280,6 @@ const EVENTS := [
 {"id": "N-V-03", "category": "move", "weight": 2, "from_day": 5, "effects": {"end_night": true, "move_to": "cellar", "drop_carried": true},
  "text": "You wake in the cellar. There is no light and you do not remember the stairs."},
 
-# ==== CLUE ===================================================================
 {"id": "N-C-01", "category": "clue", "weight": 4, "from_day": 2, "effects": {"clue": 1},
  "text": "There is writing on the last page of your notebook. It is your handwriting. It is not your sentence."},
 {"id": "N-C-02", "category": "clue", "weight": 2, "from_day": 2, "effects": {"reveal_room": 1},
@@ -245,7 +291,10 @@ const EVENTS := [
 {"id": "N-C-05", "category": "clue", "weight": 2, "from_day": 2, "effects": {"clue": 1},
  "text": "There is a note under the door. The paper is old. The ink is not."},
 
-# ==== TAG: AMBIENT ===========================================================
+# ============================================================================
+# TAG
+# ============================================================================
+
 {"id": "D-A-01", "category": "ambient", "weight": 3, "from_day": 1, "effects": {},
  "text": "The picture in the hall is crooked. You straighten it. Later, it is crooked again."},
 {"id": "D-A-02", "category": "ambient", "weight": 3, "from_day": 1, "effects": {},
@@ -259,7 +308,6 @@ const EVENTS := [
 {"id": "D-A-06", "category": "ambient", "weight": 3, "from_day": 1, "effects": {},
  "text": "You can hear yourself moving around upstairs."},
 
-# ==== TAG: SUPPLY ============================================================
 {"id": "D-S-01", "category": "supply", "weight": 4, "from_day": 1, "effects": {"give": {"can_beans": 1}},
  "text": "Something has rolled behind the dresser and been there a long time."},
 {"id": "D-S-02", "category": "supply", "weight": 3, "from_day": 1, "effects": {"give": {"matches": 1}},
@@ -274,7 +322,6 @@ const EVENTS := [
 
 
 ## Die Radio-Staffel: die einzige Vorwarnung auf die Rettung an Tag 20.
-## Es wird nie ein Datum genannt.
 const RADIO := [
 	{"from_day": 1, "text": "\"...scattered showers through the county, clearing towards the weekend...\""},
 	{"from_day": 3, "text": "\"...police are asking motorists to avoid the old county road following an incident...\""},

@@ -12,6 +12,8 @@ const RUNS := 40
 var _endings := {}
 var _days: Array[int] = []
 var _errors: Array[String] = []
+var _solved := 0
+var _unsolved := 0
 
 
 func _ready() -> void:
@@ -24,8 +26,8 @@ func _ready() -> void:
 
 func _play_one_run(index: int) -> void:
 	DayCycle.start_run()
-	if not DayCycle.wake_event.is_connected(_auto_answer):
-		DayCycle.wake_event.connect(_auto_answer)
+	if not DayCycle.problem_event.is_connected(_auto_answer):
+		DayCycle.problem_event.connect(_auto_answer)
 
 	var guard := 0
 	while GameState.run_active and guard < 400:
@@ -44,6 +46,7 @@ func _play_one_run(index: int) -> void:
 			break
 		# Zum Schlafen ins Bett — Laufen kostet nichts.
 		_goto("bedroom")
+		_pack_for_the_night()
 		# Länge zufällig, damit auch kurze Nächte vorkommen.
 		var segments := 3 if randf() < 0.7 else randi_range(1, 2)
 		if not DayCycle.sleep(segments):
@@ -60,7 +63,7 @@ func _play_one_run(index: int) -> void:
 	var key := "%s — %s" % [ending, GameState.ending_detail] if GameState.ending_detail != "" else ending
 	_endings[key] = int(_endings.get(key, 0)) + 1
 	_days.append(GameState.day)
-	DayCycle.wake_event.disconnect(_auto_answer)
+	DayCycle.problem_event.disconnect(_auto_answer)
 
 
 func _eat_if_hungry() -> void:
@@ -137,25 +140,31 @@ func _take_one_action() -> bool:
 	return GameState.spend_action(1)
 
 
-func _auto_answer(event: Dictionary, _segment: int) -> void:
-	var options: Array = event.get("options", [])
-	if options.is_empty():
-		return
-	# Wählt eine Option, deren Materialbedarf erfüllt ist.
-	var order: Array[int] = []
-	for i in options.size():
-		order.append(i)
-	order.shuffle()
-	for i in order:
-		var needs: Dictionary = options[i].get("needs", {})
-		var ok := true
-		for id in needs:
-			if not Inventory.has(str(id), int(needs[id])):
-				ok = false
-		if ok:
-			DayCycle.resolve_choice(event, i, true)
-			return
-	DayCycle.resolve_choice(event, order[0], true)
+## Die eigentliche Entscheidung des Spiels: was kommt in die sechs Plätze?
+## Der Bot packt nach fester Prioritätenliste — ein Mensch würde je nach
+## Lage anders wählen, aber so ist der Test wenigstens vergleichbar.
+const NIGHT_KIT := ["hammer", "board", "candle", "matches", "bandage", "crowbar"]
+
+func _pack_for_the_night() -> void:
+	# Erst alles ablegen, was heute Nacht nichts nützt.
+	for id in Inventory.carried.keys():
+		if not str(id) in NIGHT_KIT:
+			Inventory.put_in_stash(str(id), int(Inventory.carried[id]))
+	# Dann die Packliste auffüllen, solange Platz ist.
+	for id in NIGHT_KIT:
+		while Inventory.take_from_stash(id, 1):
+			if Inventory.carried_count(id) >= 2:
+				break
+
+
+## Der Bot benutzt die erste Lösung, die er dabei hat — oder gar keine.
+func _auto_answer(event: Dictionary, solutions: Array) -> void:
+	if solutions.is_empty():
+		_unsolved += 1
+		DayCycle.solve(event, -1)
+	else:
+		_solved += 1
+		DayCycle.solve(event, int(solutions[0]["index"]))
 
 
 func _check_invariants(index: int) -> void:
@@ -182,6 +191,9 @@ func _report() -> void:
 	print("endings:")
 	for key in _endings:
 		print("   %-40s %d" % [key, _endings[key]])
+	print("problems solved with an item: %d of %d (%d%%)" % [
+		_solved, _solved + _unsolved,
+		int(round(100.0 * float(_solved) / float(maxi(_solved + _unsolved, 1))))])
 	if _errors.is_empty():
 		print("no errors")
 	else:

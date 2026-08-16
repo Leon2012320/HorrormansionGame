@@ -94,8 +94,6 @@ func _pick_category(room_id: String) -> String:
 			continue
 		if category == "theft" and _damage_this_night:
 			continue
-		if category == "mark" and _mark_this_night:
-			continue
 		if category == "move" and GameState.day < 5:
 			continue
 		var weight := int(EventsDB.NIGHT_WEIGHTS[category])
@@ -103,11 +101,10 @@ func _pick_category(room_id: String) -> String:
 			pool.append(category)
 	if pool.is_empty():
 		return ""
-	# Die Stolperschnur wandelt schwere Ereignisse in ein Aufwachen um.
+	# Die Stolperschnur wandelt Diebstahl in ein lösbares Problem um.
 	var picked: String = pool[randi() % pool.size()]
-	if picked in ["damage", "theft", "mark"] and bool(Rooms.state.get(room_id, {}).get("trip_line", false)):
-		Rooms.state[room_id]["trip_line"] = false
-		return "tripline"
+	if picked == "theft" and Inventory.has_carried("trip_line"):
+		return "problem"
 	return picked
 
 
@@ -157,7 +154,86 @@ func _conditions_met(event: Dictionary, room_id: String) -> bool:
 	if event.has("requires_condition"):
 		if not GameState.has_condition(str(event["requires_condition"])):
 			return false
+	if bool(event.get("requires_fuse", false)):
+		var any_fuse := false
+		for room in Rooms.state:
+			if bool(Rooms.state[room].get("has_fuse", false)):
+				any_fuse = true
+		if not any_fuse:
+			return false
+	if bool(event.get("ground_or_cellar", false)):
+		if not room_id in ["entrance", "parlor", "library", "dining", "kitchen", "conservatory", "cellar"]:
+			return false
+	if bool(event.get("requires_food_stock", false)) and _food_items() < 2:
+		return false
+	if bool(event.get("requires_perishables", false)) and _perishables().is_empty():
+		return false
 	return true
+
+
+func _food_items() -> int:
+	var count := 0
+	for item_id in EventsDB.ItemsDB.ITEMS:
+		if str(EventsDB.ItemsDB.ITEMS[item_id].get("category", "")) == "food":
+			count += Inventory.count(str(item_id))
+	return count
+
+
+func _perishables() -> Array[String]:
+	var result: Array[String] = []
+	for item_id in EventsDB.ItemsDB.ITEMS:
+		if EventsDB.ItemsDB.ITEMS[item_id].has("spoils_after") and Inventory.has(str(item_id)):
+			result.append(str(item_id))
+	return result
+
+
+## --- Lösungen ----------------------------------------------------------------
+
+## Welche der hinterlegten Lösungen kann der Spieler gerade wirklich benutzen?
+## Das ist der Kern des neuen Ereignis-Systems: nicht "was willst du tun",
+## sondern "was hast du dabei".
+func available_solutions(event: Dictionary) -> Array:
+	var result: Array = []
+	var solutions: Array = event.get("solutions", [])
+	for i in solutions.size():
+		if _solution_possible(solutions[i]):
+			result.append({"index": i, "solution": solutions[i]})
+	return result
+
+
+## Prüft NUR das Getragene. Das ist der Kern des Systems: die sechs Slots
+## entscheiden über die Nacht, nicht der Vorratsstapel drei Räume weiter.
+func _solution_possible(solution: Dictionary) -> bool:
+	if bool(solution.get("kitchen_powered", false)):
+		return Rooms.light_of("kitchen") >= Rooms.Light.ELECTRIC
+	if solution.has("tool") and not Inventory.has_carried(str(solution["tool"])):
+		return false
+	for id in solution.get("needs", {}):
+		if not Inventory.has_carried(str(id), int(solution["needs"][id])):
+			return false
+	return true
+
+
+## Beschreibt eine Lösung so, wie sie im Dialog steht: "Board ×1 + Hammer".
+func solution_label(solution: Dictionary) -> String:
+	var parts: Array[String] = []
+	for id in solution.get("needs", {}):
+		var amount := int(solution["needs"][id])
+		parts.append(Inventory.display_name(str(id)) + ("" if amount == 1 else " ×%d" % amount))
+	if solution.has("tool"):
+		parts.append(Inventory.display_name(str(solution["tool"])))
+	if bool(solution.get("kitchen_powered", false)):
+		parts.append("power in the kitchen")
+	return " + ".join(parts)
+
+
+## Verbraucht, was die Lösung kostet. Werkzeuge bleiben erhalten —
+## außer sie sind ausdrücklich als Verbrauch markiert (Stolperschnur).
+func consume_for(solution: Dictionary) -> void:
+	for id in solution.get("needs", {}):
+		Inventory.consume_carried(str(id), int(solution["needs"][id]))
+	if bool(solution.get("consumes_tool", false)) and solution.has("tool"):
+		Inventory.consume_carried(str(solution["tool"]), 1)
 
 
 func _note_drawn(event: Dictionary) -> void:
@@ -197,6 +273,35 @@ func apply_effects(effects: Dictionary, room_id: String) -> Array[String]:
 
 	if effects.has("heal"):
 		GameState.remove_condition(str(effects["heal"]))
+
+	if effects.has("set_safety"):
+		Rooms.set_safety(room_id, int(effects["set_safety"]))
+
+	if effects.has("permanent_safety"):
+		Rooms.set_safety(room_id, Rooms.safety_of(room_id) + int(effects["permanent_safety"]))
+		log.append("That window will not open again.")
+
+	if effects.has("light"):
+		Rooms.place_candle(room_id, 1)
+
+	if effects.has("steal_food"):
+		var taken := 0
+		for i in int(effects["steal_food"]):
+			for food_id in EventsDB.ItemsDB.ITEMS:
+				if str(EventsDB.ItemsDB.ITEMS[food_id].get("category", "")) != "food":
+					continue
+				if Inventory.consume(str(food_id), 1):
+					taken += 1
+					break
+		if taken > 0:
+			log.append("%d of your stores are gone." % taken)
+
+	if effects.has("spoil_perishables"):
+		for spoiled_id in _perishables():
+			var amount := Inventory.count(spoiled_id)
+			Inventory.consume(spoiled_id, amount)
+			Inventory.add_stash("food_spoiled", amount)
+		log.append("Everything soft has turned.")
 
 	if effects.has("damage_safety"):
 		Rooms.damage_safety(room_id, int(effects["damage_safety"]))

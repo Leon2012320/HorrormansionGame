@@ -5,7 +5,7 @@ extends Node
 
 signal phase_changed(phase: int)
 signal night_started(segments: int)
-signal wake_event(event: Dictionary, segment: int)
+signal problem_event(event: Dictionary, solutions: Array)
 signal night_finished(report: Array)
 signal day_started(day: int, energy: int)
 
@@ -71,10 +71,10 @@ func _run_segments() -> void:
 			_segments_done += 1
 			_segments_counted += 1
 			continue
-		var category := str(event.get("category", ""))
-		if category in ["wake", "tripline"] and not event.get("options", []).is_empty():
+		if str(event.get("category", "")) == "problem":
+			# Ein Problem wartet auf den Spieler: welches Werkzeug hat er dabei?
 			_awaiting_choice = true
-			wake_event.emit(event, _segments_done)
+			problem_event.emit(event, EventDeck.available_solutions(event))
 			return
 		_night_log.append(str(event.get("text", "")))
 		var lines := EventDeck.apply_effects(event.get("effects", {}), _current_room)
@@ -88,52 +88,33 @@ func _run_segments() -> void:
 		_finish_night()
 
 
-## Wird von der UI aufgerufen, wenn der Spieler eine Wake-Option gewählt hat.
-func resolve_choice(event: Dictionary, option_index: int, keep_sleeping: bool) -> Array[String]:
+## Wird aufgerufen, wenn der Spieler eine Lösung gewählt hat.
+## solution_index von -1 heißt: er hatte nichts dabei.
+func solve(event: Dictionary, solution_index: int) -> Array[String]:
 	var lines: Array[String] = []
-	var options: Array = event.get("options", [])
-	if option_index >= 0 and option_index < options.size():
-		var option: Dictionary = options[option_index]
+	var solutions: Array = event.get("solutions", [])
 
-		# Materialkosten der Option
-		for id in option.get("consumes", {}):
-			Inventory.consume(str(id), int(option["consumes"][id]))
-		if option.has("needs") and not option.has("consumes"):
-			for id in option["needs"]:
-				Inventory.consume(str(id), int(option["needs"][id]))
-
-		# Raumwirkungen der Option
-		if option.has("sets_safety"):
-			Rooms.set_safety(_current_room, int(option["sets_safety"]))
-			lines.append("The door will hold for now.")
-		if option.has("permanent_safety"):
-			Rooms.set_safety(_current_room, Rooms.safety_of(_current_room) + int(option["permanent_safety"]))
-			lines.append("That window will not open again.")
-		if bool(option.get("places_candle", false)):
-			Rooms.place_candle(_current_room, 2)
-		if bool(option.get("protects_barricade", false)):
-			EventDeck._damage_this_night = true
-
-		lines.append_array(EventDeck.apply_effects(option.get("effects", {}), _current_room))
-		if option.has("outcomes"):
-			var outcome := EventDeck.roll_outcome(option["outcomes"])
-			if outcome.has("text"):
-				lines.append(str(outcome["text"]))
-			lines.append_array(EventDeck.apply_effects(outcome.get("effects", {}), _current_room))
-
-		# Die Nacht schreitet immer voran. Ob das Segment auch Erholung bringt,
-		# entscheidet costs_segment.
+	if solution_index >= 0 and solution_index < solutions.size():
+		var solution: Dictionary = solutions[solution_index]
+		EventDeck.consume_for(solution)
+		lines.append(str(solution.get("text", "")))
+		lines.append_array(EventDeck.apply_effects(solution.get("effects", {}), _current_room))
+		# Ein gelöstes Problem kostet den Schlaf nicht — das ist der Lohn
+		# fürs Vorbereitetsein.
 		_segments_done += 1
-		if not bool(option.get("costs_segment", true)):
-			_segments_counted += 1
-		if bool(option.get("ends_night", false)):
-			_pending_segments = _segments_done
+		_segments_counted += 1
 	else:
+		var unsolved: Dictionary = event.get("unsolved", {})
+		lines.append(str(unsolved.get("text", "")))
+		lines.append_array(EventDeck.apply_effects(unsolved.get("effects", {}), _current_room))
 		_segments_done += 1
+		if not bool(unsolved.get("effects", {}).get("lose_segment", false)):
+			_segments_counted += 1
+		if bool(unsolved.get("effects", {}).get("end_night", false)):
+			_pending_segments = _segments_done
+
 	_night_log.append_array(lines)
 	_awaiting_choice = false
-	if not keep_sleeping:
-		_pending_segments = _segments_done
 	_run_segments()
 	return lines
 
